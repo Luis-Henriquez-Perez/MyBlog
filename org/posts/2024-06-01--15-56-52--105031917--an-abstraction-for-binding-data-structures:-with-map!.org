@@ -1,0 +1,193 @@
+#+TITLE: Binding Symbols in Maps: with-map!
+#+AUTHOR: Luis Henriquez-Perez
+
+Three of the most common data structures in emacs-lisp are [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html][alists]], [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Property-Lists.html][plists]], and
+[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Hash-Tables.html][hash-tables]].  They are used so frequently that it is not surprising that
+situations arise in which you have to access elements from these.  And although
+each corresponding data structure has their own getter, fetching more than two
+elements in a single lisp form can quickly get out of hand as is apparent from
+the repetition of ~(plist-get SOME-PLIST KEY)~ from the following example.
+
+#+begin_src emacs-lisp
+(let ((a (plist-get some-plist 'a))
+      (b (plist-get some-plist 'b))
+      (c (plist-get some-plist 'c)))
+  (+ a b c))
+#+end_src
+
+The [[file:../documentation/helpful-macro---let.html][-let]] macro from [[https://github.com/magnars/dash.el][dash]] actually has specific syntax to make this kind of thing
+easier.  With it you can specify syntax of the form ~(&THING key1 key2...keyN)~
+where =THING= can be one of =alist=, =plist= or =hash= and each key is a the key of the
+data structure.  This syntax tells dash to let-bind a symbol that is by default
+the name of the key to its corresponding value.  And, as you can see below, it
+is much more concise than the example above.
+
+#+begin_src emacs-lisp
+(-let (((&plist 'a 'b 'c) '(a 1 b 2 c 3)))
+  (list a b c))
+;; => 6
+
+(-let (((&alist 'a 'b 'c) '((a . 1) (b . 2) (c . 3))))
+  (+ a b c))
+;; => 6
+
+(-let (((&hash 'a 'b 'c) (aprog1 (make-hash-table)
+                           (puthash 'a 1 it)
+                           (puthash 'b 2 it)
+                           (puthash 'c 3 it))))
+  (+ a b c))
+;; => 6
+#+end_src
+
+In the corresponding macroexpansions we see that the =-let= expands to getting the
+corresponding getters from the data structures.
+
+#+begin_src emacs-lisp
+(let ((input0 '(a 1 b 2 c 3)))
+  (let* ((a (plist-get input0 'a))
+         (b (plist-get input0 'b))
+         (c (plist-get input0 'c)))
+    (+ a b c)))
+
+(let ((input0 '((a . 1) (b . 2) (c . 3))))
+  (let* ((a (cdr (assoc 'a input0)))
+         (b (cdr (assoc 'b input0)))
+         (c (cdr (assoc 'c input0))))
+    (+ a b c)))
+
+(let ((input0 (aprog1 (make-hash-table)
+                (puthash 'a 1 it)
+                (puthash 'b 2 it)
+                (puthash 'c 3 it))))
+  (let* ((a (gethash 'a input0))
+         (b (gethash 'b input0))
+         (c (gethash 'c input0)))
+    (+ a b c)))
+#+end_src
+
+There is a built-in solution as well: the macro [[file:../documentation/helpful-macro--let-alist.html][let-alist]].  With it you can
+access the values of an alist using a =.KEY=.  Unlike dash's =-let=, =let-alist= does
+not make you declare the key symbols beforehand; rather =let-alist= infers which
+keys your using based on the symbols prefixed by a period in the macro
+body--making the syntax much more concise.  On the other hand, as the name
+"let-alist" suggests it only works on alists which is certainly a downgrade from
+=-let=.  Additionally, according to [[https://www.reddit.com/r/emacs/comments/b325ae/letplist_a_version_of_the_useful_letalist_macro/][this reddit post]] the period notation it uses
+to prefix its symbols is prone to being confused with emacs-lisp cons cell
+syntax when evaluating symbols in a backquoted form.
+
+#+begin_src emacs-lisp
+(let-alist '((a . 1) (b . 2) (c . 3))
+  (+ .a .b .c))
+
+;; => 6
+#+end_src
+
+I wanted to combine the best of both dash's =-let= and Emacs's built-in =let-alist=.
+Specifically, I wanted it to have the brevity of =let-alist= while avoiding its
+dot syntax and the ability of =-let= to work with all three data structures.  Thus
+I came up with the macro [[file:../documentation/helpful-macro--with-map-bang.html][with-map!]].  It accepts any one of the three
+aforementioned data structures as well as a body of forms and let-binds
+specially-named symbols in its body.  Unlike =let-alist= it uses symbols prefixed
+by the bang symbol thereby avoiding the aforementioned problem with dot symbols.
+
+#+begin_src emacs-lisp
+(with-map! '(a 1 b 2 c 3)
+  (+ !a !b !c))
+
+;; => 6
+
+(with-map! '((a . 1) (b . 2) (c . 3))
+  (+ !a !b !c))
+
+6
+
+;; => 6
+
+(with-map! (aprog1 (make-hash-table)
+             (puthash 'a 1 it)
+             (puthash 'b 2 it)
+             (puthash 'c 3 it))
+  (+ !a !b !c))
+
+;; => 6
+#+end_src
+
+The following macroexpansion provides insight in how my macro works.  I bind the
+alist to a generated symbol in this case =map85=.  In this example because the map
+is a static form that evaluates to itself it would not make a difference.  But
+if the map was a lisp expression that returns a map, then having that expression
+on each binding would cause multiple unintended evaluation.
+
+Notably, my expansions are virtually homogeneous despite using different maps
+because I am deferring the built-in [[file:../documentation/map-library.html][map.el]], a library that provides a generic
+interface between three main emacs-lisp data structures alists, plists and
+hash-tables.  The function [[file:../documentation/helpful-function--map-elt.html][map-elt]] checks what kind of map it has and uses the
+appropriate getter to return the correct value.  Consequently, in contrast to
+=-let= the user does not need to specify which kind of map (alist, plist or
+hash-table) they need to use beforehand--in fact, they do not even need to know
+which map their dealing with themselves.
+
+#+begin_src emacs-lisp
+(let* ((map85 '(a 1 b 2 c 3))
+       (!a (map-elt map85 'a))
+       (!b (map-elt map85 'b))
+       (!c (map-elt map85 'c)))
+  (+ !a !b !c))
+
+(let* ((map402 '((a . 1) (b . 2) (c . 3)))
+       (!a (map-elt map402 'a))
+       (!b (map-elt map402 'b))
+       (!c (map-elt map402 'c)))
+  (+ !a !b !c))
+
+(let* ((map403 (aprog1 (make-hash-table)
+                 (puthash 'a 1 it)
+                 (puthash 'b 2 it)
+                 (puthash 'c 3 it)))
+       (!a (map-elt map403 'a))
+       (!b (map-elt map403 'b))
+       (!c (map-elt map403 'c)))
+  (+ !a !b !c))
+#+end_src
+
+The following helper is what I use to actually generate the macro expansion.
+The function loops through all the symbols in the body of the macro, collecting
+any symbols that match the regular expression =regexp=; then, it binds them to the
+key which is given by their name.  The optional argument =use-keywords= tells the
+function to get the value =!SYMBOL= by using the key =:SYMBOL= as opposed to =SYMBOL=
+as normal.  Maps often use keywords--symbols prepened by a =:=--as keys and
+although it is possible to specify keywords as =!:KEY= I did not find it
+aesthetically pleasing or satisfactorily concise to type prefix symbols with =!:=.
+Accordingly, I created this =use-keywords= argument so that in the future I can
+add an option to the =with-map!= macro or even create a spin-off macro that
+assumes keyword keys.
+
+#+begin_src emacs-lisp
+(defun oo--map-let-binds (map body regexp &optional use-keywords)
+  "Return a list of let-bindings for `with-map!'.
+Collect symbols matching REGEXP in BODY into an alist."
+  (let* ((mapsym (cl-gensym "map"))
+         (let-binds `((,mapsym ,map)))
+         (name nil)
+         (key nil))
+    (dolist (obj (flatten-tree body))
+      (when (and obj
+                 (symbolp obj)
+                 (setq name (symbol-name obj))
+                 (string-match regexp name)
+                 (not (assoc obj let-binds)))
+        (setq key (funcall (if use-keywords #'oo-into-keyword #'oo-into-symbol)
+                           (match-string 1 name)))
+        (push `(,obj (map-elt ,mapsym ',key)) let-binds)))
+    (nreverse let-binds)))
+#+end_src
+
+Overall, I am quite pleased with my implementation of =with-map!= (shown below).
+
+#+begin_src emacs-lisp
+(defmacro with-map! (map &rest body)
+  "Let-bind bang symbols in BODY to corresponding keys in MAP."
+  (declare (indent 1))
+  `(let* ,(oo--map-let-binds map body "!\\([^[:space:]]+\\)" nil)
+     ,@body))
+#+end_src

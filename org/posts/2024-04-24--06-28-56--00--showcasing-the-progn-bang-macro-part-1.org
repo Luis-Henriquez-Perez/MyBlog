@@ -1,0 +1,180 @@
+#+TITLE: Showcasing the =progn!= macro (part 1)
+#+AUTHOR: Luis Henriquez-Perez
+
+Manipulating symbol values is so common in emacs-lisp that you can almost always
+expect the bodies of functions and macros to be encased by =let= or =let*=, [[http://xahlee.info/emacs/emacs/elisp_special_form.html][special
+forms]] that bind symbols to values.  In practice, this adds what is essentially
+a default level of additional indentation to virtually any reasonably sized
+block of lisp code you write.  And while this may not be such a big issue in
+isolation, in combination with the abundant body-enclosing macros in
+emacs-lisp--[[file:../documentation/helpful-special-form--save-excursion.html][save-excursion]], [[file:../documentation/helpful-special-form--save-restriction.html][save-restriction]], [[file:../documentation/helpful-macro--save-match-data.html][save-match-data]], [[file:../documentation/helpful-special-form--unwind-protect.html][unwind-protect]],
+[[file:../documentation/helpful-special-form--condition-case.html][condition-case]] and [[file:../documentation/helpful-function--eval-after-load.html][eval-after-load]] just to name a few--it is that much easier
+for nesting to get out of hand.  Even worse is using =let= and =let*= in combination
+with closely related symbol-binding macros such as =cl-labels=, =cl-flet=, and
+=cl-letf=.  Each of these constructs adds its own boilerplate as well as
+additional level of nesting making the resulting form progressively more
+unwiedly and cumbersome to read.
+
+Consider the following form as an example.  It does two very typical things: it
+binds symbols--=a= =b= and =c=--with [[file:../documentation/helpful-special-form--let.html][let]] and it binds symbols--=plus= and =minus=--to
+functions via [[file:../documentation/helpful-macro--cl-flet.html][cl-flet]].  And yet before we have even reached the main body we are
+already at two levels of nesting.
+
+#+NAME: initial-example
+#+begin_src emacs-lisp
+(let ((a 1)
+      (b 2)
+      (c 3))
+  (cl-flet ((plus (x y) (+ x y))
+            (minus (x y) (- x y)))
+    (minus (plus b c) (plus a b))))
+#+end_src
+
+To be clear, I am not demonizing nesting itself.  Proper nesting actually makes
+code more readable by conveying information about what pertains to a specific
+form.  And, objectively speaking, the nesting here is logical and consistent
+with the nesting of any typical body-enclosing lisp form.  Nevertheless, the
+similar nature of the symbol-binding lisp constructs, the frequency of their
+use, as well as the verbosity that arises from using them in tandem presaged the
+need for an abstraction.  Accordingly, I devised [[file:../documentation/helpful-macro--progn-bang.html][progn!]].
+
+# Around the same time I had been looking at the Emacs package [[https://github.com/okamsn/loopy][loopy]] an
+# alternative to [[file:../documentation/helpful-macro--cl-loop.html][cl-loop]] that improves on its predecessor by using lisp
+# expressions.  There, I noticed the idea of using certain names that signal
+# variable binding.  While I undoubtedly found loopy useful, I lamented the fact
+# that I had to write loops to use this feature because I often wanted it even
+# outside of loops.
+
+# All of these things--,,--lead me to the creation of =progn!=, a macro that.
+
+To see how it works consider the initial example below re-written using =progn!=.  Even
+with a cursory glance it is apparent how much cleaner and less cluttered the
+form is compared to [[initial-example][its counterpart]].
+
+#+begin_src emacs-lisp
+(progn!
+  (set! a 1)
+  (set! b 2)
+  (set! c 3)
+  (flet! plus (x y) (+ x y))
+  (flet! minus (x y) (- x y))
+  (minus (plus b c) (plus a b)))
+#+end_src
+
+Among the first things you will notice is the appearance new macros: =set!= and
+=flet!=.  The former is a wrapper around =setq= and the latter just ignores its
+arguments and expands to nil.  Primarily, these macros--especially for =flet!=
+which otherwise does nothing--is to indicate to =progn!= where in the body it
+should either record information or modify the body itself.  The idea of using
+certain lisp patterns to indicate some action is not a novel one: it was inspired
+by [[https://github.com/okamsn/loopy][loopy]] an iteration macro that in turn was inspired by [[file:../documentation/helpful-macro--cl-loop.html][cl-loop]].
+
+#+begin_src emacs-lisp
+(defmacro set! (var value)
+  `(setq ,var ,value))
+
+(defmacro flet! (name args &rest body)
+  "Define a local function definition with `cl-flet'.
+NAME, ARGS and BODY are the same as in `defun'.
+Must be used in `progn!'."
+  (declare (indent defun))
+  (ignore name args body))
+#+end_src
+
+During macro-expansion, =progn!= loops[fn::By "loops" I do not mean a normal
+[[file:../documentation/helpful-macro--dolist.html][dolist]] kind of loop.  It walks the tree of forms using [[https://github.com/Luis-Henriquez-Perez/treepy.el][treepy]].  But I do not
+want to digress here.]through its body detecting forms that match the patterns
+~(set!  SYMBOL VALUE)~ and ~(flet!  NAME . ARGUMENTS)~.  When it finds the former it
+collects =SYMBOL= into a list of symbols to be implicitly let-bound.  When it
+finds the latter (shown below) it replaces it as well as subsequent forms, =REST=,
+with =(cl-flet ((NAME . ARGUMENTS)) REST)=.  After finishing going through the
+body =progn!= let-binds the symbols it collected from =set!= patterns around the
+resulting body.  The result is the following macro-expansion[fn::Actually, this
+is a slightly simplified macro-expansion for didactic purposes.] which is
+virtually equivalent to the initial example.
+
+#+begin_src emacs-lisp
+(let ((a nil)
+      (b nil)
+      (c nil))
+  (set! a 1)
+  (set! b 2)
+  (set! c 3)
+  (cl-flet ((plus (x y) (+ x y)))
+    (cl-flet ((minus (x y) (- x y)))
+      (minus (plus b c) (plus a b)))))
+#+end_src
+
+It should be noted that abstracting the code in this way does come with a
+drawback.  Namely, you lose out on some of the precision and flexibility you
+have to specify the scope of forms.  In the following example for instance, the
+form ~(+ 1 1)~ is in the scope of =let= but not =cl-flet= whereas ~(minus (plus b c)
+(plus a b))~ is in both.  With =progn!= this is impossible.  However, with over a
+year of using =progn!=, I have not found a case where I actually need this level
+of control.
+
+#+begin_src emacs-lisp
+(let ((a 1)
+      (b 2)
+      (c 3))
+  (+ 1 1)
+  (cl-flet ((plus (x y) (+ x y))
+            (minus (x y) (- x y)))
+    (minus (plus b c) (plus a b))))
+#+end_src
+
+By working in combination with these indicator macros =progn!= facilitates writing
+more direct and concise code.  Previously, I felt discouraged from using
+=cl-flet=, =cl-labels= and =cl-letf= despite their palpable usefulness due to their
+unruly verbosity; now I find myself using such constructs all the time.
+
+# Notably, =progn!= resolves the [[https://stackoverflow.com/questions/17764326/emacs-proper-cl-flet-indentation][ugly indentation problem]] of locally binding even a
+# moderately-sized function with [[file:../documentation/helpful-macro--cl-flet.html][cl-flet]].  Historically, that problem was
+# approached in terms of how to make the [[file:../documentation/helpful-function--lisp-indent-function.html][lisp-indent-function]] recognize functions
+# bound by which is very hard if not impossible to do cleanly, Instead concede
+# that putting an entire function in a let-binding is not a good idea--and it
+# probably is not a good idea anyway to be honest--and instead devote the function
+# its own form =flet= that will be indented properly.
+
+# Some of the most common macros and special forms in
+# emacs-lisp enclose a group of forms, their body.  It is
+# precisely my aversion to this nesting that has so often deterred me from using
+# macros like =cl-flet= and [[file:../documentation/helpful-macro--cl-letf.html][cl-letf]].  It is not hard to see how using just a few of
+# these forms can result in a form that is four or more levels deep.
+
+# #+begin_src emacs-lisp
+# (progn
+#   (let ((a 1)
+#         (b 2)
+#         (c 3))
+#     (cl-flet ((plus (x y) (+ x y))
+#               (minus (x y) (- x y)))
+#       (minus (plus b c) (plus a b)))))
+# #+end_src
+
+# Although there is nothing inherently wrong with this, I argue that more often
+# than not you do not need that level of specificity.  A majority of the time it
+# suffices to have the scope to apply to the whole body.  Look, for example, at
+# the equivalent.  It is exceedingly rare--for me at least--to have a function
+# that I will not.
+
+# #+begin_src emacs-lisp
+# (progn
+#   (let ((a 1)
+#         (b 2)
+#         (c 3))
+#     (cl-flet ((plus (x y) (+ x y))
+#               (minus (x y) (- x y)))
+#       (minus (plus b c) (plus a b)))))
+# #+end_src
+
+# There is no additional nesting here.  Moreover, putting the definition of a
+# locally bound =cl-letf= function in its own form--the =flet!=--ensures that you can
+# use the same indentation as =defun=.  Maybe the problem with is not that the
+# longer functions defined in =cl-flet= and friends are not too long--it is that.
+
+# Since =progn!= makes it so easy to.  Programmers are encouraged to use as they
+# should be.  There is a trade-off.
+
+# Now that I have whetted the tongue or at least I hope I have, let me go over a
+# list of features for.

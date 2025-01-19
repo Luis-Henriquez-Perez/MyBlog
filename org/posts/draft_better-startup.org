@@ -1,0 +1,4 @@
+* create better
+
+The idea of mine was inspired by multiple packages I have seen online--init
+loaders. [[][Pinit-loader]] [[][Pel-init-loader]].

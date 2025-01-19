@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>oo-abbrev-table-main.el</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .custom {
+        /* (:inherit outline-1 :extend t :overline t) */
+        text-decoration: overline;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .highlight-quoted-quote {
+        /* highlight-quoted-quote */
+        color: #531ab6;
+      }
+      .highlight-quoted-symbol {
+        /* highlight-quoted-symbol */
+        color: #0000b0;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .org-link {
+        /* org-link */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .outli-repeat-emacs-lisp-mode-1 {
+        /* outli-repeat-emacs-lisp-mode-1 */
+        color: #000000;
+        background-color: #bfffbfffbfff;
+        font-weight: bold;
+        text-decoration: overline;
+      }
+      .outli-stem-emacs-lisp-mode-1 {
+        /* outli-stem-emacs-lisp-mode-1 */
+        background-color: #bfffbfffbfff;
+        text-decoration: overline;
+      }
+      .rainbow-delimiters-depth-1 {
+        /* rainbow-delimiters-depth-1-face */
+        color: #000000;
+      }
+      .rainbow-delimiters-depth-2 {
+        /* rainbow-delimiters-depth-2-face */
+        color: #dd22dd;
+      }
+      .rainbow-delimiters-depth-3 {
+        /* rainbow-delimiters-depth-3-face */
+        color: #008899;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="outli-stem-emacs-lisp-mode-1"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-1">;</span><span class="custom"> oo-abbrev-table-main.el -*- lexical-binding: t; -*-
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Copyright (c) 2024 Free Software Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author: Luis Henriquez-Perez <a href="mailto:luis%40luishp.xyz">&lt;luis@luishp.xyz&gt;</a>
+</span><span class="comment-delimiter">;; </span><span class="comment">Homepage: </span><span class="comment"><span class="org-link"><a href="https://github.com/Luis-Henriquez-Perez/dotfiles/">https://github.com/Luis-Henriquez-Perez/dotfiles</a><a href="https://github.com/Luis-Henriquez-Perez/dotfiles/">/</a></span></span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is not part of GNU Emacs.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This program is free software; you can redistribute it and/or
+</span><span class="comment-delimiter">;; </span><span class="comment">modify it under the terms of the GNU General Public License as
+</span><span class="comment-delimiter">;; </span><span class="comment">published by the Free Software Foundation, either version 3 of the
+</span><span class="comment-delimiter">;; </span><span class="comment">License, or (at your option) any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This program is distributed in the hope that it will be useful, but
+</span><span class="comment-delimiter">;; </span><span class="comment">WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+</span><span class="comment-delimiter">;; </span><span class="comment">General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with this program. If not, see </span><span class="comment"><span class="org-link"><a href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/</a><a href="http://www.gnu.org/licenses/">&gt;</a></span></span><span class="comment">.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="outli-stem-emacs-lisp-mode-1"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-1">;</span><span class="custom"> Commentary:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;  </span><span class="comment">Define my main abbrev table, `</span><span class="comment"><span class="constant">oo-abbrev-table-main</span></span><span class="comment">'.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="outli-stem-emacs-lisp-mode-1"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-1">;</span><span class="custom"> Code:
+</span><span class="rainbow-delimiters-depth-1">(</span><span class="keyword">require</span> <span class="highlight-quoted-quote">'</span><span class="constant">abbrev</span><span class="rainbow-delimiters-depth-1">)</span>
+
+<span class="rainbow-delimiters-depth-1">(</span>define-abbrev-table <span class="highlight-quoted-quote">'</span><span class="highlight-quoted-symbol">oo-abbrev-table-main</span>
+  <span class="highlight-quoted-quote">'</span><span class="rainbow-delimiters-depth-2">(</span><span class="rainbow-delimiters-depth-3">(</span><span class="string">"mmend"</span> <span class="string">"recommend"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"b"</span> <span class="string">"be"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"del"</span> <span class="string">"delete"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"desc"</span> <span class="string">"description"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hes"</span> <span class="string">"he is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"impressoin"</span> <span class="string">"impression"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"n"</span> <span class="string">"and"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wsa"</span> <span class="string">"was"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"var"</span> <span class="string">"variable"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"vars"</span> <span class="string">"variables"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"macroexp"</span> <span class="string">"macro expansion"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"coments"</span> <span class="string">"comments"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"unes"</span> <span class="string">"unnecessary"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"uness"</span> <span class="string">"unnecessary"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dk"</span> <span class="string">"do not know"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"emacss"</span> <span class="string">"Emacs's"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ess"</span> <span class="string">"essentially"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sist"</span> <span class="string">"consistent"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"initing"</span> <span class="string">"initializing"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fnames"</span> <span class="string">"filenames"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"misc"</span> <span class="string">"miscellaneous"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"imm"</span> <span class="string">"immediately"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"evv"</span> <span class="string">"everything"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"abut"</span> <span class="string">"about"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"movo"</span> <span class="string">"moreover"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dandylion"</span> <span class="string">"dandelion"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dandylions"</span> <span class="string">"dandelions"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"bev"</span> <span class="string">"bird's-eye view"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"thot"</span> <span class="string">"thought"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tmmw"</span> <span class="string">"to make matters worse"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"freq"</span> <span class="string">"frequency"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"pertubed"</span> <span class="string">"perturbed"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"si"</span> <span class="string">"is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"vs"</span> <span class="string">"versus"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"mor"</span> <span class="string">"more"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"configing"</span> <span class="string">"configuring"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"aume"</span> <span class="string">"as you might expect"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ayme"</span> <span class="string">"as you might expect"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tss"</span> <span class="string">"timestamps"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ts"</span> <span class="string">"timestamp"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"obj"</span> <span class="string">"object"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"oop"</span> <span class="string">"object-oriented-programming"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ood"</span> <span class="string">"object-oriented-design"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hwat"</span> <span class="string">"what"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sep"</span> <span class="string">"separate"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"utube"</span> <span class="string">"youtube"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hav"</span> <span class="string">"have"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ootq"</span> <span class="string">"out of the question"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tte"</span> <span class="string">"to this end"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wasnt"</span> <span class="string">"was not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ult"</span> <span class="string">"ultimate"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ultl"</span> <span class="string">"ultimately"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"aia"</span> <span class="string">"all in all"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"soly"</span> <span class="string">"solely"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idwt"</span> <span class="string">"I do not want to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"coll"</span> <span class="string">"collection"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hadnt"</span> <span class="string">"had not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"suces"</span> <span class="string">"success"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sucess"</span> <span class="string">"success"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"accros"</span> <span class="string">"across"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"resonable"</span> <span class="string">"reasonable"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sec"</span> <span class="string">"second"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"secs"</span> <span class="string">"seconds"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"reco"</span> <span class="string">"recommended"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sth"</span> <span class="string">"something"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ath"</span> <span class="string">"anything"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"corsor"</span> <span class="string">"cursor"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sdb"</span> <span class="string">"should not be"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"rihgt"</span> <span class="string">"right"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"shdnt"</span> <span class="string">"should not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"aycs"</span> <span class="string">"as you can see"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"twisi"</span> <span class="string">"the way I see it"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fnr"</span> <span class="string">"for no reason"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"mk"</span> <span class="string">"make"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"prases"</span> <span class="string">"phrases"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"thse"</span> <span class="string">"these"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"lang"</span> <span class="string">"language"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"english"</span> <span class="string">"English"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"nuf"</span> <span class="string">"enough"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idek"</span> <span class="string">"I did not even know"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"cur"</span> <span class="string">"current"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"curr"</span> <span class="string">"current"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"onl"</span> <span class="string">"only"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"uve"</span> <span class="string">"you have"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"revaled"</span> <span class="string">"re-evaluated"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idid"</span> <span class="string">"I did"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tres"</span> <span class="string">"interesting"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ml"</span> <span class="string">"modeline"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"def"</span> <span class="string">"definitely"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"docs"</span> <span class="string">"documentation"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"doc"</span> <span class="string">"documentation"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"nfo"</span> <span class="string">"information"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"info"</span> <span class="string">"information"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"correclty"</span> <span class="string">"correctly"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"coudl"</span> <span class="string">"could"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"oofone"</span> <span class="string">"O(1)"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"iml"</span> <span class="string">"immediately"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"theyre"</span> <span class="string">"they are"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"punc"</span> <span class="string">"punctuation"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dling"</span> <span class="string">"downloading"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ez"</span> <span class="string">"easy"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fol"</span> <span class="string">"follow"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"popl"</span> <span class="string">"populate"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"als"</span> <span class="string">"autoloads"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"al"</span> <span class="string">"autoload"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ootw"</span> <span class="string">"out of the way"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"gen"</span> <span class="string">"generate"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"aloads"</span> <span class="string">"autoloads"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"alods"</span> <span class="string">"autoloads"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dls"</span> <span class="string">"downloads"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"lize"</span> <span class="string">"realize"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hwo"</span> <span class="string">"how"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tbe"</span> <span class="string">"to be exact"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"chars"</span> <span class="string">"characters"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"heres"</span> <span class="string">"here is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hesi"</span> <span class="string">"hesitant"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ex"</span> <span class="string">"example"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"xample"</span> <span class="string">"example"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"cna"</span> <span class="string">"can"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ord"</span> <span class="string">"order"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"cate"</span> <span class="string">"category"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"nyt"</span> <span class="string">"anything"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"mena"</span> <span class="string">"mean"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"doin"</span> <span class="string">"doing"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"na"</span> <span class="string">"an"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"somethig"</span> <span class="string">"something"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"iac"</span> <span class="string">"in any case"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"di"</span> <span class="string">"do it"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"intro"</span> <span class="string">"introduction"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tha"</span> <span class="string">"that"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"char"</span> <span class="string">"character"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wt"</span> <span class="string">"want to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hava"</span> <span class="string">"have a"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"deflt"</span> <span class="string">"default"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fname"</span> <span class="string">"filename"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ta"</span> <span class="string">"that"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"itl"</span> <span class="string">"it will"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"itll"</span> <span class="string">"it will"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"mott"</span> <span class="string">"most of the time"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sd"</span> <span class="string">"should"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"shd"</span> <span class="string">"should"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"emacs"</span> <span class="string">"Emacs"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"alot"</span> <span class="string">"a lot"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"moro"</span> <span class="string">"moreover"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"orig"</span> <span class="string">"original"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"iat"</span> <span class="string">"in addition to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"elisp"</span> <span class="string">"emacs-lisp"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idl"</span> <span class="string">"I do not like"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"y"</span> <span class="string">"why"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"r"</span> <span class="string">"are"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">"id" is actually a word, but I use it so infrequently and I use the phrase I
+</span>    <span class="comment-delimiter">;; </span><span class="comment">would so frequently that it is worth having it be an abbrev for I.
+</span>    <span class="comment-delimiter">;; </span><span class="comment">("wm" "which")
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"prec"</span> <span class="string">"precedence"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wdimbt"</span> <span class="string">"what do I mean by this"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wdim"</span> <span class="string">"what do I mean"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"awn"</span> <span class="string">"also worth noting"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"int"</span> <span class="string">"I need to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wch"</span> <span class="string">"which"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ch"</span> <span class="string">"which"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"igts"</span> <span class="string">"I have got to say"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ihtbs"</span> <span class="string">"it has to be said"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wd"</span> <span class="string">"would"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"freql"</span> <span class="string">"frequently"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ifreql"</span> <span class="string">"infrequently"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"infreql"</span> <span class="string">"infrequently"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"id"</span> <span class="string">"ID"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wan"</span> <span class="string">"want"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idht"</span> <span class="string">"I do not have to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hvae"</span> <span class="string">"have"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"cann"</span> <span class="string">"cannot"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"icj"</span> <span class="string">"I can just"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ic"</span> <span class="string">"I can"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ure"</span> <span class="string">"you are"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"lhp"</span> <span class="string">"Luis Henriquez-Perez"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"noly"</span> <span class="string">"not only"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"specy"</span> <span class="string">"specifically"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"rl"</span> <span class="string">"really"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"args"</span> <span class="string">"arguments"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ppl"</span> <span class="string">"people"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"o"</span> <span class="string">"of"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"urself"</span> <span class="string">"yourself"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ab"</span> <span class="string">"about"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ret"</span> <span class="string">"return"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tn"</span> <span class="string">"then"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"blv"</span> <span class="string">"believe"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"nto"</span> <span class="string">"not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"mone"</span> <span class="string">"money"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hve"</span> <span class="string">"have"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"m"</span> <span class="string">"my"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"swich"</span> <span class="string">"switch"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"actuall"</span> <span class="string">"actually"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"evalt"</span> <span class="string">"evaluate"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"asap"</span> <span class="string">"A.S.A.P."</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"econf"</span> <span class="string">"emacs configuration"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"alth"</span> <span class="string">"although"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"esp"</span> <span class="string">"especially"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">This clashes with the word "ill" but I barely use that word.  In the rare
+</span>    <span class="comment-delimiter">;; </span><span class="comment">event where I do need to use it I will unexpand it.
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ill"</span> <span class="string">"I will"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">This is a common abbrev for "by the way" but I feel like I do not really use
+</span>    <span class="comment-delimiter">;; </span><span class="comment">that phrase unless I am texting.
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"imd"</span> <span class="string">"immediately"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"exand"</span> <span class="string">"expand"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ppet"</span> <span class="string">"snippet"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tse"</span> <span class="string">"these"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"usu"</span> <span class="string">"usually"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"iprac"</span> <span class="string">"in practice"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"efy"</span> <span class="string">"efficiency"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"evr"</span> <span class="string">"everything"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sen"</span> <span class="string">"seen"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wat"</span> <span class="string">"what"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dfl"</span> <span class="string">"default"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dflt"</span> <span class="string">"default"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"difr"</span> <span class="string">"differ"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"btw"</span> <span class="string">"between"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dif"</span> <span class="string">"difference"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"diff"</span> <span class="string">"difference"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"htat"</span> <span class="string">"that"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"rnt"</span> <span class="string">"are not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"arent"</span> <span class="string">"are not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tt"</span> <span class="string">"the"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"len"</span> <span class="string">"length"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"bf"</span> <span class="string">"before"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"af"</span> <span class="string">"after"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"oft"</span> <span class="string">"often"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dsnt"</span> <span class="string">"does not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ihb"</span> <span class="string">"I had been"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"comptia"</span> <span class="string">"CompTIA"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"gt"</span> <span class="string">"get"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wev"</span> <span class="string">"whatever"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"jbos"</span> <span class="string">"jobs"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"theyll"</span> <span class="string">"they will"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"prevl"</span> <span class="string">"previously"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"prev"</span> <span class="string">"previous"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ivs"</span> <span class="string">"I have seen"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"rxp"</span> <span class="string">"regular expression"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"rx"</span> <span class="string">"regular expression"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dl"</span> <span class="string">"download"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"vc"</span> <span class="string">"version control"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wil"</span> <span class="string">"will"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"shiftk"</span> <span class="string">"SHIFT"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"nots"</span> <span class="string">"number of times"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"num"</span> <span class="string">"number"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"f"</span> <span class="string">"of"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"lins"</span> <span class="string">"lines"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">I thought that this could be a bad abbrev because it is too much line a
+</span>    <span class="comment-delimiter">;; </span><span class="comment">spelling mistake of =the=, but then I thought if I do misspell "the" it is
+</span>    <span class="comment-delimiter">;; </span><span class="comment">very unlikely I will do so by pressing =t= again.
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tht"</span> <span class="string">"thought"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"i"</span> <span class="string">"I"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"luis"</span> <span class="string">"Luis"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">This will not work because ";" is not a work constituent.  I need to use
+</span>    <span class="comment-delimiter">;; </span><span class="comment">`</span><span class="comment"><span class="constant">aas</span></span><span class="comment">' for this or come up with some other solution.
+</span>    <span class="comment-delimiter">;; </span><span class="comment">(";;" ".")
+</span>    <span class="comment-delimiter">;; </span><span class="comment">TODO: move to spell-fixing abbrev.
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ivb"</span> <span class="string">"I have been"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"werent"</span> <span class="string">"were not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"rly"</span> <span class="string">"really"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"aagp"</span> <span class="string">"at any given point"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"begn"</span> <span class="string">"beginning"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idt"</span> <span class="string">"I do not think"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"arent"</span> <span class="string">"are not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ting"</span> <span class="string">"thing"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ned"</span> <span class="string">"need"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dir"</span> <span class="string">"directory"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ull"</span> <span class="string">"you will"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"spst"</span> <span class="string">"supposed"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hv"</span> <span class="string">"have"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"desiding"</span> <span class="string">"deciding"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"pkgs"</span> <span class="string">"packages"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"pkg"</span> <span class="string">"package"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ftmp"</span> <span class="string">"for the most part"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"readme"</span> <span class="string">"README"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"sdnt"</span> <span class="string">"should not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"cme"</span> <span class="string">"come"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"imed"</span> <span class="string">"immediately"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"cesly"</span> <span class="string">"successfully"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"owoto"</span> <span class="string">"one way or the other"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"configs"</span> <span class="string">"configurations"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"espace"</span> <span class="string">"escape"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ijwi"</span> <span class="string">"I just want it"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ijw"</span> <span class="string">"I just want"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idw"</span> <span class="string">"I do not want"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ij"</span> <span class="string">"I just"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"unesy"</span> <span class="string">"unnecessarily"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"unes"</span> <span class="string">"unnecessary"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"nes"</span> <span class="string">"necessary"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"bec"</span> <span class="string">"because"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"aswer"</span> <span class="string">"answer"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dlk"</span> <span class="string">"do not like"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tho"</span> <span class="string">"though"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idkw"</span> <span class="string">"I do not know why"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"damw"</span> <span class="string">"do not ask me why"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idlk"</span> <span class="string">"I do not like"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ilk"</span> <span class="string">"I like"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"auly"</span> <span class="string">"automatically"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dsl"</span> <span class="string">"Domain-Specific-Language"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fn"</span> <span class="string">"function"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fns"</span> <span class="string">"functions"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ig"</span> <span class="string">"instagram"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"econf"</span> <span class="string">"emacs configuration"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"kbdm"</span> <span class="string">"keyboard macro"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"kbdms"</span> <span class="string">"keyboard macros"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"msw"</span> <span class="string">"Microsoft Windows"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">".mail"</span> <span class="string">"luis@luishp.xyz"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"imho"</span> <span class="string">"in my humble opinion"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"imo"</span> <span class="string">"in my opinion"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fyi"</span> <span class="string">"for your information"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"lmk"</span> <span class="string">"let me know"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"afaik"</span> <span class="string">"as far as I know"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idk"</span> <span class="string">"I do not know"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"gonna"</span> <span class="string">"going to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"otc"</span> <span class="string">"on the contrary"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"st"</span> <span class="string">"sometimes"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tbh"</span> <span class="string">"to be honest"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"qwerty"</span> <span class="string">"QWERTY"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ngl"</span> <span class="string">"not going to lie"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tfb"</span> <span class="string">"to be frank"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ndo"</span> <span class="string">"window"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"tis"</span> <span class="string">"it is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"amly"</span> <span class="string">"automatically"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"rn"</span> <span class="string">"right now"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"bly"</span> <span class="string">"probably"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"lk"</span> <span class="string">"like"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">I want the word =config= to stay the same too much for this to be useful.
+</span>    <span class="comment-delimiter">;; </span><span class="comment">Right now it is frankly more of an impediment for me than something that
+</span>    <span class="comment-delimiter">;; </span><span class="comment">helps me.
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"questioin"</span> <span class="string">"question"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ur"</span> <span class="string">"your"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wiht"</span> <span class="string">"with"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ith"</span> <span class="string">"with"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"abilit"</span> <span class="string">"ability"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ko"</span> <span class="string">"K.O."</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dat"</span> <span class="string">"that"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"incc"</span> <span class="string">"increase"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"incs"</span> <span class="string">"increase"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"decs"</span> <span class="string">"deccrease"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">TODO: Add a condition preventng it from expanding if I am writing a file path.
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"config"</span> <span class="string">"configuration"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"obv"</span> <span class="string">"obviously"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"appr"</span> <span class="string">"appropriate"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ofc"</span> <span class="string">"of course"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ok"</span> <span class="string">"O.K."</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"iis"</span> <span class="string">"it's"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"bc"</span> <span class="string">"because"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"iow"</span> <span class="string">"in other words"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"uun"</span> <span class="string">"up until now"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"exwm"</span> <span class="string">"EXWM"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fe"</span> <span class="string">"for example"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"evaled"</span> <span class="string">"evaluated"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"imma"</span> <span class="string">"I am going to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">From </span><span class="comment"><span class="org-link"><a href="https://sachachua.com/blog/2015/01/developing-emacs-micro-habits-text-automation/">https://sachachua.com/blog/2015/01/developing-emacs-micro-habits-text-automation</a><a href="https://sachachua.com/blog/2015/01/developing-emacs-micro-habits-text-automation/">/</a></span></span><span class="comment">
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"iwt"</span> <span class="string">"I want to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hw"</span> <span class="string">"however"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ths"</span> <span class="string">"this"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"otoh"</span> <span class="string">"on the one hand"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"otth"</span> <span class="string">"on the other hand"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"kinda"</span> <span class="string">"kind of"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ohter"</span> <span class="string">"other"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fe"</span> <span class="string">"for example"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fi"</span> <span class="string">"for instance"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"youve"</span> <span class="string">"you have"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"youd"</span> <span class="string">"you would"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"il"</span> <span class="string">"I will"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"theres"</span> <span class="string">"there is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"itss"</span> <span class="string">"it is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"im"</span> <span class="string">"I am"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"illl"</span> <span class="string">"I will"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"cant"</span> <span class="string">"cannot"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"idd"</span> <span class="string">"I would"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dont"</span> <span class="string">"do not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wontt"</span> <span class="string">"will not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"doesnt"</span> <span class="string">"does not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">Not sure I actually want this abbrev because =wont= is actually a word.
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ine"</span> <span class="string">"one"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"mispelling"</span> <span class="string">"misspelling"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ry"</span> <span class="string">"very"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wont"</span> <span class="string">"will not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"thats"</span> <span class="string">"that is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"u"</span> <span class="string">"you"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ul"</span> <span class="string">"you'll"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dont"</span> <span class="string">"do not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dnt"</span> <span class="string">"don't"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wo"</span> <span class="string">"without"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ive"</span> <span class="string">"I have"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ik"</span> <span class="string">"I know"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"plx"</span> <span class="string">"complex"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ribe"</span> <span class="string">"describe"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"iff"</span> <span class="string">"if and only if"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"addd"</span> <span class="string">"additionally"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"weve"</span> <span class="string">"we have"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"whats"</span> <span class="string">"what is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"havent"</span> <span class="string">"have not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"didnt"</span> <span class="string">"did not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"shouldnt"</span> <span class="string">"should not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"isnt"</span> <span class="string">"is not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fo"</span> <span class="string">"for"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ud"</span> <span class="string">"you would"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fwis"</span> <span class="string">"from what I see"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fwiu"</span> <span class="string">"from what I understand"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"youre"</span> <span class="string">"you are"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wouldnt"</span> <span class="string">"would not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"woudnt"</span> <span class="string">"would not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"coudnt"</span> <span class="string">"could not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"couldnt"</span> <span class="string">"could not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="comment-delimiter">;; </span><span class="comment">These abbrevs are focused on spelling mistakes.
+</span>    <span class="comment-delimiter">;; </span><span class="comment">Here I focus on fixing unambiguous spelling mistakes.
+</span>    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"onw"</span> <span class="string">"own"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"frst"</span> <span class="string">"first"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"edting"</span> <span class="string">"editing"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"alread"</span> <span class="string">"already"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"htats"</span> <span class="string">"that is"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"whehther"</span> <span class="string">"whether"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"somehting"</span> <span class="string">"something"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"hte"</span> <span class="string">"the"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"te"</span> <span class="string">"the"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"th"</span> <span class="string">"the"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"ot"</span> <span class="string">"to"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"wnat"</span> <span class="string">"want"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"stoped"</span> <span class="string">"stopped"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"capfs"</span> <span class="string">"completion-at-point-functions"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"suprise"</span> <span class="string">"surprise"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"functoin"</span> <span class="string">"function"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"refect"</span> <span class="string">"reflect"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dint"</span> <span class="string">"did not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"orignal"</span> <span class="string">"original"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"eachother"</span> <span class="string">"each other"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dn"</span> <span class="string">"do not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dsn"</span> <span class="string">"does not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"fsr"</span> <span class="string">"for some reason"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"propogate"</span> <span class="string">"propagate"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"pakcage"</span> <span class="string">"package"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"pakcages"</span> <span class="string">"packages"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"motn"</span> <span class="string">"more often than not"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"itc"</span> <span class="string">"in that case"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"prob"</span> <span class="string">"problem"</span><span class="rainbow-delimiters-depth-3">)</span>
+    <span class="rainbow-delimiters-depth-3">(</span><span class="string">"dered"</span> <span class="string">"considered"</span><span class="rainbow-delimiters-depth-3">)</span><span class="rainbow-delimiters-depth-2">)</span>
+  <span class="doc">"My main abbrev table for English text."</span><span class="rainbow-delimiters-depth-1">)</span>
+<span class="outli-stem-emacs-lisp-mode-1"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-1">;</span><span class="custom"> provide
+</span><span class="rainbow-delimiters-depth-1">(</span><span class="keyword">provide</span> <span class="highlight-quoted-quote">'</span><span class="constant">oo-abbrev-table-main</span><span class="rainbow-delimiters-depth-1">)</span>
+<span class="outli-stem-emacs-lisp-mode-1"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-1">;</span><span class="custom"> oo-abbrev-table-main.el ends here
+</span></pre>
+  </body>
+</html>

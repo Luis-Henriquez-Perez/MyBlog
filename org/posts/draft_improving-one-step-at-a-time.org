@@ -1,0 +1,8 @@
+#+title: Little by Little
+#+author: Luis Henriquez-Perez
+
+I have been notoriously bad at gradual improvement over several days.  This is
+one of the most important life skills.  But I feel that most people are not good
+at.  And particularly in programming this is important.  You want to change your
+goals form DO THIS to position my self so I can do this.  You just want to get
+closer and closer.

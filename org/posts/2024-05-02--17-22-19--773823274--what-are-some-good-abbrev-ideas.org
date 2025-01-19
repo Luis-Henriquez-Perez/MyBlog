@@ -1,0 +1,102 @@
+#+TITLE: Good abbrev ideas
+#+AUTHOR: Luis Henriquez-Perez
+
+The more I started using [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Abbrevs.html][abbrev]] the more uses I found for it.  Here I showcase
+some of my nicest abbrev candidates as well as corresponding examples from [[https://github.com/Luis-Henriquez-Perez/dotfiles/blob/develop/dot_config/emacs/lisp/99-after-load-abbrev.el][my
+personal abbrev file]].
+
+- *capitalized words*
+
+  Typing an uppercase letter, =LETTER=, requires the key-chord =SHIFT LETTER=.  A
+  key-chord is a set of keys pressed simultaneously.  Assuming you use a [[https://en.wikipedia.org/wiki/QWERTY][QWERTY]]
+  keyboard, a key-chord is in general harder, slower, and more strenuous to type
+  than a series of individual letters.  Abbrevs allows us produce the results of
+  harder keystrokes with a short series of easier ones.
+#+begin_src emacs-lisp
+(define-abbrev text-mode-abbrev-table "i" "I")
+(define-abbrev text-mode-abbrev-table "luis" "Luis")
+(define-abbrev text-mode-abbrev-table "Emacs" "Emacs")
+(define-abbrev text-mode-abbrev-table "english" "English")
+;; Not the be confused with the actual word "shift" I add a "k" to the end of
+;; the abbrev to represent "shift key".  And this way I avoid having to
+;; capitalize the entire word myself.
+(define-abbrev text-mode-abbrev-table "shiftk" "SHIFT")
+#+end_src
+- *[[https://www.grammarly.com/blog/contractions/][contractions]]*
+  
+  Contractions are just abbreviations of certain english words like not--and in
+  terms of typing it is doubtful whether they are even easier to type than their
+  expansions.  In any case, you can get the benefit of saving text when typing
+  the contraction, but.  Almost all punctuation is produced via a key-chords.
+  Use abbrevs to avoid ever having to type ='= and other forms of punctuation
+  found in english.
+#+begin_src emacs-lisp
+(define-abbrev text-mode-abbrev-table "youre" "you are")
+(define-abbrev text-mode-abbrev-table "dnt" "do not")
+(define-abbrev text-mode-abbrev-table "wdnt" "would not")
+(define-abbrev text-mode-abbrev-table "wouldnt" "would not")
+(define-abbrev text-mode-abbrev-table "cdnt" "could not")
+(define-abbrev text-mode-abbrev-table "couldnt" "could not")
+#+end_src
+- *common spelling mistakes*
+
+  You can register your typos as abbrevs and their
+  corrections as the corresponding expansions, essentially creating a sort of
+  auto-correct.
+  
+  If you are familiar with Emacs you might be thinking, why not just use
+  [[https://www.emacswiki.org/emacs/FlySpell][flyspell]]?  It has an can identify typos guess what word you meant when you
+  misspell a word.
+
+  Admittedly, =flyspell= is pretty good at guessing which word you meant but it is
+  not perfect and it is not catered specifically for your typing.  Everyone has
+  words they tend to type incorrectly more than others--a sort of "typo
+  tendency" if you will--and this tendency varies among individuals.  This
+  tendency is simply not accounted for be =flyspell=.
+  
+  For example, for me =th= is a common misspelling for =the=.  Flyspell did
+  correctly identifies it as a typo but auto-correcting it yields =ht=[fn:: I did
+  not even know this but apparently "ht" is a contraction of "height".], a word
+  I never use.
+#+begin_src emacs-lisp
+(define-abbrev text-mode-abbrev-table "htat" "that")
+(define-abbrev text-mode-abbrev-table "hte" "the")
+(define-abbrev text-mode-abbrev-table "th" "the")
+(define-abbrev text-mode-abbrev-table "ot" "to")
+#+end_src
+- *[[https://writing.wisc.edu/handbook/transitions/][transitional words and phrases]]*
+
+  Transitional words and phrases are good candidates for abbrevs because of how
+  frequently used they are in sentences.
+#+begin_src emacs-lisp
+(define-abbrev text-mode-abbrev-table "altho" "although")
+(define-abbrev text-mode-abbrev-table "hw" "however")
+(define-abbrev text-mode-abbrev-table "moro" "moreover")
+(define-abbrev text-mode-abbrev-table "iow" "in other words")
+(define-abbrev text-mode-abbrev-table "otoh" "on the one hand")
+#+end_src
+- *phrases*
+
+  The English language is rife with multi-word phrases such as "more often than
+  not" or "once upon a time".  Abbreviating these phrases is particularly
+  satisfying due to the sheer number of words saved.
+#+begin_src emacs-lisp
+(define-abbrev text-mode-abbrev-table "ivs" "I have seen")
+(define-abbrev text-mode-abbrev-table "idlk" "I do not like")
+(define-abbrev text-mode-abbrev-table "idk" "I do not know")
+(define-abbrev text-mode-abbrev-table "damw" "do not ask me why")
+(define-abbrev text-mode-abbrev-table "iff" "if and only if")
+#+end_src
+
+- *words that just go together*
+
+  Words are just commonly used in tandem like "version control" or "regular
+  expression".
+#+begin_src emacs-lisp
+(define-abbrev text-mode-abbrev-table "vc" "version control")
+(define-abbrev text-mode-abbrev-table "rx" "regular expression")
+#+end_src
+
+Of course this list is not exhaustive and It cannot be because there are so many
+ways to use abbrevs, but it is a great point to get started.  Also, check out [[https://github.com/Luis-Henriquez-Perez/dotfiles/blob/develop/dot_config/emacs/lisp/99-after-load-abbrev.el][my
+abbrev file]] for more inspiration.

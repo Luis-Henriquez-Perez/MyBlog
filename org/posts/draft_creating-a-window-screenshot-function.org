@@ -1,0 +1,14 @@
+#+title: Screenshot Function
+#+author: Luis Henriquez-Perez
+
+* creating a screenshot function
+:PROPERTIES:
+:ID:       20250117T112658.465214
+:END:
+
+I want something to take a screenshot.  Specifically, I want functions for
+window, region and full screen screenshots.  It is something that is
+particularly important for things like this blog but also just generally
+important for documenting information that is better described with a picture.
+I have written a function to do this before the first thing I did is try to find
+it.

@@ -1,0 +1,154 @@
+#+TITLE: Using Timestamped Posts
+#+AUTHOR: Luis Henriquez-Perez
+
+The more blog posts I write the harder its getting to find the one I am looking
+for at a glance.  Since the filenames are sorted in lexicographical order and I
+name files solely by topic with no consideration of their resulting order,
+adding a new filename to me is tantamount to tossing a needle in a haystack.  I
+create the post and when I save the file I think: "Where did it go?".  A post I
+created today and one I created five minutes ago might be miles apart.
+Conversely, a post created five years ago and one created five minutes ago might
+be right next to each other.  The experience is disorienting and costly as I end
+up spending more time searching for posts.  Of course, I can always use
+[[file:../../helpful-function--consult-line.html][consult-line]] from [[https://github.com/minad/consult][consult]] but I do not want to do this every time.  Ultimately,
+I want posts for my blog to be in the order that they where created.  To that
+end, I decided to prefix a timestamp at the beginning of the filename of each
+post.
+* deciding on a timestamp format
+I did not know how timestamps were normally written.  Should there be some
+separator between certain time components?  If so what is it and where should it
+go?  I suspect the answer largely depends on use-case and preference.
+
+In a [[https://emacs.stackexchange.com/questions/14673/emacs-function-to-make-a-file-with-date-time-as-filename-and-a-shortcut-for-it][question similar to my own]] the following timestamp format was generated
+using [[file:../../helpful-function--format-time-string.html][format-time-string]].
+#+begin_src emacs-lisp
+(format-time-string "%Y-%m-%d--%H-%M-%S")
+;; => "2024-04-24--14-31-16"
+#+end_src
+
+In contrast the timestamp used for org IDs which is much more conservative about
+separators.  It only uses "T" to separate the year and a "." to separate
+anything smaller than a second.
+#+begin_src emacs-lisp
+(require 'org-id)
+(org-id-new)
+;; => "20240424T141308.453178"
+#+end_src
+
+Not wanting excessively long filenames, I was inclined to avoid using
+separators.  It was when I actually tried using timestamps with no separators
+that I realized how difficult it is to distinguish time components without them.
+Compare with this.  I think the year is easy to see but suppose I wanted the
+hour and minute instead.  I for one would have to sit there a few seconds trying
+to figure it out.
+
+#+begin_src emacs-lisp
+(format-time-string "%Y%m%d%H%M%S%N")
+;; => "20240504145659269408809"
+#+end_src
+
+It is apparent that the question of whether to have separators or not is a trade
+off between readability and brevity.  Then again the question.  After all, if I
+never need to read the timestamp myself and can manipulate them programmatically
+then.
+
+Ultimately, I opted for readability by separating individual time components
+with either a "-" or "--".  Although the minor seconds are not pretty I still
+leave them so I can be sure that filenames are different even if they are
+created in a short time span from each other.
+#+begin_src emacs-lisp
+(format-time-string "%Y-%m-%d--%H-%M-%S--%N")
+;; => "2024-05-01--05-04-45--204039545"
+#+end_src
+# * adding timestamps to existing posts
+# I already had some posts I had written when I had the idea of adding timestamps.
+# To add a timestamp to them I used [[][wdired]]
+* automating the creation of new blog posts
+Typing out the timestamp is too error prone and tedious.  Instead, I wrote the
+following function that prompts me for a blog post title and then creates a blog
+post from the given name, opening the file in Emacs[fn::To be more precise, it
+creates a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Buffers.html][buffer]] that visits the post file using [[file:../../helpful-function--find-file.html][find-file]].] and inserting the
+title and author information.
+#+begin_src emacs-lisp
+(defun oo-blog-new-post (title)
+  "Create a new blog post."
+  (interactive "sBlog post title: ")
+  (find-file (oo--blog-post-filename title))
+  (insert (format "#+TITLE: %s\n" (capitalize title)))
+  (insert (format "#+AUTHOR: Luis Henriquez-Perez\n" (capitalize title))))
+#+end_src
+* generating the path of a blog post from a title
+:PROPERTIES:
+:ID:       20240504T183735.266348
+:END:
+For testing it is often much easier to segregate side-effects (the creation of
+the file) from computations (the generation of the path).  That is why even
+though the body of this function is small enough to fit in =oo-blog-new-post=
+without making it excessively long, I place it into its own function.
+#+begin_src emacs-lisp
+(defun oo--blog-post-filename (title)
+  "Return a valid blog post name from TITLE.
+TITLE is a string describing the topic of a post."
+  (let ((timestamp (format-time-string "%Y-%m-%d--%H-%M-%S--%N"))
+        (name (downcase (string-replace "\s" "-" title)))
+        (post-dir "~/Documents/blog/org/posts/"))
+    (expand-file-name (format "%s--%s.org" timestamp name) post-dir)))
+#+end_src
+This way I can test whether the correct filename is generated without worrying
+about whether inadvertently creating a file in the wrong directory in case of
+I get the code wrong.
+#+begin_src emacs-lisp
+(abbreviate-file-name (oo--blog-post-filename "writing a post while upside down"))
+;; => "~/Documents/blog/org/posts/2024-05-02--12-11-11--127335202--writing-a-post-while-upside-down.org"
+
+(abbreviate-file-name (oo--blog-post-filename "writing a post underwater"))
+;; => "~/Documents/blog/org/posts/2024-05-02--12-11-23--036941798--writing-a-post-underwater.org"
+#+end_src
+I could generalize this function maybe for just generating a timestamp filename.
+I could definitely see myself wanting more such files in the future.  But since
+I have no concrete need as of yet I will leave it as is.
+
+* conclusion
+
+After adding timestamps I have achieved what I wanted.  Now blog posts are
+displayed in a predictable order when viewed via [[https://www.man7.org/linux/man-pages/man1/ls.1.html][ls]] or any file viewer.
+
+#+CAPTION: The dired buffer of the directory containing my blog posts.
+[[file:../images/timestaped-blog-posts.png]]
+# * function that converts an existing filename
+# #+begin_src emacs-lisp
+# ;; 1. separate the name of the file
+# (defun! oo-convert-to-blog-post (file)
+#   (set! ts (format-time-string "%Y%m%d%H%M%S"))
+#   (set! fname (format "%s--%s" ts (f-filename file)))
+#   ;; Timestamp the file if its not timestamped.
+#   (expand-file-name fname "~/Documents/blog/org/posts/"))
+
+# (oo-convert-to-blog-post "~/foo/bar/baz.org")
+
+# "/home/luis/Documents/blog/org/posts/20240424064703--baz.org"
+
+# #+end_src
+# * converting existing drafts into posts
+# I came to the decision to use timestamped files only after writing several
+# partially completed posts that I have already named.  Note we never have had to
+# test for the existence of the file because we are creating a timestamped file so
+# it should not exist.
+
+# I can divide this process into two steps.  If the file is not in the directory
+# move it there and if the file is in the directory make sure it has the correct
+# name.
+
+# I am wondering if there is an "elegant" way to do this where I have a function
+# that works programmatically and a file that works with [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html][dired]] as well.
+# #+begin_src emacs-lisp
+# (defun! oo-dired-do-rename-post (&optional arg)
+#   "Rename FILE to be a blog post."
+#   (interactive "P")
+#   (noflet! dired-rename-file (file _ _)
+#     (funcall this-fn file (oo-convert-to-blog-post file) t))
+#   (dired-do-rename arg))
+# #+end_src
+# * create a link from [[file:../index.org][homepage]] to post
+# After writing a post I need to make it accessible from the homepage.  To do this
+# I add a link from the [[][]] that points to the post.

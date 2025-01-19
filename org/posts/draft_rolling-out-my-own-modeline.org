@@ -1,0 +1,111 @@
+#+title: Rolling out my own mode line
+#+author: Luis Henriquez-Perez
+
+* Journey
+
+For the most part of my emacs journey I did not spend much time on aesthetic.
+In fact, I did not have a mode line for most the years I spent using emacs.  I
+had simply set =mode-line-format= to nil, disabling the mode line.  I think that
+most of the segments on the mode line are useless or at the very least
+overestimated.  Somehow I.
+
+* Quest for the perfect mode line
+- Spaceline
+
+  Spaceline is an example of over-design.  It has a lot of additional options.
+  It recommends compiling the mode line with =spaceline-compile= but does not
+  mention that you really should not do that during startup.  Otherwise, your
+  init time might balloon like mine.  If you compile it try to do so during idle
+  time with [[][]].
+   
+#+begin_src emacs-lisp
+(setq spaceline-byte-compile nil)
+#+end_src
+
+- Telephone-Line
+
+  [[https://github.com/dbordak/telephone-line][Telephone-Line]] looks amazing.  It is separators are hot and and sexy.  It
+  mentions that if you want to use its segments, you can just load but it
+  provides no examples of doing so.  And the process is not trivial.  Unlike
+  =powerline= its code is not designed to be a library.
+
+  It had no examples using icons.  For some reason [[][all-the-icons]] didnt.
+#+begin_src emacs-lisp
+#+end_src
+
+- Doom Modeline
+
+  Boasting a minimalistic look with lighting fast performance to boot, Doom
+  modeline is one of the most of not the most popular mode line out there.  It
+  is used by many "famous" people like the linux youtuber [[][Derek Taylor]] as
+  well as the creator of [[https://github.com/seagle0128/.emacs.d][Centaur Emacs]], [[https://github.com/seagle0128][Vincent Zhang]].  I think =doom-modeline= is
+  the best modeline overall for those who want a good-looking, performant mode
+  line out of the box.  It gets a 10/10 for ease of setup out of the box.  All
+  you have to do is intall it and run doom-modeline-mode= to get a basic working
+  mode line.  In emacs, it does not get easier than that.  Unbelievably,
+  doom-emacs is one of the only modelines out there with examples on its README
+  with icons and that provides segments with icons.  Additionally, the
+  doom-modeline is quite extendable.  It has a vast library of segments--more
+  than I have seen of any other mode line.  And also extensive support for
+  external packages.  I think if =doom-modeline= had separator support it would be
+  unilaterally/unequivocally the best mode line.
+
+#+begin_src emacs-lisp
+#+end_src
+
+- Powerline
+
+  Reading the powerline README I was excited when I saw "".  Unfortunately the
+  library was old and unmaintained.  One thing is it hadnt been tested with
+  icons.  So i had an unpleasnat suprise when i realized the ml width wasnt
+  working properly.  It uses [[/home/luis/Documents/blog/org/documentation/29.4-helpful--length.html][length]] to measure the string length of the
+  width and I have a feeling this is innaccurate with icons which is why I
+  assume doom-modeline uses pixels.
+
+* minor modes
+
+Perhaps the most obnoxious thing about the default mode line is its long list of
+minor modes.  Who would want this?  This list consumes the entire right-hand
+side of the mode line.
+
+* changing mode line height
+
+* Pulling Back my sleeves and making my own
+:PROPERTIES:
+:ID:       20250118T080011.101873
+:END:
+
+As an emacs power user, I had the feeling I would ultimately want more control
+than what =doom modeline= offered.  I wanted a nice display like doom but i wanted
+to have separators like =powerline= and =telephone-line= too.  One caveat is my mode
+line is not at all optimized for efficiency yet.
+
+Strictly speaking I find most mode line segments I have seen 
+
+One thing that really should be mentioned in the powerline README but is not.
+
+#+begin_src emacs-lisp
+;; Resetting the modeline after a theme change ensures separator colors are
+;; updated to match the current theme.
+(hook! enable-theme-functions powerline-reset :ignore-args t)
+#+end_src
+
+** showcasing some segments
+
+** text-scale
+
+This segment was influenced by.
+
+#+begin_src emacs-lisp
+(defun oo-mode-line-component--text-scale ()
+  "Indicate whether the text is scaled and by how much."
+  (and (boundp 'text-scale-mode-amount)
+       (/= text-scale-mode-amount 0)
+       (cond ((> text-scale-mode-amount 0)
+              (format "%s+%d" (nerd-icons-mdicon "nf-md-magnify_plus") text-scale-mode-amount))
+             (t
+              (format "%s%d" (nerd-icons-mdicon "nf-md-magnify_minus") text-scale-mode-amount)))
+       (_
+        (alet! (if (> text-scale-mode-amount 0) "(%+d)" "(%-d)")
+          (propertize (format it text-scale-mode-amount) 'face 'success)))))
+#+end_src

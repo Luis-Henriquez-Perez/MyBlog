@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful macro: let-alist*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+let-alist is an <span class="button">autoloaded</span> macro defined in <span class="button">let-alist.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(<span class="keyword">let-alist</span> ALIST <span class="type">&amp;rest</span> BODY)
+
+<span class="helpful-heading">Documentation
+</span>Let-bind dotted symbols to their cdrs in ALIST and execute BODY.
+
+Dotted symbol is any symbol starting with a <span class="constant">.</span>.  Only those present
+in BODY are let-bound and this search is done at compile time.
+
+For instance, the following code
+
+  (let-alist alist
+    (if (and .title .body)
+        .body
+      .site
+      .site.contents))
+
+essentially expands to
+
+  (let ((.title (cdr (assq 'title alist)))
+        (.body  (cdr (assq 'body alist)))
+        (.site  (cdr (assq 'site alist)))
+        (.site.contents (cdr (assq 'contents (cdr (assq 'site alist))))))
+    (if (and .title .body)
+        .body
+      .site
+      .site.contents))
+
+If you nest <span class="button">let-alist</span> invocations, the inner one can't access
+the variables of the outer one.  You can, however, access alists
+inside the original alist by using dots inside the symbol, as
+displayed in the example above.
+
+Note that there is no way to differentiate the case where a key
+is missing from when it is present, but its value is nil.  Thus,
+the following form evaluates to nil:
+
+    (let-alist '((some-key . nil))
+      .some-key)
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>let-alist is unused in <span class="button">let-alist.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by let-alist</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.3/lisp/emacs-lisp/let-alist.el.gz</span>
+<span class="comment-delimiter">;;; </span><span class="comment">The actual macro.
+</span><span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defmacro</span> <span class="function-name">let-alist</span> (alist <span class="type">&amp;rest</span> body)
+  <span class="doc">"Let-bind dotted symbols to their cdrs in ALIST and execute BODY.
+Dotted symbol is any symbol starting with a `</span><span class="doc"><span class="constant">.</span></span><span class="doc">'.  Only those present
+in BODY are let-bound and this search is done at compile time.
+
+For instance, the following code
+
+  (let-alist alist
+    (if (and .title .body)
+        .body
+      .site
+      .site.contents))
+
+essentially expands to
+
+  (let ((.title (cdr (assq </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'title alist)))
+        (.body  (cdr (assq </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'body alist)))
+        (.site  (cdr (assq </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'site alist)))
+        (.site.contents (cdr (assq </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'contents (cdr (assq </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'site alist))))))
+    (if (and .title .body)
+        .body
+      .site
+      .site.contents))
+
+If you nest `</span><span class="doc"><span class="constant">let-alist</span></span><span class="doc">' invocations, the inner one can't access
+the variables of the outer one.  You can, however, access alists
+inside the original alist by using dots inside the symbol, as
+displayed in the example above.
+
+Note that there is no way to differentiate the case where a key
+is missing from when it is present, but its value is nil.  Thus,
+the following form evaluates to nil:
+
+    (let-alist </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'((some-key . nil))
+      .some-key)"</span>
+  (<span class="keyword">declare</span> (indent 1) (debug t))
+  (<span class="keyword">let</span> ((var (make-symbol <span class="string">"alist"</span>)))
+    `(<span class="keyword">let</span> ((,var ,alist))
+       (<span class="keyword">let</span> ,(mapcar (lambda (x) `(,(car x) ,(let-alist--access-sexp (car x) var)))
+                     (delete-dups (let-alist--deep-dot-search body)))
+         ,@body))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">edebug-form-spec</span>
+  t
+<span class="constant">function-history</span>
+  ("/usr/share/emacs/29.3/lisp/emacs-lisp/let-alist.elc"
+   (autoload "let-alist"
+     ("loaddefs.elc" . 760421)
+     nil t))
+<span class="constant">lisp-indent-function</span>
+  1</pre>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: expand-file-name*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+expand-file-name is a function defined in C source code.
+
+<span class="helpful-heading">Signature
+</span>(expand-file-name NAME <span class="type">&amp;optional</span> DEFAULT-DIRECTORY)
+
+<span class="helpful-heading">Documentation
+</span>Convert filename NAME to absolute, and canonicalize it.
+
+Second arg DEFAULT-DIRECTORY is directory to start with if NAME is relative
+(does not start with slash or tilde); both the directory name and
+a directory's file name are accepted.  If DEFAULT-DIRECTORY is nil or
+missing, the current buffer's value of <span class="button">default-directory</span> is used.
+NAME should be a string that is a valid file name for the underlying
+filesystem.
+
+File name components that are <span class="constant">.</span> are removed, and so are file name
+components followed by <span class="constant">..</span>, along with the <span class="constant">..</span> itself; note that
+these simplifications are done without checking the resulting file
+names in the file system.
+
+Multiple consecutive slashes are collapsed into a single slash, except
+at the beginning of the file name when they are significant (e.g., UNC
+file names on MS-Windows.)
+
+An initial "~" in NAME expands to your home directory.
+
+An initial "~USER" in NAME expands to USER's home directory.  If
+USER doesn't exist, "~USER" is not expanded.
+
+To do other file name substitutions, see <span class="button">substitute-in-file-name</span>.
+
+For technical reasons, this function can return correct but
+non-intuitive results for the root directory; for instance,
+(expand-file-name ".." "/") returns "/..".  For this reason, use
+(directory-file-name (file-name-directory dirname)) to traverse a
+filesystem tree, not (expand-file-name ".." dirname).  Note: make
+sure DIRNAME in this example doesn't end in a slash, unless it's
+the root directory.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>C code is not yet loaded.
+
+<span class="button">Find all references</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable tracing</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">C code is not yet loaded.</span>
+
+<span class="button">Set C source directory</span>
+
+</pre>
+  </body>
+</html>

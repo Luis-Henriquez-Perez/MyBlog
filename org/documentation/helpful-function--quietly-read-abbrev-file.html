@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: quietly-read-abbrev-file*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+quietly-read-abbrev-file is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function
+defined in <span class="button">abbrev.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(quietly-read-abbrev-file <span class="type">&amp;optional</span> FILE)
+
+<span class="helpful-heading">Documentation
+</span>Quietly read abbrev definitions from file written with <span class="button">write-abbrev-file</span>.
+
+Optional argument FILE is the name of the file to read;
+it defaults to the value of <span class="button">abbrev-file-name</span>.
+Do not display any messages about loading the abbrevs.
+
+This function has :around advice: <span class="button">ignore</span>.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>quietly-read-abbrev-file is unused in <span class="button">abbrev.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by quietly-read-abbrev-file</span>
+
+<span class="helpful-heading">Advice
+</span>This function is advised.
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.3/lisp/abbrev.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">quietly-read-abbrev-file</span> (<span class="type">&amp;optional</span> file)
+  <span class="doc">"Quietly read abbrev definitions from file written with `</span><span class="doc"><span class="constant">write-abbrev-file</span></span><span class="doc">'.
+Optional argument FILE is the name of the file to read;
+it defaults to the value of `</span><span class="doc"><span class="constant">abbrev-file-name</span></span><span class="doc">'.
+Do not display any messages about loading the abbrevs."</span>
+                    <span class="comment-delimiter">;</span><span class="comment">(interactive "fRead abbrev file: ")
+</span>  (read-abbrev-file file t))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">defalias-fset-function</span>
+  #[128 "\304\300\301&#3;#\207"
+        [advice--defalias-fset nil :around nil apply]
+        5 advice]
+  <span class="button">Disassemble</span>
+<span class="constant">event-symbol-element-mask</span>
+  (quietly-read-abbrev-file 0)
+<span class="constant">event-symbol-elements</span>
+  (quietly-read-abbrev-file)
+<span class="constant">function-documentation</span>
+  (advice--make-docstring 'quietly-read-abbrev-file)
+<span class="constant">modifier-cache</span>
+  ((0 . quietly-read-abbrev-file))</pre>
+  </body>
+</html>

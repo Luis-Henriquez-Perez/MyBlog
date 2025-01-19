@@ -1,0 +1,126 @@
+#+TITLE: lef!, One of My Best Macros
+#+AUTHOR: Luis Henriquez-Perez
+
+While I was looking for any unneeded or outdated packages I could remove from my
+Emacs configuration I came across [[https://github.com/nicferrier/emacs-noflet][noflet]], an external package that implements
+"dynamic, local, advice for Emacs-Lisp code".  It is a small package consisting
+of just one macro: =noflet=.  It is similar in nature to [[file:../documentation/helpful-macro--cl-flet.html][cl-flet]] with two main
+differences: it binds functions globally instead of locally and it allows you to
+refer to the original function with the symbol =this-fn=.
+
+Adapted from noflet's [[https://github.com/nicferrier/emacs-noflet][README]], the following example showcases the effect of
+using =noflet=.  Normally, [[file:../documentation/helpful-macro--expand-file-name.html][expand-file-name]] would interpret ="#/thing"= as a path in
+the current directory as is seen from the return value of the raw call to
+=expand-file-name= below.  However, during the evaluation of its body =noflet=
+overrides =expand-file-name=, replacing it with a function that acts differently
+when a filename begins with a =#=.  Note, the binding for [[file:../documentation/helpful-function--find-file-no-select.html][find-file-no-select]]
+actually has no effect because =expand-file-name= never calls =find-file-no-select=
+in its body[fn::Actually it is a function written in C.]--I think it was included
+for didactic purposes.  But if anything did call =find-file-no-select= it would
+use it would use the version specified by =noflet=.
+
+#+begin_src emacs-lisp
+(expand-file-name "#/thing")
+;; =>  "/home/luis/Documents/blog/org/posts/#/thing"
+(noflet ((find-file-noselect (file-name)
+           (if (string-match-p "^#.*" file-name)
+               (this-fn "/tmp/mytest")
+               (this-fn file-name)))
+         (expand-file-name (file-name &optional thing)
+           (if (string-match-p "^#.*" file-name)
+               (concat "/tmp" (file-name-as-directory 
+                               (substring file-name 1)))
+               (funcall this-fn file-name thing))))
+  (expand-file-name "#/thing"))
+;; => "/tmp/thing/"
+#+end_src
+
+Although undeniably useful, =noflet= had been causing me some inconveniences.  It
+had been triggering a [[https://emacs.stackexchange.com/questions/66758/package-cl-is-deprecated-is-there-any-easy-fix-for-it][cl depreciated]] warning because it required =cl= instead of
+=cl-lib=.  Additionally, it uses [[https://github.com/magnars/dash.el][dash]] but does not explicitly declare it as a
+dependency.  Not knowing this, I had faced an error when I tried to [[file:../documentation/helpful-function--require.html][require]]
+=noflet= before I had required dash.  It was apparent From [[https://github.com/nicferrier/emacs-noflet/issues][noflet's issues page]]
+that I had not been the only one to notice these things (see [[https://github.com/nicferrier/emacs-noflet/issues/26][#26]] and [[https://github.com/nicferrier/emacs-noflet/issues/19][#19]]).  From
+amount of time numerous easy to fix issues have been open it is equally apparent
+that =noflet= is unmaintained.  To fix these things I had a few options: I could
+use my own fork of =noflet= with these fixes applied or I could just create my own
+macro.  Considering how relatively easy it would be to write a replacement for
+this package--it is just one short macro after-all--I decided to just roll it
+out myself.
+
+The closest built-in alternative for =noflet= I could find is [[file:../documentation/helpful-macro--cl-letf.html][cl-letf]][fn::I am not
+counting [[file:../documentation/helpful-function--flet.html][flet]] which is obsoleted.].  Like =noflet=, =cl-letf= can dynamically bind variables.
+However, the ~(symbol-function #'FUNCTION)~ syntax it uses to dynamically bind
+functions is too verbose for my taste.  Moreover, it lacks =noflet='s ability to
+refer to the original function using the symbol =this-fn=.  If not vital, the
+latter ability to refer to the original function is at least.
+
+In the following example I use =lef!= to replace the built-in function [[file:../documentation/helpful-function--+.html][+]], which as
+its name implies returns the sum of two or more numbers, with a function that
+returns double the sum of exactly two numbers.  In the expression ~(* 2 (funcall
+this-fn a b))~, =this-fn= refers the original =+= function.  The built-in =+= returns
+=3= when adding =1= and =2= whereas the new =+= returns =6=.
+
+#+begin_src emacs-lisp
+(+ 1 2)
+;; => 3
+
+(lef! ((+ (a b) (* 2 (funcall this-fn a b))))
+  (+ 1 2))
+;; => 6
+#+end_src
+
+Performing only one step of macroexpansion demonstrates the conversion.  The
+original function bound to =+= is stored in the generated symbol =orig-fn899= and
+let-bound to =this-fn= and =this-function= for the body of the function that
+replaces =+=.
+
+#+begin_src emacs-lisp
+(cl-letf* ((orig-fn899 (when (fboundp '+) (symbol-function '+)))
+           ((symbol-function '+) (lambda (a b) (let ((this-fn orig-fn899) (this-function orig-fn899)) (* 2 (funcall this-fn a b))))))
+  (+ 1 2))
+#+end_src
+
+This macro converts the concise and convenient place binding declarations we
+specify into what we want it to actually do via =cl-letf*=.  For each binding in
+=lef!= we create two =cl-letf*= bindings, one to store the original function (if
+there is one) and one to globally bind the specified function.
+
+#+begin_src emacs-lisp
+(defmacro lef! (bindings &rest body)
+  "Bind each symbol in BINDINGS to its corresponding function during BODY.
+BINDINGS is a list of either (SYMBOL FUNCTION), where symbol is the symbol to be
+bound and FUNCTION is the function to bind it to; or (SYMBOL ARGS BODY).  In
+each of BINDINGS if the symbol is an existing function symbol let-bind the
+original function to `this-fn', otherwise bind `this-fn' to nil."
+  (declare (indent 1))
+  (let (binds orig-fn)
+    (pcase-dolist (`(,sym . ,rest) bindings)
+      (setq orig-fn (gensym "orig-fn"))
+      (push `(,orig-fn (when (fboundp ',sym) (symbol-function ',sym))) binds)
+      (push (list `(symbol-function ',sym)
+                  (pcase rest
+                    (`(,fn . nil)
+                     `(lambda (&rest args)
+                        (let ((this-fn ,orig-fn)
+                              (this-function ,orig-fn))
+                          (apply ,fn args))))
+                    (`(,args . ,function-body)
+                     `(lambda ,args
+                        (let ((this-fn ,orig-fn)
+                              (this-function ,orig-fn))
+                          ,@function-body)))))
+            binds))
+    `(cl-letf* ,(nreverse binds) ,@body)))
+#+end_src
+
+Overall, I am pleased with =lef=.  I am happy I was able to reuse the built-in
+=cl-letf= instead of implementing dynamic binding myself.  Additionally, I am
+proud I was able to implement the =this-fn= functionality.  Yet I still have some
+lingering thoughts.  Perhaps one critique of =lef!= is that the symbols =this-fn=
+and =this-function= are bound regardless of whether you invoke the original
+function anaphrocally.  If you do not reference the original function, after
+all, you would be able to expect these symbols are unbound.  Although, I am hard-pressed
+to think of a realistic example of how this could cause problems I cannot help but
+think that to be "perfect" this excessive binding should be avoided--good topic
+for another blog post.
