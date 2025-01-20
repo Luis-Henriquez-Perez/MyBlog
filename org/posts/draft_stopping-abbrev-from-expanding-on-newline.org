@@ -10,13 +10,7 @@ The first function that comes to mind to search for the problem is
 unsurprisingly [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--expand-abbrev.html][expand-abbrev]] then at [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev-expand-function.html][abbrev-expand-function]] until finally I
 found the culprit, [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev--before-point.html][abbrev--before-point]].  The body of =abbrev--before-point= is
 long and intimidating but the only part that concerns the problem is the
-following chunk.  By default it uses [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--backward-word.html][backward-word]] to find the previous
-expansion.  And therein lies the problem.  The function =backward-word= finds the
-last word regardless of how many lines it is behind point.  It has no
-boundaries.  Notably, however, using any regexp will automatically bound the
-search to the beginning of the current line as we can see to the call to
-[[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--looking-back.html][looking-back]]: ~(looking-back re (line-beginning-position))~.  I do not know if
-this was intentional.  If you bound =looking-back= why not bound =backward-word=?
+following chunk.
 
 #+begin_src emacs-lisp
 (let ((re (abbrev-table-get table :regexp)))
@@ -34,9 +28,17 @@ this was intentional.  If you bound =looking-back= why not bound =backward-word=
       (setq end   (match-end 1)))))
 #+end_src
 
+By default it uses [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--backward-word.html][backward-word]] to find the previous expansion.  Therein lies
+the problem.  The function =backward-word= finds the last word regardless of how
+many lines it is behind point.  It has no boundaries.  Notably, however, using
+any regexp will automatically bound the search to the beginning of the current
+line as we can see to the call to [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--looking-back.html][looking-back]]: ~(looking-back re
+(line-beginning-position))~.  I do not know if this was intentional.  If you
+bound =looking-back= why not bound =backward-word=?
+
 In any case, this suggests that what I need to do is provide a regexp and it
 will automatically be bounded.  Conveniently the comment in the code provides a
-good regexp to go by.  Sure it mentions [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--words-include-escapes.html][words-include-escapes]] but to be
+good regexp to go by.  Sure, I know it mentions [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--words-include-escapes.html][words-include-escapes]] but to be
 honest I do not really care about that.  I have got to say I am not sure if I
 care about including escape sequences in words.  Yeah for this I am following
 the principle I made up of: deal with problems only as they arise.  As of yet I
