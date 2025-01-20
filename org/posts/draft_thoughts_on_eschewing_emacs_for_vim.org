@@ -1,3 +1,6 @@
+:PROPERTIES:
+:ID:       20250119T235555.589379
+:END:
 Recently I saw a video on youtube where this developer has decided to switch
 from emacs to vim and he explains the reasons why.  To be honest I do not
 understand the first reason.
@@ -10,6 +13,8 @@ with emacs.  It is /extremely/ easy to have 5+ seconds startup time even when
 trying to follow lazy-loading principles.  And it is extremely easy to end up
 with latency as you type.  I was shocked when in the video the developer pointed
 out he had a 5 second startup time /and/ was using doom emacs.  I thought that
-doom emacs users had at most a 1 second startup time.  I found that revelation
-quite disheartening.  Considering how hard doom
-tries to be fast.
+doom emacs users had at most a 1 second startup time.  Considering how hard doom
+tries to be fast I found that revelation quite disheartening.  I would go so far
+as to say if there is no extenuating circumstance such as a slow computer or a
+bad configuration, then it is a failure on Doom Emacs.  And again its very
+disheartening because if a team of people.

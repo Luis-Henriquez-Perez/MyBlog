@@ -1,0 +1,97 @@
+:PROPERTIES:
+:ID:       20250120T014652.706073
+:END:
+#+title: Stop abbrev from expanding on newline
+#+author: Luis Henriquez-Perez
+
+Abbrev is tries very hard to expand previous text.  It even skips newlines.  I
+remember I saw the cause of this before but I need to find it again.  It is been
+a problem I have always known I need to fix but I have not wanted to actually
+get to fixing.
+
+The first function that comes to mind to search for the problem is [[][Fexpand-abbrev]]
+
+#+begin_src emacs-lisp
+(defun expand-abbrev ()
+  "Expand the abbrev before point, if there is an abbrev there.
+Effective when explicitly called even when `abbrev-mode' is nil.
+Calls the value of `abbrev-expand-function' with no argument to do
+the work, and returns whatever it does.  (That return value should
+be the abbrev symbol if expansion occurred, else nil.)"
+  (interactive)
+  (or (funcall abbrev-expand-function)
+      (if abbrev-suggest
+          (abbrev--suggest-maybe-suggest))))
+#+end_src
+
+Ah O.K., I need to look deeper here into the [[][Vabbrev-expand-function]] whose
+value is [[][Fabbrev--default-expand]].
+
+#+begin_src emacs-lisp
+(defun abbrev--default-expand ()
+  "Default function to use for `abbrev-expand-function'.
+This also respects the obsolete wrapper hook `abbrev-expand-functions'.
+\(See `with-wrapper-hook' for details about wrapper hooks.)
+Calls `abbrev-insert' to insert any expansion, and returns what it does."
+  (subr--with-wrapper-hook-no-warnings abbrev-expand-functions ()
+                                       (pcase-let ((`(,sym ,name ,wordstart ,wordend) (abbrev--before-point)))
+                                         (when sym
+                                           (let ((startpos (copy-marker (point) t))
+                                                 (endmark (copy-marker wordend t)))
+                                             (unless (or ;; executing-kbd-macro
+                                                      noninteractive
+                                                      (window-minibuffer-p))
+                                               ;; Add an undo boundary, in case we are doing this for
+                                               ;; a self-inserting command which has avoided making one so far.
+                                               (undo-boundary))
+                                             ;; Now sym is the abbrev symbol.
+                                             (setq last-abbrev-text name)
+                                             (setq last-abbrev sym)
+                                             (setq last-abbrev-location wordstart)
+                                             ;; If this abbrev has an expansion, delete the abbrev
+                                             ;; and insert the expansion.
+                                             (prog1
+                                                 (abbrev-insert sym name wordstart wordend)
+                                               ;; Yuck!!  If expand-abbrev is called with point slightly
+                                               ;; further than the end of the abbrev, move point back to
+                                               ;; where it started.
+                                               (if (and (> startpos endmark)
+                                                        (= (point) endmark)) ;Obey skeletons that move point.
+                                                   (goto-char startpos))))))))
+#+end_src
+
+O.K.  The key function here is [[][Fabbrev--before-point]].  That is the
+function that determines.
+
+#+begin_src emacs-lisp
+(defun abbrev--default-expand ()
+  "Default function to use for `abbrev-expand-function'.
+This also respects the obsolete wrapper hook `abbrev-expand-functions'.
+\(See `with-wrapper-hook' for details about wrapper hooks.)
+Calls `abbrev-insert' to insert any expansion, and returns what it does."
+  (subr--with-wrapper-hook-no-warnings abbrev-expand-functions ()
+                                       (pcase-let ((`(,sym ,name ,wordstart ,wordend) (abbrev--before-point)))
+                                         (when sym
+                                           (let ((startpos (copy-marker (point) t))
+                                                 (endmark (copy-marker wordend t)))
+                                             (unless (or ;; executing-kbd-macro
+                                                      noninteractive
+                                                      (window-minibuffer-p))
+                                               ;; Add an undo boundary, in case we are doing this for
+                                               ;; a self-inserting command which has avoided making one so far.
+                                               (undo-boundary))
+                                             ;; Now sym is the abbrev symbol.
+                                             (setq last-abbrev-text name)
+                                             (setq last-abbrev sym)
+                                             (setq last-abbrev-location wordstart)
+                                             ;; If this abbrev has an expansion, delete the abbrev
+                                             ;; and insert the expansion.
+                                             (prog1
+                                                 (abbrev-insert sym name wordstart wordend)
+                                               ;; Yuck!!  If expand-abbrev is called with point slightly
+                                               ;; further than the end of the abbrev, move point back to
+                                               ;; where it started.
+                                               (if (and (> startpos endmark)
+                                                        (= (point) endmark)) ;Obey skeletons that move point.
+                                                   (goto-char startpos))))))))
+#+end_src
