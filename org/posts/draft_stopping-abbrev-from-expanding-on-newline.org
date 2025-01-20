@@ -1,129 +1,22 @@
 #+title: Stop abbrev from expanding on newline
 #+author: Luis Henriquez-Perez
 
-Abbrev is tries very hard to expand previous text.  It even skips newlines.  I
-remember I saw the cause of this before but I need to find it again.  It is been
-a problem I have always known I need to fix but I have not wanted to actually
-get to fixing.
+For a long time I wanted to fix a particular behavior with abbrev expansion.
+Namely, that by default =abbrev= will skip newlines when looking for a word to
+expand.  This can causes me unexpected and more often than not undesired abbrev
+expansions.  In this post I will document how I go about fixing this.
 
-The first function that comes to mind to search for the problem is [[][Fexpand-abbrev]]
-
-#+begin_src emacs-lisp
-(defun expand-abbrev ()
-  "Expand the abbrev before point, if there is an abbrev there.
-Effective when explicitly called even when `abbrev-mode' is nil.
-Calls the value of `abbrev-expand-function' with no argument to do
-the work, and returns whatever it does.  (That return value should
-be the abbrev symbol if expansion occurred, else nil.)"
-  (interactive)
-  (or (funcall abbrev-expand-function)
-      (if abbrev-suggest
-          (abbrev--suggest-maybe-suggest))))
-#+end_src
-
-Ah O.K., I need to look deeper here into the [[][Vabbrev-expand-function]] whose
-value is [[][Fabbrev--default-expand]].
-
-#+begin_src emacs-lisp
-(defun abbrev--default-expand ()
-  "Default function to use for `abbrev-expand-function'.
-This also respects the obsolete wrapper hook `abbrev-expand-functions'.
-\(See `with-wrapper-hook' for details about wrapper hooks.)
-Calls `abbrev-insert' to insert any expansion, and returns what it does."
-  (subr--with-wrapper-hook-no-warnings abbrev-expand-functions ()
-                                       (pcase-let ((`(,sym ,name ,wordstart ,wordend) (abbrev--before-point)))
-                                         (when sym
-                                           (let ((startpos (copy-marker (point) t))
-                                                 (endmark (copy-marker wordend t)))
-                                             (unless (or ;; executing-kbd-macro
-                                                      noninteractive
-                                                      (window-minibuffer-p))
-                                               ;; Add an undo boundary, in case we are doing this for
-                                               ;; a self-inserting command which has avoided making one so far.
-                                               (undo-boundary))
-                                             ;; Now sym is the abbrev symbol.
-                                             (setq last-abbrev-text name)
-                                             (setq last-abbrev sym)
-                                             (setq last-abbrev-location wordstart)
-                                             ;; If this abbrev has an expansion, delete the abbrev
-                                             ;; and insert the expansion.
-                                             (prog1
-                                                 (abbrev-insert sym name wordstart wordend)
-                                               ;; Yuck!!  If expand-abbrev is called with point slightly
-                                               ;; further than the end of the abbrev, move point back to
-                                               ;; where it started.
-                                               (if (and (> startpos endmark)
-                                                        (= (point) endmark)) ;Obey skeletons that move point.
-                                                   (goto-char startpos))))))))
-#+end_src
-
-O.K.  The key function here is [[][Fabbrev--before-point]].  That is the
-function that determines.
-
-#+begin_src emacs-lisp
-(defun abbrev--before-point ()
-  "Try and find an abbrev before point.  Return it if found, nil otherwise."
-  (unless (eq abbrev-start-location-buffer (current-buffer))
-    (setq abbrev-start-location nil))
-
-  (let ((tables (abbrev--active-tables))
-        (pos (point))
-        start end name res)
-
-    (if abbrev-start-location
-        (progn
-          (setq start abbrev-start-location)
-          (setq abbrev-start-location nil)
-          ;; Remove the hyphen inserted by `abbrev-prefix-mark'.
-          (when (and (< start (point-max))
-                     (eq (char-after start) ?-))
-            (delete-region start (1+ start))
-            (setq pos (1- pos)))
-          (skip-syntax-backward " ")
-          (setq end (point))
-          (when (> end start)
-            (setq name (buffer-substring start end))
-            (goto-char pos)               ; Restore point.
-            (list (abbrev-symbol name tables) name start end)))
-
-      (while (and tables (not (car res)))
-        (let* ((table (pop tables))
-               (enable-fun (abbrev-table-get table :enable-function)))
-          (setq tables (append (abbrev-table-get table :parents) tables))
-          (setq res
-                (and (or (not enable-fun) (funcall enable-fun))
-                     (let ((re (abbrev-table-get table :regexp)))
-                       (if (null re)
-                           ;; We used to default `re' to "\\<\\(\\w+\\)\\W*"
-                           ;; but when words-include-escapes is set, that
-                           ;; is not right and fixing it is boring.
-                           (let ((lim (point)))
-                             (backward-word 1)
-                             (setq start (point))
-                             (forward-word 1)
-                             (setq end (min (point) lim)))
-                         (when (looking-back re (line-beginning-position))
-                           (setq start (match-beginning 1))
-                           (setq end   (match-end 1)))))
-                     (setq name  (buffer-substring start end))
-                     (let ((abbrev (abbrev--symbol name table)))
-                       (when abbrev
-                         (setq enable-fun (abbrev-get abbrev :enable-function))
-                         (and (or (not enable-fun) (funcall enable-fun))
-                              ;; This will also look it up in parent tables.
-                              ;; This is not on purpose, but it seems harmless.
-                              (list abbrev name start end))))))
-          ;; Restore point.
-          (goto-char pos)))
-      res)))
-#+end_src
-
-It sure looks intimidating, but the key part is this block of code.
-Essentially, if the table has a regexp it uses that to determine where the
-previous abbrev should start at, otherwise it uses [[][Fbackward-word]].  This
-suggests that what I need to do is provide a good regexp to determine.  The
-comment in the code mentions [[][Vwords-include-escapes]].  I have got to say I
-am not sure if I care about including escape sequences in words.
+The first function that comes to mind to search for the problem is
+unsurprisingly [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--expand-abbrev.html][expand-abbrev]] then at [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev-expand-function.html][abbrev-expand-function]] until finally I
+found the culprit, [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev--before-point.html][abbrev--before-point]].  The body of =abbrev--before-point= is
+long and intimidating but the only part that concerns the problem is the
+following chunk.  By default it uses [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--backward-word.html][backward-word]] to find the previous
+expansion.  And therein lies the problem.  The function =backward-word= finds the
+last word regardless of how many lines it is behind point.  It has no
+boundaries.  Notably, however, using any regexp will automatically bound the
+search to the beginning of the current line as we can see to the call to
+[[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--looking-back.html][looking-back]]: ~(looking-back re (line-beginning-position))~.  I do not know if
+this was intentional.  If you bound =looking-back= why not bound =backward-word=?
 
 #+begin_src emacs-lisp
 (let ((re (abbrev-table-get table :regexp)))
@@ -141,5 +34,15 @@ am not sure if I care about including escape sequences in words.
       (setq end   (match-end 1)))))
 #+end_src
 
+In any case, this suggests that what I need to do is provide a regexp and it
+will automatically be bounded.  Conveniently the comment in the code provides a
+good regexp to go by.  Sure it mentions [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--words-include-escapes.html][words-include-escapes]] but to be
+honest I do not really care about that.  I have got to say I am not sure if I
+care about including escape sequences in words.  Yeah for this I am following
+the principle I made up of: deal with problems only as they arise.  As of yet I
+have not even dreamed of a need to include escape sequences in words.
+
 #+begin_src emacs-lisp
+(abbrev-table-put global-abbrev-table :regexp "\\<\\(\\sw+\\)\\Sw*")
 #+end_src
+

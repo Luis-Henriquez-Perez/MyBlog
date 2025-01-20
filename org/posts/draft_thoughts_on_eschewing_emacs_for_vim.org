@@ -1,6 +1,3 @@
-:PROPERTIES:
-:ID:       20250119T235555.589379
-:END:
 Recently I saw a video on youtube where this developer has decided to switch
 from emacs to vim and he explains the reasons why.  To be honest I do not
 understand the first reason.
