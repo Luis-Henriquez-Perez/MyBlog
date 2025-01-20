@@ -42,7 +42,7 @@ good regexp to go by[fn:: Sure, I know it mentions [[/home/luis/Documents/MyBlog
 honest I do not really care about that.  I have =words-include-escapes= set to nil
 have do not plan on enabling it any time soon.].
 
-And voila.
+And voilà.
 
 #+begin_src emacs-lisp
 (abbrev-table-put global-abbrev-table :regexp "\\<\\(\\sw+\\)\\Sw*")
