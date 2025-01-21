@@ -1,0 +1,2 @@
+I wrote something like this before [[][in this post]].  Taking a buffer snapshot
+is so useful that I want it in it own function.

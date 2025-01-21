@@ -1,0 +1,30 @@
+Timestamp about high time I setup an ai chat locally.  To be honest it has
+become indispensable for developers in the present day.  Old man as I am, I have
+still been using =chatgpt= online.
+
+#+begin_src sh
+sudo pacman -S ollam
+#+end_src
+
+First I installed ollama via arch.  And I followd the simple recommendation to
+use =zephyr= as the backend.  This will take a bit.
+
+#+begin_src sh
+ollama pull zephyr
+#+end_src
+
+Then I tried to set [[][Pellama]] an emacs package for managing these llvms.
+Strangely, I could not find =ellama= with the [[][Fpackage-install]]
+completing-read interface.  But it was in the list of packages from
+[[][Flist-packages]].  So I ended up selecting it from the buffer and manualy
+clicking the install button.  This was the case even after attempting
+[[][Fpackage-refresh]].  I should have looked at a video tutorial first.
+
+Make sure to get the exact names of your backends with ~ollama list~.
+
+#+begin_src sh
+ollama list
+#+end_src
+
+I tried this and honestly it did not work.  My emacs/computer lagged an I had to
+restart my computer.

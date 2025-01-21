@@ -1,0 +1,3 @@
+This is the process of me configuring [[][Pgptel]].
+
+I use pass and password-store to manage my passwords.
