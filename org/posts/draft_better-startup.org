@@ -63,16 +63,16 @@ painless as possible.  I am surprised this does not exist but I could not find i
 #+begin_src emacs-lisp
 ;; I am a bit surprised this does not exist.
 (defun oo-rename-library (oldname newname)
-  "Rename a library and replace all references across the project non-interactively.
+  "Rename a library and replace all references.
 OLDNAME is the current library name, and NEWNAME is the new name."
   (interactive "sOld library name: \nsNew library name: ")
   ;; Get all my lisp files.
   (let (files regexp)
     (rename-file file newname)
-    (setq regexp "")
+    (setq regexp (regexp-quote oldname))
     (setq files (append (directory-files (expand-file-name "lisp")) files))
-    (push (expand-file-name) files)
-    (setq files (append (directory-files) files))
+    (push user-init-file files)
+    (setq files (append (directory-files (expand-file-name "test")) files))
     ;; Replace the name of the symbol in file.
     (dolist (file files)
       (with-temp-file file
