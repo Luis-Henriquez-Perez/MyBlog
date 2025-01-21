@@ -62,22 +62,23 @@ painless as possible.  I am surprised this does not exist but I could not find i
 
 #+begin_src emacs-lisp
 ;; I am a bit surprised this does not exist.
-(defun oo-rename-library (oldname newname)
+(defun! oo-rename-library (oldname newname)
   "Rename a library and replace all references.
 OLDNAME is the current library name, and NEWNAME is the new name."
   (interactive "sOld library name: \nsNew library name: ")
-  ;; Get all my lisp files.
-  (let (files regexp)
-    (rename-file file newname)
-    (setq regexp (regexp-quote oldname))
-    (setq files (append (directory-files (expand-file-name "lisp")) files))
-    (push user-init-file files)
-    (setq files (append (directory-files (expand-file-name "test")) files))
-    ;; Replace the name of the symbol in file.
-    (dolist (file files)
-      (with-temp-file file
-        (insert-file-contents file)
-        (goto-char (point-min))
-        (while (re-search-forward regexp nil t)
-          (replace-match newname))))))
+  (message "oldname %S newname %S" oldname newname)
+  (return!)
+  (rename-file oldname newname)
+  (set! regexp (regexp-quote oldname))
+  (set! lisp-file-regexp ".+\\.el\\'")
+  (set! files (append (directory-files (expand-file-name "lisp") t lisp-file-regexp)
+                      (list user-init-file)
+                      (directory-files (expand-file-name "test") t lisp-file-regexp)))
+  ;; Replace the name of the symbol in file.
+  (dolist (file files)
+    (with-temp-file file
+      (insert-file-contents file)
+      (goto-char (point-min))
+      (while (re-search-forward regexp nil t)
+        (replace-match newname)))))
 #+end_src
