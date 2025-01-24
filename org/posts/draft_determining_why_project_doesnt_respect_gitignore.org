@@ -1,0 +1,8 @@
+When I started using the built-in =project.el= in emacs I was surprised that it
+did not auto-ignore the files I specified in my =.gitignore= file.  And in this
+post I will document my investigation into why that is.  First, one question is
+is it even designed to do that?
+
+* cutting corners
+
+Right now I do not know why that does not happen.  But I want this functionality.
