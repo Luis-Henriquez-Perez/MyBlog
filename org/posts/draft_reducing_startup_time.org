@@ -1,0 +1,50 @@
+#title: Luis Henriquez-Perez
+
+I have designed my emacs configuration with the purpose of minimizing my init
+time.  I have done staple things like disabling garbage collection and file
+handlers.  I have set certain recommended.  And most importantly I lazy load all
+unneeded packages.  Even with this my startup is still at a whopping =3.29=
+seconds.  To be honest this is one of the biggest reasons why not to use emacs.
+It is hard to get startup low even after trying very hard.
+
+* profiling
+
+I have always wanted a better profiler for my emacs startup.  The first step to
+lowering startup is simply to know what is causing it.  Here the [[][80-20
+principle applies]]: 20% of your emacs configuration (or less) is likely
+responsible for 80% or more of the startup time.  If you have muliple emacs-lisp
+files, you want to figure out which one is causing the.  I actually went as far
+as.
+
+The following macro is a wrapper around [[][Frequire]].  In addition to
+loading a feature it logs the time it took for the feature to be loaded.  And if
+loading the feature should result in an error, it suppresses the error
+and logs it.
+
+#+begin_src emacs-lisp
+(defmacro require! (feature &optional path)
+  "Catch any errors, record and log the time taken to require FEATURE."
+  `(let ((start (current-time))
+         (feature ',feature)
+         (time nil))
+     (condition-case err
+         (progn
+           (require ',feature ,path)
+           (setq time (string-to-number (format "%.2f" (float-time (time-subtract (current-time) start)))))
+           (oo-log 'info "Required '%s in %.2f seconds" feature time))
+       (error
+        (oo-log 'error "Error requiring '%s: %s" feature err)))
+     (push (list feature time) oo-init-data)))
+#+end_src
+
+I use this macro in another macro, =load!=.
+#+begin_src emacs-lisp
+(defmacro load! (dir)
+  (let (forms feature)
+    (setq dir (expand-file-name dir user-emacs-directory))
+    (dolist (path (directory-files dir t "^[[:digit:]][[:digit:]][[:digit:]].+\\.el$"))
+      (setq feature (intern (file-name-sans-extension (file-name-nondirectory (directory-file-name path)))))
+      ;; It is a bit faster if you specify the path because then emacs does not have to look through the directory.
+      (push `(require! ,feature ,path) forms))
+    `(progn ,@(nreverse forms))))
+#+end_src
