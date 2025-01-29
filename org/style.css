@@ -1,19 +1,50 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600&display=swap');
+
 body {
-    font-family: Helvetica, sans-serif;
+    font-family: 'Fira Sans', sans-serif;
     line-height: 1.5;
-    font-size: 18px;
+    font-size: 20px;
     /* background: #fff; */
     /* color: #000000; */
+    color: #222;
     margin: 0;
+    /* max-width: 1000px; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
     /* border-top: 3px solid #1692cc; */
 }
 
-/* .org-src-container { */
-/*     border: 5px solid #000000; */
-/*     border-radius: 3px; */
-/*     background-color: white; */
-/*     padding: 8pt; */
-/*     font-family: monospace; */
-/*     overflow: auto; */
-/*     margin: 1.2em; */
-/* } */
+.title {
+    text-align: center;
+    font-weight: 600;
+}
+
+a {
+    /* dont underline links; looks ugly */
+    text-decoration: none;
+    /* color: #1692cc; /\* Optional: Customize the link color *\/ */
+}
+
+a:hover {
+   /* but do it when the cursor is on them because then it makes sense */
+   text-decoration: underline;
+}
+
+h1, h2, h3 {
+    margin: 0 0 0.35em;
+}
+
+p {
+    margin: 0 0 1.15em;
+}
+
+.org-src-container {
+    border: 5px solid #000000;
+    /* border-radius: 3px; */
+    background-color: white;
+    /* padding: 8pt; */
+    /* font-family: monospace; */
+    /* overflow: auto; */
+    /* margin: 1.2em; */
+}
