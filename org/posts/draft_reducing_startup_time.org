@@ -19,7 +19,9 @@ as.
 The following macro is a wrapper around [[][Frequire]].  In addition to
 loading a feature it logs the time it took for the feature to be loaded.  And if
 loading the feature should result in an error, it suppresses the error
-and logs it.
+and logs it.  What this means for my config is I will know preciesely how much
+time loading each file will take.  Also, my configuration will not short circuit
+if I get an error in an init file.
 
 #+begin_src emacs-lisp
 (defmacro require! (feature &optional path)
@@ -37,7 +39,13 @@ and logs it.
      (push (list feature time) oo-init-data)))
 #+end_src
 
+I have made a big decision with my file organization: I decided to prefix most
+of my files with three digits.  And the order of the digits correspond to the
+order in which the files should be loaded.  The downside is the file names look ugly.  But
+the reason did this is that it makes the logic for loading files much easier.
+
 I use this macro in another macro, =load!=.
+
 #+begin_src emacs-lisp
 (defmacro load! (dir)
   (let (forms feature)
@@ -48,3 +56,5 @@ I use this macro in another macro, =load!=.
       (push `(require! ,feature ,path) forms))
     `(progn ,@(nreverse forms))))
 #+end_src
+
+With these two macros I.
