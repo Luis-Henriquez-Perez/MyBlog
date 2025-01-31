@@ -1,0 +1,18 @@
+#+title: protocol for adding hooks
+#+author: Luis Henriquez-Perez
+
+I have struggled a bit with hooks, perhaps a symptom of over-engineering.  Right
+now instead I will.  Essentially, I have wanted to add certain properties to
+hooks.  I will document the cases I wish to handle well.
+
+* case 1: adding a named function to a hook
+
+In this case I do not want to add the original function to the hook because I
+want the function to do "special" hook things.  Namely, suppress errors and log
+it is usage.
+
+* case 2: creating a new hook
+
+* naming convention
+
+Since I am creating specific functions for hooks.

@@ -1,27 +1,32 @@
-#title: Luis Henriquez-Perez
+#+title: profiling startup time
+#+author: Luis Henriquez-Perez
 
 I have designed my emacs configuration with the purpose of minimizing my init
 time.  I have done staple things like disabling garbage collection and file
-handlers.  I have set certain recommended.  And most importantly I lazy load all
-unneeded packages.  Even with this my startup is still at a whopping =3.29=
-seconds.  To be honest this is one of the biggest reasons why not to use emacs.
-It is hard to get startup low even after trying very hard.
+handlers, I have set certain recommended variables such as
+[[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--bidi-display-reordering.html][bidi-display-reordering]] and [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--idle-update-delay.html][idle-update-delay]], and most importantly I lazy load
+all unneeded packages.  Sadly, even with all this my startup is still at a
+whopping =3.29= seconds.
 
-* profiling
+The first step to reducing startup time is simply to find out what parts of your
+configuration is responsible.  Here the [[https://en.wikipedia.org/wiki/Pareto_principle][80-20 principle applies]]: 20% of your
+emacs configuration (or less) is responsible for 80% or more of the startup
+time.  There are several packages that offer profiling for emacs like [[https://github.com/jschaf/esup][esup]] or
+[[https://www.emacswiki.org/emacs/ProfileDotEmacs][ProfileDotEmacs]].  I do not have much experience with the latter but I have used
+=esup= before and it is pretty good, when it works that is.  Lately when I use it
+I run into problems with.  It should not be this hard.
 
-I have always wanted a better profiler for my emacs startup.  The first step to
-lowering startup is simply to know what is causing it.  Here the [[][80-20
-principle applies]]: 20% of your emacs configuration (or less) is likely
-responsible for 80% or more of the startup time.  If you have muliple emacs-lisp
-files, you want to figure out which one is causing the.  I actually went as far
-as.
+# To be honest this is one of the biggest reasons why not to use emacs (not that
+# this is a big reason, but of the reasons not to use emacs this is one of the
+# biggest).  It is hard to get startup low even after trying very hard.  It is the
+# opposite with vim, it is hard to get the startup very high unless you mess up.
 
-The following macro is a wrapper around [[][Frequire]].  In addition to
-loading a feature it logs the time it took for the feature to be loaded.  And if
-loading the feature should result in an error, it suppresses the error
-and logs it.  What this means for my config is I will know preciesely how much
-time loading each file will take.  Also, my configuration will not short circuit
-if I get an error in an init file.
+The following macro is a wrapper around [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--require.html][require]].  In addition to loading a
+feature it logs the time it took for the feature to be loaded.  And if loading
+the feature should result in an error, it suppresses the error and logs it.
+What this means for my config is I will know preciesely how much time loading
+each file will take.  Also, my configuration will not short circuit if I get an
+error in an init file.
 
 #+begin_src emacs-lisp
 (defmacro require! (feature &optional path)
@@ -41,11 +46,12 @@ if I get an error in an init file.
 
 I have made a big decision with my file organization: I decided to prefix most
 of my files with three digits.  And the order of the digits correspond to the
-order in which the files should be loaded.  The downside is the file names look ugly.  But
-the reason did this is that it makes the logic for loading files much easier.
+order in which the files should be loaded.  The downside is the file names look
+ugly.  But the reason I did this is that it makes the logic for loading files
+much easier.  This is good programmatically but it also makes things
+transparent.
 
 I use this macro in another macro, =load!=.
-
 #+begin_src emacs-lisp
 (defmacro load! (dir)
   (let (forms feature)
@@ -56,5 +62,7 @@ I use this macro in another macro, =load!=.
       (push `(require! ,feature ,path) forms))
     `(progn ,@(nreverse forms))))
 #+end_src
+
+[[../documentation/log-buffer.html][foo]]
 
 With these two macros I.

@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: rename-file*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffffff;
+        background-color: #000000;
+      }
+      .button {
+        /* button */
+        color: #79a8ff;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #989898;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #00bcff;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #ffffff;
+        font-weight: bold;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #6ae4b9;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+rename-file is an <span class="button">interactive</span> function defined in C source code.
+
+<span class="helpful-heading">Signature
+</span>(rename-file FILE NEWNAME <span class="type">&amp;optional</span> OK-IF-ALREADY-EXISTS)
+
+<span class="helpful-heading">Documentation
+</span>Rename FILE as NEWNAME.  Both args must be strings.
+
+If file has names other than FILE, it continues to have those names.
+If NEWNAME is a directory name, rename FILE to a like-named file under
+NEWNAME.  For NEWNAME to be recognized as a directory name, it should
+end in a slash.
+
+Signal a <span class="constant">file-already-exists</span> error if a file NEWNAME already exists
+unless optional third argument OK-IF-ALREADY-EXISTS is non-nil.
+An integer third arg means request confirmation if NEWNAME already exists.
+This is what happens in interactive use with M-x.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>C code is not yet loaded.
+
+<span class="button">Find all references</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable tracing</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">C code is not yet loaded.</span>
+
+<span class="button">Set C source directory</span>
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (rename-file 0)
+<span class="constant">event-symbol-elements</span>
+  (rename-file)
+<span class="constant">modifier-cache</span>
+  ((0 . rename-file))</pre>
+  </body>
+</html>

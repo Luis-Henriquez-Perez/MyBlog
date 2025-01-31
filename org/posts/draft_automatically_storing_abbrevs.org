@@ -1,0 +1,4 @@
+I have had a few problems with the default abbrev system in emacs.  I think
+overall abbrevs are great.  And it is pretty miraculous how far you can get with
+such a simple feature.  However, I did not like how it saved my abbrevs to a
+generated file.
