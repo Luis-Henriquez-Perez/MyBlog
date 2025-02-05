@@ -1,0 +1,8 @@
+I am torn between having using.  The thing is I went through the work of
+supporting both [[][Pall-the-icons]] and [[][Pnerd-icons]].  With many if not
+all of the functions I conditionally use one or the other based on user
+preference.  Just using =nerd-icons= would be easier and it would also make my
+code cleaner and more concise.  But I am adverse to just "throwing away" the
+work that I have already done choosing =all-the-icon= icons.  In general, you
+never want to throw things away.  And the funtionality I have for toggling icons
+is nice too.

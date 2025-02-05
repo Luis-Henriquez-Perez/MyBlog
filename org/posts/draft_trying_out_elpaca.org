@@ -1,0 +1,47 @@
+#+title: Trying Out Elpaca
+#+author: Luis Henriquez-Perez
+
+So I have tried elpaca.  It was not my first time trying it out.  I wanted to
+see if could make it work.
+
+* missing timing during first package install
+
+So the last time I tried elpaca I was really put off by the installation of
+packages for the first time.  One of the elpaca's selling points is that it
+installs packages asynchronously and generally this is good.  In fact I think
+one of the biggest annoyances of =package.el= is that it installs packages
+synchronously, blocking Emacs until its done.  So it installs packages
+asynchronous and in separate processes, which will likely make installation
+faster.  The problem I have with this is that the user has no idea when the
+package installation will be done.  Since the installations do not block Emacs,
+Emacs continues with its init process.  By the time at least your packages are
+installed, the init process will be over and code you had relyig on the init
+process that required certain packages will have missed timing.  For example, I
+enable =evil-mode= and =vertico-mode= in [[][Vemacs-startup-hook]].  So if you have
+anything that relies on certain packages.
+
+* unexplicable =elpaca-wait=
+
+I had created an [[][issue]] in the past asking for elpaca to be able to
+optinally install packages synchronously.  I was thinking I could install
+packages synchronously the first time I am bootstrapping my configuration, and
+then I could just use the asynchronous stuff.  The author did not want to and
+instead added =elpaca-wait= which was a while loop that would block emacs until
+the registered elpaca packages were done.  Right now the recommendation.
+
+* inconsistent success when installing packages
+
+I have tried installing packages.
+
+* unusual error when byte-compiling
+
+I have recently.
+
+* conclusion
+
+For now I will stick to =package.el=.  Despite how badly Radian criticized
+package.el, the truth is it is not that bad at least considering how eccentric
+built-in emacs packages can be.  It does its job and installs packages.  The
+lack of asynchronous support is annoying but bearable.  I do want the
+reproducibility that =elpaca= can offer me but not at the price of losing
+stability at startup.  While =package.el= is quircky it is simple so I can.
