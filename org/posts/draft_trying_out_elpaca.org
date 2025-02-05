@@ -17,17 +17,22 @@ package installation will be done.  Since the installations do not block Emacs,
 Emacs continues with its init process.  By the time at least your packages are
 installed, the init process will be over and code you had relyig on the init
 process that required certain packages will have missed timing.  For example, I
-enable =evil-mode= and =vertico-mode= in [[][Vemacs-startup-hook]].  So if you have
-anything that relies on certain packages.
+enable =evil-mode= and =vertico-mode= in [[][Vemacs-startup-hook]] so since these
+packages are not installed yet, your hooks will not work and your configuration
+will not work properly the first time your installing packages.  So if you have anything that relies on certain packages.
 
 * unexplicable =elpaca-wait=
+:PROPERTIES:
+:ID:       20250205T170130.220650
+:END:
 
 I had created an [[][issue]] in the past asking for elpaca to be able to
-optinally install packages synchronously.  I was thinking I could install
+optionally install packages synchronously.  I was thinking I could install
 packages synchronously the first time I am bootstrapping my configuration, and
-then I could just use the asynchronous stuff.  The author did not want to and
-instead added =elpaca-wait= which was a while loop that would block emacs until
-the registered elpaca packages were done.  Right now the recommendation.
+then I could just use the asynchronous installing in session.  The author did
+not want to and instead added =elpaca-wait= which was a while loop that would
+block emacs until the registered elpaca packages were done.  Right now the
+recommendation is to use =elpaca-wait= after the packages you need for startup.
 
 * inconsistent success when installing packages
 
@@ -41,7 +46,7 @@ I have recently.
 
 For now I will stick to =package.el=.  Despite how badly Radian criticized
 package.el, the truth is it is not that bad at least considering how eccentric
-built-in emacs packages can be.  It does its job and installs packages.  The
-lack of asynchronous support is annoying but bearable.  I do want the
-reproducibility that =elpaca= can offer me but not at the price of losing
+built-in emacs packages can be.  It at least does its basic job and installs
+packages.  The lack of asynchronous support is annoying but bearable.  I do want
+the reproducibility that =elpaca= can offer me but not at the price of losing
 stability at startup.  While =package.el= is quircky it is simple so I can.
