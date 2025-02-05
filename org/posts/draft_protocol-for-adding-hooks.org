@@ -13,6 +13,17 @@ it is usage.
 
 * case 2: creating a new hook
 
+Sometimes I need to create a new hook altogether that is not based on an
+existing name.  For example, in emacs there are cases when you need to set a
+local variable during a mode.  And in that case there's no function per se.
+
+* decision
+
+Based on these cases I think it would be best to have a function that generates
+a hook.  The function should generate a hook function given the function that
+should be called as the body.  The function could be a symbol function or an
+anonymous lambda.
+
 * naming convention
 
 Since I am creating specific functions for hooks.
