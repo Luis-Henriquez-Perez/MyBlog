@@ -1,0 +1,67 @@
+#+title: Making my configuration even faster
+#+authro: Luis Henriquez-Perez
+
+It is no secret that I have a need for speed.  I want my Emacs configuration to
+be fast.  I have been using Emacs for over 10 years so I should have a fast
+configuration.  The common answer by Emacs users when others ask about Emacs
+startup is that Emacs startup does not have to be fast because you just open
+Emacs once and then leave it open.  O.K., while it may be true that Emacs
+startup time is not the most important thing and that most users open it once
+and leave it open for days, it still is annoying to have it be slow.  I do not
+know.  There is truth to this answer in that startup time importance is often
+exaggerated.  However, there also is general feeling of trying to cover up for
+what is a legitimate issue.  We can debate how important the startup time is,
+but having a fast startup is desirable.
+
+I have already dropped my startup time to around between =1= and =1.3= seconds by
+refactoring and byte-compiling my config.  Now the bottleneck for my config
+is [[][Fpackage-initialize]].
+
+The first step is to do research on what =package-initialize= is doing and to
+profile it.  I know that in general =package-initialize= sets the load-path and
+loads the autoloads for packages but I was not sure what more it does beyond
+that.
+
+I realized I first needed to determine what.
+I began by writing the macro =time-elapsed!= which times the amount of time
+certain forms take to run and logs it into the log buffer.  With this I wanted
+to determine which of the forms in =package-initialize= is taking so long.
+
+#+begin_src emacs-lisp
+(defmacro time-elapsed! (&rest forms)
+  (let ((start (make-symbol "start"))
+        (time-elapsed (make-symbol "time-elapsed")))
+    `(let ((,start (float-time))
+           (,time-elapsed nil))
+       ,(macroexp-progn forms)
+       (setq ,time-elapsed (/ (fround (* (- (float-time) ,start) 100)) 100.0))
+       (oo-log 'info "%S took %.2f seconds" ',(macroexp-progn forms) ,time-elapsed))))
+#+end_src
+
+Essentially, I replaced the call to =package-initialize= with it is body and used
+time elapsed to determine which part of its body is taking up the most time.
+
+#+begin_src emacs-lisp
+(unless (bound-and-true-p package--initialized)
+  (progn (setq package-alist nil)
+         (time-elapsed! (package-load-all-descriptors))
+         ;; (time-elapsed! (package-read-all-archive-contents))
+         (setq package--initialized t)
+         (time-elapsed! (package-activate-all))
+         ;; This uses `package--mapc' so it must be called after
+         ;; `package--initialized' is t.
+         (time-elapsed! (package--build-compatibility-table)))
+  ;; (time-elapsed! (package-initialize))
+  ;; This is inspired by centaur-emacs.  I add the the lisp directory to the
+  ;; front of the load-path so files from here can load faster.
+  (push (expand-file-name "lisp/" user-emacs-directory) load-path))
+#+end_src
+
+I quickly found out that it was [[][Fpackage-read-all-archive-contents]].  As
+you can see from my =*log*= buffer below it takes up X, a whoppig X% of the
+startup time.  And X% of my total startup time.
+
+According to =chatgpt= it is not necessary to archive package contents during
+startup.  Doing so is only needed when installing or upgrading packages.  And it
+seems to be right.  After commenting to the =package-read-all-archive-contens= my
+init time dropped to =0.8= seconds and with no apparent loss of functionality.
