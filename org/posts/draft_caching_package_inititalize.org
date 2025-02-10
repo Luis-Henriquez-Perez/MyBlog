@@ -1,5 +1,5 @@
 #+title: Making my configuration even faster
-#+authro: Luis Henriquez-Perez
+#+author: Luis Henriquez-Perez
 
 It is no secret that I have a need for speed.  I want my Emacs configuration to
 be fast.  I have been using Emacs for over 10 years so I should have a fast
@@ -22,7 +22,8 @@ profile it.  I know that in general =package-initialize= sets the load-path and
 loads the autoloads for packages but I was not sure what more it does beyond
 that.
 
-I realized I first needed to determine what.
+I realized I first needed to determine what about that function takes so much
+time.
 I began by writing the macro =time-elapsed!= which times the amount of time
 certain forms take to run and logs it into the log buffer.  With this I wanted
 to determine which of the forms in =package-initialize= is taking so long.
@@ -65,3 +66,6 @@ According to =chatgpt= it is not necessary to archive package contents during
 startup.  Doing so is only needed when installing or upgrading packages.  And it
 seems to be right.  After commenting to the =package-read-all-archive-contens= my
 init time dropped to =0.8= seconds and with no apparent loss of functionality.
+
+The variable == is not needed for setting up existing packages.  It is only
+needed if you need to install packages.
