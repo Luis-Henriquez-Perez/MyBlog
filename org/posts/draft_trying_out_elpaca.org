@@ -1,3 +1,6 @@
+:PROPERTIES:
+:ID:       20250214T100729.180853
+:END:
 #+title: Trying Out Elpaca
 #+author: Luis Henriquez-Perez
 
@@ -44,10 +47,6 @@ recommendation is to use =elpaca-wait= after the packages you need for startup.
 * inconsistent success when installing packages
 
 I have tried installing packages.
-
-* unusual error when byte-compiling
-
-I have recently.
 
 * conclusion
 
