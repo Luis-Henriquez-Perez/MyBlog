@@ -1,0 +1,50 @@
+#+title: pinning org-mode
+#+author: Luis Henriquez-Perez
+
+I was testing installing all my packages from scratch, wondering if my Emacs
+starts up without any problems.  Everything was great except these weird errors
+I was getting when opening an org capture template.  The second I opened the
+template I would see an error.  And after that whenever I typed a character, I
+would see the message that the function =org-fold-suppress-folding-fix= was void.
+
+It is easy to feel disillusioned when something does not work the way you want
+it to.  Especially when you do not even know where to start fixing it.  That is
+what happened to me.  I wrongly thought this was an inevitable problem with
+package.el.  I gave up trying to fix this without trying and began to
+look towards newer promising package manager, [[https://github.com/progfolio/elpaca][elpaca]].  While working on it I ran
+to whole different set of complications.
+
+When I had calmed down I remembered of this package.el variable I had seen
+before [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-pinned-packages.html][package-pinned-packages]].  Upon doing more research I came across a
+package archive called "melpa-stable".  It was then I realized that what was
+probably happening is that I had installed the "bleeding-edge" version of org.
+I have not experienced any problems with other packages probably because the
+ones I use are mostly either small enough to catch bugs quickly and or not
+updated regularly.  But with a big and complex package like org that is actively
+developed this is a different story.
+
+To fix this I added melpa stable to the list of existing package archives =org=
+as a pinned package.  What this means is that when installing =org= package.el
+will install it from =melpa-stable=.
+
+#+begin_src emacs-lisp
+(setq package-archives '(("gnu-elpa"     . "https://elpa.gnu.org/packages/")
+                         ("gnu-elpa"     . "https://elpa.gnu.org/packages/")
+                         ("melpa"        . "https://melpa.org/packages/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")
+                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/")))
+
+;; I experienced bugs from installing bleeding-edge org-mode.  Do not do this,
+;; use the stable version.
+(setq package-pinned-packages '((org . "melpa-stable")))
+#+end_src
+
+Then I called [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-reinstall.html][package-reinstall]] on =org=, restarted meacs, and voilà.  The org
+version dropped from =9.7.22= to =9.6.15= and the bugs I had were no long present.
+What a relief!.  On a side-note, I find it strange that I have looked at other
+Emacs configurations like [[https://github.com/seagle0128/.emacs.d][Centaur Emacs]] and [[https://github.com/redguardtoo/emacs.d][Redguardtoo's Config]] but I have not
+seen anyone else pin org.
+
+For now my opinion about package.el is that is more than fine for most Emacs
+users.  And if pressed as to what I imagine when I say "most" is =95%=.  It does
+what it is supposed to do.

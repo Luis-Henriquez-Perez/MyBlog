@@ -1,0 +1,15 @@
+#+title: switching to elpaca
+#+author: Luis Henriquez-Perez
+
+In a previous post I wrote about deciding to stick with =package.el= for now.  I
+have changed my mind.  Partly I have found a "solution" to the problem of the
+initial package installation from =elpaca=.  I think the best way to deal with it
+is to add a command-line argument for Emacs, something like =--install-only= which
+limits my loading to the elpaca bootstrap and package install file.  At that
+point if my packages all install successfully then just restart Emacs with my
+packages installed.
+
+One drawback is my config becomes significantly slower.  I do not want to point
+to one startup time, I think it also depends on the system resources at the
+time.  But in general my startup time with compiled Emacs is about =0.83= with
+package.el.  And with elpaca it is =1.64=, so about double.
