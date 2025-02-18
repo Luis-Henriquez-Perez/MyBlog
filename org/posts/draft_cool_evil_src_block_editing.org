@@ -30,4 +30,4 @@ do it well.
 (add-hook 'org-mode-hook #'oo-enable-evil-insert-auto-src-edit)
 #+end_src
  
-It works.  But I realized
+It works.  But I realized there are a few rough edges I need to take care of.
