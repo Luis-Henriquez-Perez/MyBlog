@@ -1,4 +1,4 @@
-#+title: Making my configuration even faster
+#+title: Profiling package-initialize
 #+author: Luis Henriquez-Perez
 
 It is no secret that I have a need for speed.  I want my Emacs configuration to
@@ -15,7 +15,7 @@ but having a fast startup is desirable.
 
 I have already dropped my startup time to around between =1= and =1.3= seconds by
 refactoring and byte-compiling my config.  Now the bottleneck for my config
-is [[][Fpackage-initialize]].
+is [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-initialize.html][package-initialize]].
 
 The first step is to do research on what =package-initialize= is doing and to
 profile it.  I know that in general =package-initialize= sets the load-path and
@@ -23,8 +23,7 @@ loads the autoloads for packages but I was not sure what more it does beyond
 that.
 
 I realized I first needed to determine what about that function takes so much
-time.
-I began by writing the macro =time-elapsed!= which times the amount of time
+time.  I began by writing the macro =time-elapsed!= which times the amount of time
 certain forms take to run and logs it into the log buffer.  With this I wanted
 to determine which of the forms in =package-initialize= is taking so long.
 
@@ -46,7 +45,7 @@ time elapsed to determine which part of its body is taking up the most time.
 (unless (bound-and-true-p package--initialized)
   (progn (setq package-alist nil)
          (time-elapsed! (package-load-all-descriptors))
-         ;; (time-elapsed! (package-read-all-archive-contents))
+         (time-elapsed! (package-read-all-archive-contents))
          (setq package--initialized t)
          (time-elapsed! (package-activate-all))
          ;; This uses `package--mapc' so it must be called after
@@ -58,14 +57,17 @@ time elapsed to determine which part of its body is taking up the most time.
   (push (expand-file-name "lisp/" user-emacs-directory) load-path))
 #+end_src
 
-I quickly found out that it was [[][Fpackage-read-all-archive-contents]].  As
-you can see from my =*log*= buffer below it takes up X, a whoppig X% of the
-startup time.  And X% of my total startup time.
+I quickly found out that it was [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-read-all-archive-contents.html][package-read-all-archive-contents]].  As you can
+see from my =*log*= buffer below it takes up X, a whoppig X% of the startup time.
+And X% of my total startup time.  Yikes!.  Well, the next question is: is
+=package-read-all-archive-contents= really necessary to do on startup?
 
 According to =chatgpt= it is not necessary to archive package contents during
 startup.  Doing so is only needed when installing or upgrading packages.  And it
-seems to be right.  After commenting to the =package-read-all-archive-contens= my
+seems to be right.  After commenting to the =package-read-all-archive-contents= my
 init time dropped to =0.8= seconds and with no apparent loss of functionality.
+
+Archiving the contents during idle time.
 
 The variable == is not needed for setting up existing packages.  It is only
 needed if you need to install packages.

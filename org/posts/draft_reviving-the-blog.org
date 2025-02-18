@@ -1,15 +1,9 @@
-:PROPERTIES:
-:ID:       20250118T135805.076082
-:END:
 #+title: Reviving the Blog
 #+author: Luis Henriquez-Perez
 
 * learning from my hiatus
-:PROPERTIES:
-:ID:       20250117T231935.145504
-:END:
 
-It has to be at least a year since I have written my last blog post.  It is hard
+It has to be at over a year since I have written my last blog post.  It is hard
 for me to pinpoint when exactly I stopped but I do know that at some point
 writing blog posts stopped being enjoyable for me.  It was not because I found
 recounting what I did tedious or anything.  Actually, I enjoyed that.  Rather it

@@ -8,9 +8,6 @@ css.  It is almost as.
 https://niklasfasching.de/posts/just-enough-css/
 
 * font
-:PROPERTIES:
-:ID:       20250124T144157.067348
-:END:
 
 Let us try to take it one step at a time.  I thought about it and I would wager
 there is an 80-20 principle going on by which I mean 80% of the good look

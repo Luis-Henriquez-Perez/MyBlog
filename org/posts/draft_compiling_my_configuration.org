@@ -1,0 +1,13 @@
+#+title:draft compiling my configuration
+#+author:Luis Henriquez-Perez
+
+A big drawback of using =package.el= to =elpaca= or =straight.el=, or any other
+external package manager is not being able to use =eldev= for compiling.  Now,
+this is not really the fault of =package.el= or =eldev= for that matter.  The reason
+is that eldev does it is own configuration with =package.el= and does not expect
+an Emacs package to install any packages.
+
+That is why I had to figure out how to compile my config.  I always felt there
+was a hole in my understanding for compiling.  I saw the example of [[][Boris's
+configuration]] where he loaded his Emacs configuration before compiling.  For a
+long time I thought that I need.  But recently I actually tried.
