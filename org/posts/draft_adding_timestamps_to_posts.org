@@ -15,8 +15,35 @@ first.
 
 #+begin_src emacs-lisp
 (defun oo--add-timestamp-to-file (file)
-  ;; 1. check to see if the file has an exiting timestamp
-  ()
-  )
+  ;; Check to see if the file has an exiting timestamp
+  (unless (string-match-p )
+    ;; Get the current creation time of the file.
+    ()
+    ;; Make the timesamp for the curr file.
+    (format-time-string)
+    (rename-file file newname)))
+
+(defun oo--add-timestamp-to-file (file)
+  "Rename FILE by appending a timestamp if it doesn't already have one."
+  (let ((timestamp-regex "-[0-9]\\{8\\}_[0-9]\\{6\\}\\>")
+        (timestamp (format-time-string "-%Y%m%d_%H%M%S"))
+        (dirname (file-name-directory file))
+        (basename (file-name-nondirectory file)))
+    (unless (string-match-p timestamp-regex basename)
+      (let* ((name (file-name-sans-extension basename))
+             (ext (file-name-extension basename t))
+             (newname (concat dirname name timestamp ext)))
+        (rename-file file newname)
+        newname))))  ;; Return the new filename
+#+end_src
+
+I can pick the date created from the result of the [[][stat]] command but I want to
+I want to see if I can use the return value [[][Ffile-attributes]] instead.
+According it to its documentation it can only give me the last access time, last
+modification time, and last status change time.
+
+#+begin_src emacs-lisp
+(file-attributes (buffer-file-name))
+;; => (nil 1 1000 998 (26548 43589 984039 438000) (26548 44732 970906 596000) (26548 44732 970906 596000) 1882 "-rw-r--r--" t 12468706 2050)
 #+end_src
 

@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful variable: package-pinned-packages*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package-pinned-packages is a <span class="button">customizable</span> variable defined in
+<span class="button">package.el.gz</span>.
+
+<span class="helpful-heading">Value
+</span>((org . "melpa-stable"))
+
+<span class="helpful-heading">Original Value
+</span>nil
+
+<span class="button">Set</span> <span class="button">Customize</span>
+
+<span class="helpful-heading">Documentation
+</span>An alist of packages that are pinned to specific archives.
+
+This can be useful if you have multiple package archives enabled,
+and want to control which archive a given package gets installed from.
+
+Each element of the alist has the form (PACKAGE . ARCHIVE), where:
+ PACKAGE is a symbol representing a package
+ ARCHIVE is a string representing an archive (it should be the car of
+an element in <span class="button">package-archives</span>, e.g. "gnu").
+
+Adding an entry to this variable means that only ARCHIVE will be
+considered as a source for PACKAGE.  If other archives provide PACKAGE,
+they are ignored (for this package).  If ARCHIVE does not contain PACKAGE,
+the package will be unavailable.
+
+This variable was added, or its default value changed, in Emacs 24.4.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">package.el.gz</span>:
+(<span class="keyword">defcustom</span> <span class="variable-name">package-pinned-packages</span> ...)      <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package--add-to-archive-contents</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/package.el.gz</span>
+(<span class="keyword">defcustom</span> <span class="variable-name">package-pinned-packages</span> nil
+  <span class="doc">"An alist of packages that are pinned to specific archives.
+This can be useful if you have multiple package archives enabled,
+and want to control which archive a given package gets installed from.
+
+Each element of the alist has the form (PACKAGE . ARCHIVE), where:
+ PACKAGE is a symbol representing a package
+ ARCHIVE is a string representing an archive (it should be the car of
+an element in `</span><span class="doc"><span class="constant">package-archives</span></span><span class="doc">', e.g. \"gnu\").
+
+Adding an entry to this variable means that only ARCHIVE will be
+considered as a source for PACKAGE.  If other archives provide PACKAGE,
+they are ignored (for this package).  If ARCHIVE does not contain PACKAGE,
+the package will be unavailable."</span>
+  <span class="builtin">:type</span> '(alist <span class="builtin">:key-type</span> (symbol <span class="builtin">:tag</span> <span class="string">"Package"</span>)
+                <span class="builtin">:value-type</span> (string <span class="builtin">:tag</span> <span class="string">"Archive name"</span>))
+  <span class="comment-delimiter">;; </span><span class="comment">This could prevent you from receiving updates for a package,
+</span>  <span class="comment-delimiter">;; </span><span class="comment">via an entry (PACKAGE . NON-EXISTING).  Which could be an issue
+</span>  <span class="comment-delimiter">;; </span><span class="comment">if PACKAGE has a known vulnerability that is fixed in newer versions.
+</span>  <span class="builtin">:risky</span> t
+  <span class="builtin">:version</span> <span class="string">"24.4"</span>)
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">custom-requests</span>
+  nil
+<span class="constant">custom-type</span>
+  (alist :key-type
+         (symbol :tag "Package")
+         :value-type
+         (string :tag "Archive name"))
+<span class="constant">custom-version</span>
+  "24.4"
+<span class="constant">risky-local-variable</span>
+  t
+<span class="constant">standard-value</span>
+  ((funcall
+    #'#[0 "\300\207"
+          [nil]
+          1 ""]))
+<span class="constant">variable-documentation</span>
+  "An alist of packages that are pinned to specific archives.\nThis can be useful if you have multiple package archives enabled,\nand want to control which archive a given package gets installed from.\n\nEach element of the alist has the form (PACKAGE . ARCHIVE), where:\n PACKAGE is a symbol representing a package\n ARCHIVE is a string representing an archive (it should be the car of\nan element in `package-archives', e.g. \"gnu\").\n\nAdding an entry to this variable means that only ARCHIVE will be\nconsidered as a source for PACKAGE.  If other archives provide PACKAGE,\nthey are ignored (for this package).  If ARCHIVE does not contain PACKAGE,\nthe package will be unavailable."</pre>
+  </body>
+</html>

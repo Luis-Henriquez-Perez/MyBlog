@@ -1,15 +1,4 @@
 (require 'ox)
-;; I need htmlize for generating the syntax highlighting of source blocks.  So
-;; if I want to use this script on an external emacs process I need to ensure
-;; the package is installed.  I do not know, this is unpleasant.  I wish it were
-;; built-in but what can I do?  Maybe I will clone it as a submodule in the future.
-(defvar package-user-dir)
-
-(require 'package)
-
-(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
-
-(require 'init-package)
 
 (require 'htmlize)
 

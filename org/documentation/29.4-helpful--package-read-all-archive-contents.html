@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: package-read-all-archive-contents*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package-read-all-archive-contents is a <span class="button">byte-compiled</span> function defined
+in <span class="button">package.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(package-read-all-archive-contents)
+
+<span class="helpful-heading">Documentation
+</span>Read cached archive file for all archives in <span class="button">package-archives</span>.
+
+If successful, set or update <span class="button">package-archive-contents</span>.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">package.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">package-initialize</span> ...)                    <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package--update-downloads-in-progress</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-menu--refresh</span> ...)                 <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by package-read-all-archive-contents</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/package.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">package-read-all-archive-contents</span> ()
+  <span class="doc">"Read cached archive file for all archives in `</span><span class="doc"><span class="constant">package-archives</span></span><span class="doc">'.
+If successful, set or update `</span><span class="doc"><span class="constant">package-archive-contents</span></span><span class="doc">'."</span>
+  (<span class="keyword">setq</span> package-archive-contents nil)
+  (<span class="keyword">setq</span> package--old-archive-priorities package-archive-priorities)
+  (<span class="keyword">dolist</span> (archive package-archives)
+    (run-hook-with-args 'package-read-archive-hook (car archive))))
+
+</pre>
+  </body>
+</html>

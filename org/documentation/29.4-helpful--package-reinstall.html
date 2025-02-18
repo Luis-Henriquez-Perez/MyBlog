@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: package-reinstall*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package-reinstall is an <span class="button">autoloaded</span>, <span class="button">interactive</span> and <span class="button">byte-compiled</span>
+function defined in <span class="button">package.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(package-reinstall PKG)
+
+<span class="helpful-heading">Documentation
+</span>Reinstall package PKG.
+
+PKG should be either a symbol, the package name, or a <span class="constant">package-desc</span>
+object.
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>package-reinstall is unused in <span class="button">package.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by package-reinstall</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/package.el.gz</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">package-reinstall</span> (pkg)
+  <span class="doc">"Reinstall package PKG.
+PKG should be either a symbol, the package name, or a `</span><span class="doc"><span class="constant">package-desc</span></span><span class="doc">'
+object."</span>
+  (<span class="keyword">interactive</span>
+   (<span class="keyword">progn</span>
+     (package--archives-initialize)
+     (list (intern (completing-read
+                    <span class="string">"Reinstall package: "</span>
+                    (mapcar #'symbol-name
+                            (mapcar #'car package-alist)))))))
+  (package--archives-initialize)
+  (package-delete
+   (<span class="keyword">if</span> (package-desc-p pkg) pkg (cadr (assq pkg package-alist)))
+   'force 'nosave)
+  (package-install pkg 'dont-select))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (package-reinstall 0)
+<span class="constant">event-symbol-elements</span>
+  (package-reinstall)
+<span class="constant">function-history</span>
+  ("/usr/share/emacs/29.4/lisp/emacs-lisp/package.elc"
+   (autoload "package"
+     ("loaddefs.elc" . 905853)
+     t nil))
+<span class="constant">modifier-cache</span>
+  ((0 . package-reinstall))</pre>
+  </body>
+</html>
