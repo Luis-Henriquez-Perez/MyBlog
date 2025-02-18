@@ -1,18 +1,22 @@
+:PROPERTIES:
+:ID:       20250218T131109.313718
+:END:
 #+title:draft adding timestamps to posts
 #+author:Luis Henriquez-Perez
 
 Here I will discuss how I used file attribute of time to timestamp certain
-posts.  I had been timestamping posts before but I stopped.  Partly cause I
+posts.  I had been timestamping posts before but I stopped partly cause I
 "misplaced" the function I was using to create timestamped posts and partly
 because I did not like all that boilerplate in front of files.  Now that I have
-many draft posts and I cannot tell where the newer posts are that I realize I
+many draft posts and I cannot tell where my latest posts are that I realize I
 definitely do need timestamped names.
 
 The thing is that it is just much easier to sort the files based on their
-creation date.  I suppose I could simply sort files listed by dired by their
-creation date while I am in the blog directory.  However, I think this would be
-some work and I do not know I think it is clearer and more transparent just to
-do this based on the name.  In any case I will want to
+creation date because on the website that is the standard way to list posts.  I
+suppose I could simply sort files listed by dired by their creation date while I
+am in the blog directory.  I imagine this would involve.  However, I think this
+would be some work and I do not know.  I think it is clearer and more
+transparent just to do this based on the name.
 
 My ext4 system actually stores the date created.
 
@@ -27,13 +31,11 @@ Here is a preliminary function I wrote.
     ;; Make the timesamp for the curr file.
     (format-time-string)
     (rename-file file newname)))
-
 #+end_src
 
 And here is the result of it being filled out by ChatGPT.
 
 #+begin_src emacs-lisp
-;; Produced by chat gpt.
 (defun oo--add-timestamp-to-file (file)
   "Rename FILE by appending a timestamp if it doesn't already have one."
   (let ((timestamp-regex "-[0-9]\\{8\\}_[0-9]\\{6\\}\\>")
@@ -48,6 +50,17 @@ And here is the result of it being filled out by ChatGPT.
         newname))))  ;; Return the new filename
 #+end_src
 
+It is not completely what I want because this has no mention of actually getting
+the creation date from the file--it just uses the current time.
+
+I can get the creation it. ChatGPT provided a nice quick way of producing the format string.
+
+#+begin_src emacs-lisp
+(let* ((ctime (string-to-number (shell-command-to-string "stat -c %W draft_writing_tests.org")))
+       (time (seconds-to-time ctime)))
+  (format-time-string "%Y-%m-%d %H:%M:%S" time))
+#+end_src
+
 I can pick the date created from the result of the [[][stat]] command but I want to
 I want to see if I can use the return value [[][Ffile-attributes]] instead.
 According it to its documentation it can only give me the last access time, last
@@ -56,14 +69,6 @@ modification time, and last status change time.
 #+begin_src emacs-lisp
 (file-attributes (buffer-file-name))
 ;; => (nil 1 1000 998 (26548 43589 984039 438000) (26548 44732 970906 596000) (26548 44732 970906 596000) 1882 "-rw-r--r--" t 12468706 2050)
-#+end_src
-
-ChatGPT provided a nice quick way of producing the format string.
-
-#+begin_src emacs-lisp
-(let* ((ctime (string-to-number (shell-command-to-string "stat -c %W draft_writing_tests.org")))
-       (time (seconds-to-time ctime)))
-  (format-time-string "%Y-%m-%d %H:%M:%S" time))
 #+end_src
 
 Combining all these things we get the main function.
