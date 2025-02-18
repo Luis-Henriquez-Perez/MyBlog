@@ -8,6 +8,10 @@ because I did not like all that boilerplate in front of files.  Now that I have
 many draft posts and I cannot tell where the newer posts are that I realize I
 definitely do need timestamped names.
 
+The thing is that it is just much easier to sort the files based on their
+creation date.  I suppose I could simply sort files listed by dired by their
+creation date while I am in the blog directory.
+
 My ext4 system actually stores the date created.  Ultimately I want to add this
 as a function that can apply to files marked by dired.  But I should take this
 one step at a time and write the function so that it works with just one file
@@ -23,6 +27,7 @@ first.
     (format-time-string)
     (rename-file file newname)))
 
+;; Produced by chat gpt.
 (defun oo--add-timestamp-to-file (file)
   "Rename FILE by appending a timestamp if it doesn't already have one."
   (let ((timestamp-regex "-[0-9]\\{8\\}_[0-9]\\{6\\}\\>")
@@ -45,5 +50,30 @@ modification time, and last status change time.
 #+begin_src emacs-lisp
 (file-attributes (buffer-file-name))
 ;; => (nil 1 1000 998 (26548 43589 984039 438000) (26548 44732 970906 596000) (26548 44732 970906 596000) 1882 "-rw-r--r--" t 12468706 2050)
+#+end_src
+
+ChatGPT provided a nice quick way of producing the format string.
+
+#+begin_src emacs-lisp
+(let* ((ctime (string-to-number (shell-command-to-string "stat -c %W draft_writing_tests.org")))
+       (time (seconds-to-time ctime)))
+  (format-time-string "%Y-%m-%d %H:%M:%S" time))
+#+end_src
+
+Combining all these things we get the main function.
+
+#+begin_src emacs-lisp
+(defun oo--add-timestamp-to-file (file)
+  "Rename FILE by appending a timestamp if it doesn't already have one."
+  (let ((timestamp-regex "-[0-9]\\{8\\}_[0-9]\\{6\\}\\>")
+        (timestamp (format-time-string "-%Y%m%d_%H%M%S"))
+        (dirname (file-name-directory file))
+        (basename (file-name-nondirectory file)))
+    (unless (string-match-p timestamp-regex basename)
+      (let* ((name (file-name-sans-extension basename))
+             (ext (file-name-extension basename t))
+             (newname (concat dirname name timestamp ext)))
+        (rename-file file newname)
+        newname))))
 #+end_src
 
