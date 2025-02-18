@@ -10,12 +10,13 @@ definitely do need timestamped names.
 
 The thing is that it is just much easier to sort the files based on their
 creation date.  I suppose I could simply sort files listed by dired by their
-creation date while I am in the blog directory.
+creation date while I am in the blog directory.  However, I think this would be
+some work and I do not know I think it is clearer and more transparent just to
+do this based on the name.  In any case I will want to
 
-My ext4 system actually stores the date created.  Ultimately I want to add this
-as a function that can apply to files marked by dired.  But I should take this
-one step at a time and write the function so that it works with just one file
-first.
+My ext4 system actually stores the date created.
+
+Here is a preliminary function I wrote.
 
 #+begin_src emacs-lisp
 (defun oo--add-timestamp-to-file (file)
@@ -27,6 +28,11 @@ first.
     (format-time-string)
     (rename-file file newname)))
 
+#+end_src
+
+And here is the result of it being filled out by ChatGPT.
+
+#+begin_src emacs-lisp
 ;; Produced by chat gpt.
 (defun oo--add-timestamp-to-file (file)
   "Rename FILE by appending a timestamp if it doesn't already have one."
