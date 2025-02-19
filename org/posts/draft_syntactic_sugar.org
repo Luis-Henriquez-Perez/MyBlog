@@ -1,2 +1,14 @@
 #+title:draft syntactic sugar
 #+author:Luis Henriquez-Perez
+
+While writing the [[][a function for adding abbrevs]] I there was.  I had always
+thought about adding these but never.
+
+#+begin_src emacs-lisp
+(defmacro quitif! (condition message &rest args)
+  "Exit `autolet!' and print MESSAGE if CONDITION is true."
+  `(when ,condition
+     (return!)
+     (message ,message ,args)))
+#+end_src
+
