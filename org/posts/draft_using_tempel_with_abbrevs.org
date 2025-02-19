@@ -12,17 +12,24 @@ several applications of this method.  Hello [[/home/luis/.config/emacs/lisp/050-
 #+begin_src emacs-lisp
 (defun! oo--expansion-config-link ()
   "Expand an org link for a configuration file."
+  (setq doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
   (set! lisp-dir (expand-file-name "lisp" user-emacs-directory))
   (appending! files (directory-files lisp-dir t (rx ".el" eol)))
   (pushing! files (expand-file-name user-init-file))
   (pushing! files (expand-file-name "early-init.el" user-emacs-directory))
   ;; Save a snapshot of my configuration file.
-  (set! path (completing-read "" files))
+  (set! config-file (completing-read "" files))
+  (set! html-file (expand-file-name (file-name-nondirectory file) doc-dir))
+  (set! config-buffer (create-file-buffer config-file))
+  (set! html-buffer (htmlize-buffer config-buffer))
+  (unless (file-exists-p html-file)
+    (with-current-buffer html-buffer
+      (write-region (point-min) (point-max) html-file)))
   (with-current-buffer html-buffer
     (write-region (point-min) (point-max) html-file nil 'quiet))
-  (kill-buffer help-buffer)
   (kill-buffer html-buffer)
-  (insert (format "[[%s][%s]]"  path (file-name-nondirectory path))))
+  ;; TODO: make the file path relative.
+  (insert (format "[[file:%s][%s]]" html-file (file-name-nondirectory path))))
 
 (define-abbrev global-abbrev-table "clk" "" #'oo--expansion-config-link
   :enable-function #'oo--in-org-p)
