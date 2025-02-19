@@ -24,9 +24,7 @@ several applications of this method.  Hello [[/home/luis/.config/emacs/lisp/050-
   (set! html-buffer (htmlize-buffer config-buffer))
   (unless (file-exists-p html-file)
     (with-current-buffer html-buffer
-      (write-region (point-min) (point-max) html-file)))
-  (with-current-buffer html-buffer
-    (write-region (point-min) (point-max) html-file nil 'quiet))
+      (write-region (point-min) (point-max) html-file nil 'quiet)))
   (kill-buffer html-buffer)
   ;; TODO: make the file path relative.
   (insert (format "[[file:%s][%s]]" html-file (file-name-nondirectory path))))
