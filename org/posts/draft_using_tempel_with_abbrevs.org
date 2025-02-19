@@ -1,0 +1,98 @@
+#+title:draft using tempel with abbrevs
+#+author:Luis Henriquez-Perez
+
+I have had a desire to quickly.  It is such a pain to type links out manually.
+And the link completion interface provided by org is not much better to be
+honest.  Instead in this post I will show how I leverage abbrevs to make the
+insertion of links as close to instantaneous as you can get.  And of course
+several applications of this method.
+
+* expanding into a link
+
+#+begin_src emacs-lisp
+(defun! oo--expansion-config-link ()
+  "Expand an org link for a configuration file."
+  (set! lisp-dir (expand-file-name "lisp" user-emacs-directory))
+  (appending! files (directory-files lisp-dir t (rx ".el" eol)))
+  (pushing! files (expand-file-name user-init-file))
+  (pushing! files (expand-file-name "early-init.el" user-emacs-directory))
+  (set! path (completing-read "" files))
+  (insert (format "[[%s][%s]]"  path (file-name-nondirectory path))))
+
+(define-abbrev global-abbrev-table "clk" "" #'oo--expansion-config-link
+  :enable-function #'oo--in-org-p)
+(define-abbrev global-abbrev-table "clink" "" #'oo--expansion-config-link
+  :enable-function #'oo--in-org-p)
+#+end_src
+
+* determine whether I am in a blog post
+
+#+begin_src emacs-lisp
+#+end_src
+
+* package link documentation
+
+Often when writing blog posts I have wanted to link to Emacs packages.  Writing
+this I did not know how to do a completing-read for packages.
+
+Looking at [[][package-install]] I see that this is what is responsible for
+listing packages.
+
+#+begin_src emacs-lisp
+(mapcan
+ (lambda (elt)
+   (and (or (and (or current-prefix-arg
+                     package-install-upgrade-built-in)
+                 (package--active-built-in-p (car elt)))
+            (not (package-installed-p (car elt))))
+        (list (symbol-name (car elt)))))
+ package-archive-contents)
+#+end_src
+
+I do not know if it is worth putting this in a function yet so for now I will
+just copy over the code.  I also did not know how to get the link that
+corresponds to a package off the top of my head.  So I looked in [[][package-]]
+
+#+begin_src emacs-lisp
+(cdr (assoc :url (package-desc-extras desc)))
+#+end_src
+
+[[https://github.com/phillord/pabbrev][pabbrev]]
+
+#+begin_src emacs-lisp
+(defun! oo--expand-package-link ()
+  "Expand an org link for a configuration file."
+  (set! desc (package--query-desc))
+  (set! link (cdr (assoc :url (and desc (package-desc-extras desc)))))
+  (insert (format "[[%s][%s]]" link (package-desc-name desc))))
+
+(define-abbrev global-abbrev-table "plk" "" #'oo--expand-package-link
+  :enable-function #'oo--in-org-p)
+(define-abbrev global-abbrev-table "plink" "" #'oo--expand-package-link
+  :enable-function #'oo--in-org-p)
+#+end_src
+
+* blog link to variable documentation
+
+#+begin_src emacs-lisp
+(defun! oo--expand-var-documentation ()
+  "Expand an org link for a configuration file."
+  (setq doc-dir (expand-file-name "../documentation"))
+  (set! lisp-dir (expand-file-name "lisp" user-emacs-directory))
+  (appending! files (directory-files lisp-dir t (rx ".el" eol)))
+  (pushing! files (expand-file-name user-init-file))
+  (pushing! files (expand-file-name "early-init.el" user-emacs-directory))
+  (set! path (completing-read "" files))
+  (insert (format "[[%s][%s]]"  path (file-name-nondirectory path))))
+#+end_src
+
+* blog link to another one of my posts
+
+#+begin_src emacs-lisp
+;; Prompt me for a config file.
+(defun! oo-block-post ()
+.  ""
+  (set! blog-dir ())
+  
+  )
+#+end_src

@@ -65,7 +65,8 @@ This is what chatGPT recommends:
 Even though it is not exactly what I want, seeing an implementation over no
 implementation is extremely useful.  I can see why this makes experienced
 developers so much more efficient.  Without further ado this is the function
-after my modifications.
+after my modifications.  Mainly, I incorporate the macros from
+[[][Cautolet-macros]].
 
 #+begin_src emacs-lisp
 (defun! oo-dwim-add-abbrev ()
@@ -80,7 +81,8 @@ after my modifications.
   (set! abbrev-file (expand-file-name "990-plain-text-abbrevs.el" "lisp/"))
   (quitif! (not prev-word) "No previous word found.")
   (quitif! (string-empty-p expansion) "No expansion given.")
-  (set! form `(define-abbrev global-abbrev-table ,abbrev ,expansion nil :enable-function ))
+  ;; Find where the first `define-abbrev' starts.
+  (set! form `(define-abbrev global-abbrev-table ,abbrev ,expansion nil :enable-function #'oo-use-text-abbrev-p))
   (with-temp-buffer
     (insert-file-contents abbrev-file)
     (goto-char (point-max))

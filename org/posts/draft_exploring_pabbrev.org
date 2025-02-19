@@ -1,0 +1,12 @@
+#+title:draft exploring pabbrev
+#+author:Luis Henriquez-Perez
+
+As the organization of my configuration has settled down, I had been looking
+more into customizing completion, which is certainly a rabbit hole of a thing in
+Emacs.  My initial thoughts is I do not want a popup coming up all the time when
+I am typing text for a few reasons.  A popup can be distracting.  It can also
+bring performance problems.  Also there is a kind of "conflict" or redundancy
+between it and the minibuffer--a popup honestly is essentially a worse
+minibuffer.  I use things like.  It actually makes a lot of sense to use the
+minibuffer as the popup for completion instead of a popup because the minibuffer
+is more powerful.  I have looked at [[][pabbrev]]
