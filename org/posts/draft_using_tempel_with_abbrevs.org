@@ -35,8 +35,8 @@ several applications of this method.
 Often when writing blog posts I have wanted to link to Emacs packages.  Writing
 this I did not know how to do a completing-read for packages.
 
-Looking at [[][package-install]] I see that this is what is responsible for
-listing packages.
+Looking at [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-install.html][package-install]] I see that this is what is responsible for listing
+packages.
 
 #+begin_src emacs-lisp
 (mapcan
@@ -51,7 +51,8 @@ listing packages.
 
 I do not know if it is worth putting this in a function yet so for now I will
 just copy over the code.  I also did not know how to get the link that
-corresponds to a package off the top of my head.  So I looked in [[][package-]]
+corresponds to a package off the top of my head.  So I looked in
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-browse-url.html][package-browse-url]].
 
 #+begin_src emacs-lisp
 (cdr (assoc :url (package-desc-extras desc)))
@@ -75,20 +76,23 @@ corresponds to a package off the top of my head.  So I looked in [[][package-]]
 * blog link to function documentation
 
 #+begin_src emacs-lisp
-(defun! oo--expand-var-documentation ()
+(defun! oo--expand-function-documentation ()
   "Expand an org link for a configuration file."
-  (setq doc-dir (expand-file-name "../documentation"))
+  (setq doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
+  (set! helpful-switch-buffer-function #'ignore)
+  (set! symbol (helpful--read-symbol "Callable: " (helpful--callable-at-point) #'fboundp))
   (setq html-file (expand-file-name (format "%s-helpful--%s.html" emacs-version symbol) doc-dir))
-  (set! path (completing-read "" files))
-  (setq help-fn #'helpful-symbol)
   (unless (file-exists-p html-file)
-    (and (setq help-buffer (funcall help-fn symbol))
+    (and (setq help-buffer (helpful-callable symbol))
          (setq html-buffer (htmlize-buffer help-buffer))
          (progn (with-current-buffer html-buffer
                   (write-region (point-min) (point-max) html-file nil 'quiet))
                 (kill-buffer help-buffer)
                 (kill-buffer html-buffer))))
-  (insert (format "[[%s][%s]]"  path (file-name-nondirectory path))))
+  (insert (format "[[file:%s][%s]]"  html-file symbol)))
+
+(define-abbrev global-abbrev-table "flk" "" #'oo--expand-function-documentation
+  :enable-function #'oo--in-org-p)
 #+end_src
 
 * blog link to variable documentation
