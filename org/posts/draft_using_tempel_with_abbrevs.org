@@ -72,6 +72,25 @@ corresponds to a package off the top of my head.  So I looked in [[][package-]]
   :enable-function #'oo--in-org-p)
 #+end_src
 
+* blog link to function documentation
+
+#+begin_src emacs-lisp
+(defun! oo--expand-var-documentation ()
+  "Expand an org link for a configuration file."
+  (setq doc-dir (expand-file-name "../documentation"))
+  (setq html-file (expand-file-name (format "%s-helpful--%s.html" emacs-version symbol) doc-dir))
+  (set! path (completing-read "" files))
+  (setq help-fn #'helpful-symbol)
+  (unless (file-exists-p html-file)
+    (and (setq help-buffer (funcall help-fn symbol))
+         (setq html-buffer (htmlize-buffer help-buffer))
+         (progn (with-current-buffer html-buffer
+                  (write-region (point-min) (point-max) html-file nil 'quiet))
+                (kill-buffer help-buffer)
+                (kill-buffer html-buffer))))
+  (insert (format "[[%s][%s]]"  path (file-name-nondirectory path))))
+#+end_src
+
 * blog link to variable documentation
 
 #+begin_src emacs-lisp
