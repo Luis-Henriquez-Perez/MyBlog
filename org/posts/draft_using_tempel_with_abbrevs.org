@@ -5,7 +5,7 @@ I have had a desire to quickly.  It is such a pain to type links out manually.
 And the link completion interface provided by org is not much better to be
 honest.  Instead in this post I will show how I leverage abbrevs to make the
 insertion of links as close to instantaneous as you can get.  And of course
-several applications of this method.
+several applications of this method.  Hello [[/home/luis/.config/emacs/lisp/050-base.el][050-base.el]] in the files [[https://github.com/Crandel/tempel-collection][tempel-collection]]. 
 
 * expanding into a link
 
@@ -16,7 +16,12 @@ several applications of this method.
   (appending! files (directory-files lisp-dir t (rx ".el" eol)))
   (pushing! files (expand-file-name user-init-file))
   (pushing! files (expand-file-name "early-init.el" user-emacs-directory))
+  ;; Save a snapshot of my configuration file.
   (set! path (completing-read "" files))
+  (with-current-buffer html-buffer
+    (write-region (point-min) (point-max) html-file nil 'quiet))
+  (kill-buffer help-buffer)
+  (kill-buffer html-buffer)
   (insert (format "[[%s][%s]]"  path (file-name-nondirectory path))))
 
 (define-abbrev global-abbrev-table "clk" "" #'oo--expansion-config-link
