@@ -1,16 +1,103 @@
-#+title:draft using tempel with abbrevs
+#+title: inserting org links painlessly with abbrevs
 #+author:Luis Henriquez-Perez
 
-I have had a desire to quickly.  It is such a pain to type links out manually.
-And the link completion interface provided by org is not much better to be
-honest.  Instead in this post I will show how I leverage abbrevs to make the
-insertion of links as close to instantaneous as you can get.  And of course
-several applications of this method.  Hello [[/home/luis/.config/emacs/lisp/050-base.el][050-base.el]] in the files [[https://github.com/Crandel/tempel-collection][tempel-collection]]. 
+It is such a pain to type links out manually.  And the link completion interface
+provided by org is not much better to be honest.  Fortunately, abbrevs
+can inserting links quick and painless by using abbrevs.
+
+* function for determining if I am writing a blog post
+
+I use abbrevs a bit differently than what is suggested in the [[][manual]].  In
+the manual it is recommneded to use multiple abbrev table, one for each mode
+you want abbrevs for and if you ever one more than one abbrev table active you
+can modify the local abbrev table variable.  Instead I just use one table, the
+global abbrev table, distinguish where each links should go via the abbrev's
+[[][:enable-function]] property.  The enable property needs to return non-nil when the abbrev is active.
+
+#+begin_src emacs-lisp
+(defun oo-blog-post-p ()
+  "Return non-nil if the current buffer is for one of my blog posts."
+  (and (derived-mode-p 'org-mode)
+       (string= (expand-file-name default-directory)
+                (expand-file-name "~/Documents/MyBlog/posts/"))))
+#+end_src
+
+* package link documentation
+
+Often when writing blog posts I have wanted to link to Emacs packages I talk
+about.  The idea is to write an abbrev that prompt me for a package and once I select one it will insert an org link to the package.  Writing this I did not know how to do select a package via [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--completing-read.html][completing-read]], or rather how to list the set of packages to choose from via =completing-read= but I found out by looking at the definition for [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-install.html][package-install]].
+
+#+begin_src emacs-lisp
+(mapcan
+ (lambda (elt)
+   (and (or (and (or current-prefix-arg
+                     package-install-upgrade-built-in)
+                 (package--active-built-in-p (car elt)))
+            (not (package-installed-p (car elt))))
+        (list (symbol-name (car elt)))))
+ package-archive-contents)
+#+end_src
+
+I also did not know how to get the link that corresponds to a package off the
+top of my head.  So I looked in [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-browse-url.html][package-browse-url]] to see how that was done.
+
+#+begin_src emacs-lisp
+(cdr (assoc :url (package-desc-extras desc)))
+#+end_src
+
+One thing to always keep in mind when dealing with packages is that they are handled represented via package description objects.  I realized the aforementioned code used by =package-install= would give me a list of package symbols but what I actually needed was a way to get a description object which, fortunately, is what [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package--query-desc.html][package--query-desc]] provides. 
+
+#+begin_src emacs-lisp
+(defun! oo-expand-package-link ()
+  "Expand an org link for a configuration file."
+  (set! desc (package--query-desc))
+  (set! link (cdr (assoc :url (and desc (package-desc-extras desc)))))
+  (insert (format "[[%s][%s]]" link (package-desc-name desc))))
+
+(define-abbrev global-abbrev-table "plk" "" #'oo-expand-package-link
+  :enable-function #'oo-blog-post-p)
+(define-abbrev global-abbrev-table "plink" "" #'oo-expand-package-link
+  :enable-function #'oo-blog-post-p)
+#+end_src
+
+* generally add a buffer to the documentation
+
+Although the links I wrote are undoubtedly useful there are time when I want to link to a buffer that is nether helpful documentation nor a config file.  In that case I want a generic function.
+
+#+begin_src emacs-lisp
+(defun oo-add-to-blog-docs ()
+  "Take an html snapshot of the current buffer and add it to blog."
+  (interactive)
+  (set! doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
+  ;; Add a timestamp to the thing.
+  (set! html-buffer (htmlize-buffer (current-buffer)))
+  (set! html-file (expand-file-name (format "$s")))
+  (with-current-buffer html-buffer
+    (write-region (point-min) (point-max) html-file nil 'quiet))
+  (kill-buffer html-buffer))
+#+end_src
+
+* generally add a buffer to the documentation
+
+I want a.
+
+#+begin_src emacs-lisp
+(defun oo-reference-blog-doc ()
+  "Take an html snapshot of the current buffer and add it to blog."
+  (interactive)
+  (set! doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
+  ;; Remove timestamp from the name.
+  ;; 
+  ;; Add a timestamp to the thing.
+  (insert (format "[[file:%s][%s]]" file (file-name-non-directory name))))
+#+end_src
 
 * expanding into a link
 
+Occasionally whem I am writing my blog files I will want to.  Foo vlk
+
 #+begin_src emacs-lisp
-(defun! oo--expansion-config-link ()
+(defun! oo-expand-config-link ()
   "Expand an org link for a configuration file."
   (setq doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
   (set! lisp-dir (expand-file-name "lisp" user-emacs-directory))
@@ -29,66 +116,16 @@ several applications of this method.  Hello [[/home/luis/.config/emacs/lisp/050-
   ;; TODO: make the file path relative.
   (insert (format "[[file:%s][%s]]" html-file (file-name-nondirectory path))))
 
-(define-abbrev global-abbrev-table "clk" "" #'oo--expansion-config-link
-  :enable-function #'oo--in-org-p)
-(define-abbrev global-abbrev-table "clink" "" #'oo--expansion-config-link
-  :enable-function #'oo--in-org-p)
-#+end_src
-
-* determine whether I am in a blog post
-
-#+begin_src emacs-lisp
-#+end_src
-
-* package link documentation
-
-Often when writing blog posts I have wanted to link to Emacs packages.  Writing
-this I did not know how to do a completing-read for packages.
-
-Looking at [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-install.html][package-install]] I see that this is what is responsible for listing
-packages.
-
-#+begin_src emacs-lisp
-(mapcan
- (lambda (elt)
-   (and (or (and (or current-prefix-arg
-                     package-install-upgrade-built-in)
-                 (package--active-built-in-p (car elt)))
-            (not (package-installed-p (car elt))))
-        (list (symbol-name (car elt)))))
- package-archive-contents)
-#+end_src
-
-I do not know if it is worth putting this in a function yet so for now I will
-just copy over the code.  I also did not know how to get the link that
-corresponds to a package off the top of my head.  So I looked in
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--package-browse-url.html][package-browse-url]].
-
-#+begin_src emacs-lisp
-(cdr (assoc :url (package-desc-extras desc)))
-#+end_src
-
-[[https://github.com/phillord/pabbrev][pabbrev]]
-
-#+begin_src emacs-lisp
-(defun! oo--expand-package-link ()
-  "Expand an org link for a configuration file."
-  (set! desc (package--query-desc))
-  (set! link (cdr (assoc :url (and desc (package-desc-extras desc)))))
-  (insert (format "[[%s][%s]]" link (package-desc-name desc))))
-
-(define-abbrev global-abbrev-table "plk" "" #'oo--expand-package-link
-  :enable-function #'oo--in-org-p)
-(define-abbrev global-abbrev-table "plink" "" #'oo--expand-package-link
-  :enable-function #'oo--in-org-p)
+(define-abbrev global-abbrev-table "clk" "" #'oo-expand-config-link :enable-function #'oo-blog-post-p)
+(define-abbrev global-abbrev-table "clink" "" #'oo-expand-config-link :enable-function #'oo-blog-post-p)
 #+end_src
 
 * blog link to function documentation
 
 #+begin_src emacs-lisp
-(defun! oo--expand-function-documentation ()
+(defun! oo-expand-function-doc-link ()
   "Expand an org link for a configuration file."
-  (setq doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
+  (set! doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
   (set! helpful-switch-buffer-function #'ignore)
   (set! symbol (helpful--read-symbol "Callable: " (helpful--callable-at-point) #'fboundp))
   (setq html-file (expand-file-name (format "%s-helpful--%s.html" emacs-version symbol) doc-dir))
@@ -101,7 +138,7 @@ corresponds to a package off the top of my head.  So I looked in
                 (kill-buffer html-buffer))))
   (insert (format "[[file:%s][%s]]"  html-file symbol)))
 
-(define-abbrev global-abbrev-table "flk" "" #'oo--expand-function-documentation
+(define-abbrev global-abbrev-table "flk" "" #'oo-expand-function-doc-link
   :enable-function #'oo--in-org-p)
 #+end_src
 
