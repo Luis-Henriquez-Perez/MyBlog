@@ -6,13 +6,13 @@ measure of the amount of time Emacs takes to start.  It computes the time
 difference between two variables set during initialization, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--after-init-time.html][after-init-time]] and
 [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--before-init-time.html][before-init-time]].  As I became more serious about reducing the startup time of
 my Emacs configuration I was naturally curious about details of initialization.
-Specifically, I was interested where the =after-init-time= and =before-init-time=
+Specifically, I was interested in where the =after-init-time= and =before-init-time=
 were set in relation to other events happening during Emacs startup.  I read up
-all about this [[][Emacs's startup summary]] and what I found was surprising.
-The first thing that stuck out to me was that many more things happen between
-these times beyond just loading user configuration files.  I also things I
-expected to be counted towards initialization, namely the =after-init-hook= and
-the =emacs-startup-hook= were excluded.
+on all this in [[][Emacs's startup summary]] and what I found was surprising.
+The first thing that stuck out to me was that there were many more things
+happening between these times beyond just loading user configuration files.  I
+also things I expected to be counted towards initialization, namely the
+=after-init-hook= and the =emacs-startup-hook= were excluded.
 
 I want a better measure of the "absolute" Emacs startup time, which I define as
 the "total" time Emacs takes to startup.
@@ -22,7 +22,9 @@ the "total" time Emacs takes to startup.
 
 There will always be some non-negotiable things Emacs has to spend time on
 during initialization but when I am profiling I want to only consider the
-effect my configuration has on Emacs startup.
+effect my configuration has on Emacs startup.  So I set out to take a few time
+measurements of my own.  Below I am trying to compute exactly how much time Emacs
+takes to compute it is own stuff.
 
 #+begin_src emacs-lisp
 (defvar oo-before-load-time (current-time))
@@ -36,8 +38,8 @@ effect my configuration has on Emacs startup.
     (message "before -> %0.2f | loading elapsed %0.2f | done %0.2f" a b c)))
 #+end_src
 
-Additionally I recorded the amount of time spent running the =after-init-hook= and
-the =emacs-startup-hook=.
+Additionally I logged the amount of time spent running the =after-init-hook= and
+the =emacs-startup-hook= which I also considered part of my effect on startup.
 
 #+begin_src emacs-lisp
 (defhook! record-after-init-hook-start-time (after-init-hook)
@@ -69,6 +71,8 @@ the =emacs-startup-hook=.
   (set-register :emacs-startup-hook-time time)
   (oo-log 'info "Finished running `emacs-startup-hook' in %.2f seconds" time))
 #+end_src
+
+I know have a more.
 
 Steps 3 through 13 are internal steps for Emacs
 initialization that are out of the users control.  Furthermore, the I wanted to
