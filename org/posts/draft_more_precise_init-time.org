@@ -1,0 +1,46 @@
+#+title: how I got a better idea of startup time
+#+author:Luis Henriquez-Perez
+
+The function [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][emacs-init-time]] is widely used by Emacs users as the primary
+measure of the amount of time Emacs takes to start.  It computes the time
+difference between two variables set during initialization, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--after-init-time.html][after-init-time]] and
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--before-init-time.html][before-init-time]].  As I became more serious about reducing the startup time of
+my Emacs configuration I was naturally curious about details of initialization.
+Specifically, I was interested where the =after-init-time= was set and initialized
+in relation to other events happening during Emacs startup.  What I found was
+surprising.  According to Emacs's startup summary, that there are several things
+that happen between these times beyond just loading your configuration files.
+
+#+begin_src emacs-lisp
+(defvar oo-before-load-time (current-time))
+(require! :profile t)
+(defvar oo-after-load-time (current-time))
+(defun oo-startup-info ()
+  (interactive)
+  (let ((a (float-time (time-subtract oo-before-load-time before-init-time)))
+        (b (float-time (time-subtract oo-after-load-time oo-before-load-time)))
+        (c (float-time (time-subtract after-init-time oo-after-load-time))))
+    (message "before -> %0.2f | loading elapsed %0.2f | done %0.2f" a b c)))
+#+end_src
+
+Steps 3 through 13 are internal steps for Emacs
+initialization that are out of the users control.  Furthermore, the I wanted to
+know then what portion of the startup time was my responsibility.  I also
+noticed that =after-init-time= is set just before. what =emacs-init-time= does not
+measure: Namely the time it takes to run the [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--after-init-hook.html][after-init-hook]] and
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--emacs-startup-hook.html][emacs-startup-hook]].  I am not sure why this is not included considering that
+these hooks do consume some time.  Particularly when trying to improve Emacs
+startup time I found it useful to focus specifically on the effect you have on
+Emacs initialization.
+
+But if you look at everything that happens in the startup summary steps, I am
+not responsible for steps 3 through 13 (inclusive).  The init file is loaded on
+step 14.  Also note that =after-init-time= is set /before/ either [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--after-init-hook.html][after-init-hook]] or
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--emacs-startup-hook.html][emacs-startup-hook]] is set, meaning that the time these hooks take is not
+included in the init time.  This is strange to me because I am the one who adds
+to these hooks and they do consume time so they should also be considered.  I do
+not know, essentially I would classify the "real" init time as everything you as
+a user are responsible for, in other words, the real difference in time that
+your configuration is adding to Emacs's startup.  This would be the time taken
+to load your configuration files + the time taken to run =after-init-hook= + the
+time taken to run =emacs-startup-hook=.
