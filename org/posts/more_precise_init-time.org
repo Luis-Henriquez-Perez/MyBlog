@@ -8,15 +8,19 @@ difference between two variables set during initialization, [[file:/home/luis/Do
 my Emacs configuration I was naturally curious about details of initialization.
 Specifically, I was interested in where the =after-init-time= and =before-init-time=
 were set in relation to other events happening during Emacs startup.  I read up
-on all this in [[][Emacs's startup summary]] and what I found was surprising.
-Notably, there were many things happening between these times beyond just
-loading user configuration files.  In the startup summary.  In fact, of the N
-steps I also things I expected to be counted towards initialization, namely the
-=after-init-hook= and the =emacs-startup-hook= were
-excluded. [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][emacs-init-time]]
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][emacs-init-time]].  
- 
+on all this in [[file:../documentation/29.4-info-elisp-startup-summary.html][the manual]] where initialization is divided into steps.  One of
+the first things that stuck out to me was how many events beyond loading the
+Emacs init file there were between the =before-init-time= and =after-init-time=.  Of
+the 15 events within these times.  I was also surprised that the =after-init-hook=
+and =emacs-startup-hook= were not among these events and consequently not included
+in the measurement produced via =emacs-init-time=.  Because running these hooks takes
+/some/ time and particularly because.
 
+
+In the startup summary.  In fact, of the N
+steps I also things I expected to be counted towards initialization, namely the
+=after-init-hook= and the =emacs-startup-hook= were excluded.
+ 
 I want a better measure of the "absolute" Emacs startup time, which I define as
 the "total" time Emacs takes to startup.
 
@@ -27,8 +31,7 @@ There will always be some non-negotiable things Emacs has to spend time on
 during initialization but when I am profiling I want to only consider the
 effect my configuration has on Emacs startup.  So I set out to take a few time
 measurements of my own.  Below I am compute exactly how much time Emacs
-takes to compute it own stuff.
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][emacs-init-time]] 
+takes to compute it own stuff. 
 
 #+begin_src emacs-lisp
 (defvar oo-before-load-time (current-time))

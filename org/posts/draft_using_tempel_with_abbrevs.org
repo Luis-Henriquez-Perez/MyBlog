@@ -162,14 +162,14 @@ Although the links I wrote are undoubtedly useful there are times when I want to
 * reference blog documentation
 
 Naturally, after adding I will want to.
-
+ 
 #+begin_src emacs-lisp
 (defun oo-reference-blog-doc ()
   "Take an html snapshot of the current buffer and add it to blog."
   (interactive)
   (set! doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
   ;; Remove timestamp from the name.
-  ;; 
+  ;; Get name of thing based on buffer name.
   ;; Add a timestamp to the thing.
   (insert (format "[[file:%s][%s]]" file (file-name-non-directory name))))
 #+end_src
