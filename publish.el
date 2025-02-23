@@ -19,7 +19,7 @@
          :recursive t
          :auto-sitemap t
          :sitemap-title "Blog Index"
-         :sitemap-filename "index.org"
+         ;; :sitemap-filename "index.org"
          :sitemap-style list
          ;; :sitemap-sort-files anti-chronologically
          ;; ----------------------------------- experimental
