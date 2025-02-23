@@ -1,0 +1,16 @@
+#+title:draft abbrev for inserting link
+#+author:Luis Henriquez-Perez
+
+While I was writing my blog post I wanted an abbrev that will insert a link from the [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--kill-ring.html][kill-ring]].
+
+#+begin_src emacs-lisp
+#+end_src
+
+An abbrev that will prompt for a buffer and convert it to html.
+
+#+begin_src emacs-lisp
+(defun! oo-expand-blog-buffer ()
+  "Prompt for a buffer, convert it into html and save it as a link."
+  )
+#+end_src
+

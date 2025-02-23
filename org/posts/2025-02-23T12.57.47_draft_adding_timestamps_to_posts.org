@@ -87,4 +87,3 @@ Combining all these things we get the main function.
         (rename-file file newname)
         newname))))
 #+end_src
-

@@ -1,0 +1,14 @@
+#+title:draft auto filling pargraphs
+#+author:Luis Henriquez-Perez
+
+For far too long I have wanted Emacs to automatically fill my paragraphs like
+all the other non-Emacs text editors I have used previously.  I looked at an
+external package.
+
+There is also a relevant issue [[][]].  It recommends [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--refill-mode.html][refill-mode]], which is the closest I could find for this.  The problem with this mode is that it joins adjacent paragraphs separated by newlines which I do not want.
+
+This is something that needs a minor mode that I can toggle on and off.  But the main part of the body is simply going to be adding a local hook to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--post-command-hook.html][post-command-hook]] that calls [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--fill-paragraph.html][fill-paragraph]].
+
+#+begin_src emacs-lisp
+#+end_src
+

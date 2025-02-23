@@ -1,19 +1,22 @@
 #+title: how I got a better idea of startup time
 #+author: Luis Henriquez-Perez
 
-The function [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][emacs-init-time]] is widely used by Emacs users as the primary
-measure of the amount of time Emacs takes to start.  It computes the time
-difference between two variables set during initialization, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--after-init-time.html][after-init-time]] and
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--before-init-time.html][before-init-time]].  As I became more serious about reducing the startup time of
-my Emacs configuration I was naturally curious about details of initialization.
-I wanted to know where =after-init-time= and =before-init-time= were set in relation
-to other events happening during Emacs startup.  I read up on all this in the
-manual's [[file:../documentation/29.4-info-elisp-startup-summary.html][startup summary]].  I noticed there were many steps besides loading the
-Emacs init file there were between the =before-init-time= and =after-init-time=.  Of
-the 15 events within these times 14 of them are not related to.  I was surprised
-that the =after-init-hook= and =emacs-startup-hook= were not included in the
-measurements for =emacs-init-time=.  My logic was that because running these hooks
-takes /some/ time and the hooks added are determined by the user.
+Throughout my Emacs journey I had exclusively used [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][emacs-init-time]] as the
+primary measure of how fast my Emacs configuration starts.  Under the hood it
+computes the time difference between two variables set during initialization,
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--after-init-time.html][after-init-time]] and [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--before-init-time.html][before-init-time]].  As I became more serious about minimizing
+my startup time, however, I wanted to know more about where =after-init-time= and
+=before-init-time= were set in relation to other events happening during Emacs
+initialization.  These details are available in [[file:../documentation/29.4-info-elisp-startup-summary.html][startup summary]], the "sequence
+of actions at startup".  There, I saw that there are 15 actions (3 through 17
+inclusive) that occur between setting the =before-init-time= and =after-init-time=.
+And I saw that most of the actions that occurred.  For me the most pertinent
+action at least in regards to initialization is action number 14, loading the
+init files.  It occurred that it might be more useful to know what portion of
+the startup time I was responsible for.  I was surprised that the
+=after-init-hook= and =emacs-startup-hook= were not included in the measurements for
+=emacs-init-time=.  My logic was that because running these hooks takes /some/ time
+and the hooks added are determined by the user.
 
 There will always be some non-negotiable things Emacs has to spend time on
 during initialization but when I am profiling I want to only consider the
