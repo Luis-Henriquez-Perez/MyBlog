@@ -1,0 +1,5 @@
+#+title: excluding draft posts in my blog
+#+author: Luis Henriquez-Perez
+
+Ideally I would write one blog per day.  Testing to see if this file is being updated.
+

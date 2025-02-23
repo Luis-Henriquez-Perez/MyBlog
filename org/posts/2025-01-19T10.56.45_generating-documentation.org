@@ -1,6 +1,5 @@
 #+title: Generating Documentation
 #+author: Luis Henriquez-Perez
-# (assoc :url (package-desc-extras (cadr (assoc 'htmlize package-alist))))
 
 Whenever I mention an emacs variable or function for the first time I will link
 it to an html page containing its documentation.  The html page is generated
@@ -40,8 +39,6 @@ Then I need to check whether a file already exists.  A detail I did not mention
 is that I am naming files based on the current version of emacs I am using.
 This is to account for me using a different version of emacs later on.  In that
 case I should not use the same documentation.
-
-For simplicity and brevity I did not.
 
 #+begin_src emacs-lisp
 (cl-defun oo-next-doc ()
