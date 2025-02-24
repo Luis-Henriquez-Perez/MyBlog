@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: org-publish-find-date*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #483d8b;
+      }
+      .button {
+        /* button */
+        color: #3a5fcd;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #8b2252;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #800080;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #8b2252;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #b6532f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+org-publish-find-date is a <span class="button">byte-compiled</span> function defined in
+<span class="button">ox-publish.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(org-publish-find-date FILE PROJECT)
+
+<span class="helpful-heading">Documentation
+</span>Find the date of FILE in PROJECT.
+
+This function assumes FILE is either a directory or an Org file.
+If FILE is an Org file and provides a DATE keyword use it.  In
+any other case use the file system's modification time.  Return
+time in <span class="button">current-time</span> format.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">ox-publish.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">org-publish-sitemap</span> ...) <span class="comment">2 references</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by org-publish-find-date</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/org/ox-publish.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">org-publish-find-date</span> (file project)
+  <span class="doc">"Find the date of FILE in PROJECT.
+This function assumes FILE is either a directory or an Org file.
+If FILE is an Org file and provides a DATE keyword use it.  In
+any other case use the file system's modification time.  Return
+time in `</span><span class="doc"><span class="constant">current-time</span></span><span class="doc">' format."</span>
+  (<span class="keyword">let</span> ((file (org-publish--expand-file-name file project)))
+    (<span class="keyword">or</span> (org-publish-cache-get-file-property file <span class="builtin">:date</span> nil t)
+	(org-publish-cache-set-file-property
+	 file <span class="builtin">:date</span>
+	 (<span class="keyword">if</span> (file-directory-p file)
+	     (file-attribute-modification-time (file-attributes file))
+	   (<span class="keyword">let</span> ((date (org-publish-find-property file <span class="builtin">:date</span> project)))
+	     <span class="comment-delimiter">;; </span><span class="comment">DATE is a secondary string.  If it contains
+</span>	     <span class="comment-delimiter">;; </span><span class="comment">a time-stamp, convert it to internal format.
+</span>	     <span class="comment-delimiter">;; </span><span class="comment">Otherwise, use FILE modification time.
+</span>	     (<span class="keyword">cond</span> ((<span class="keyword">let</span> ((ts (<span class="keyword">and</span> (consp date) (assq 'timestamp date))))
+		      (<span class="keyword">and</span> ts
+			   (<span class="keyword">let</span> ((value (org-element-interpret-data ts)))
+			     (<span class="keyword">and</span> (org-string-nw-p value)
+				  (org-time-string-to-time value))))))
+		   ((file-exists-p file)
+		    (file-attribute-modification-time (file-attributes file)))
+		   (t (<span class="warning">error</span> <span class="string">"No such file: \"%s\""</span> file)))))))))
+
+</pre>
+  </body>
+</html>

@@ -7,16 +7,20 @@ For the most part of my emacs journey I did not spend much time on aesthetic.
 In fact, I did not have a mode line for most the years I spent using emacs.  I
 had simply set =mode-line-format= to nil, disabling the mode line.  I think that
 most of the segments on the mode line are useless or at the very least
-overestimated.  Somehow I.
+overestimated.  Now I have finally decided to roll back my sleeves and roll out
+my own mode line.  Here lies my quest for the perfect mode line.
 
 * Quest for the perfect mode line
+While looking for the ideal mode line I went through various Emacs packages.
+
 - Spaceline
 
-  Spaceline is an example of over-design.  It has a lot of additional options.
-  It recommends compiling the mode line with =spaceline-compile= but does not
-  mention that you really should not do that during startup.  Otherwise, your
-  init time might balloon like mine.  If you compile it try to do so during idle
-  time with [[][]].
+  Spaceline is a good mode line.  I really like how it tries to be a mode line
+  library as opposed to its.  Spaceline is an example of over-design.  It has a
+  lot of additional options.  It recommends compiling the mode line with
+  =spaceline-compile= but does not mention that you really should not do that
+  during startup.  Otherwise, your init time might balloon like mine.  If you
+  compile it try to do so during idle time with [[][]].
    
 #+begin_src emacs-lisp
 (setq spaceline-byte-compile nil)
@@ -76,9 +80,9 @@ side of the mode line.
 :END:
 
 As an emacs power user, I had the feeling I would ultimately want more control
-than what =doom modeline= offered.  I wanted a nice display like doom but i wanted
+than what =doom modeline= offered.  I wanted a nice display like doom but I wanted
 to have separators like =powerline= and =telephone-line= too.  One caveat is my mode
-line is not at all optimized for efficiency yet.
+line is not at all optimized for efficiency yet.  This should not be a big deal unless.  Performance is important and inefficiencies can add up especially in a language like emacs-lisp.  That being said.
 
 Strictly speaking I find most mode line segments I have seen 
 

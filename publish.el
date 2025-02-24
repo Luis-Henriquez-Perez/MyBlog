@@ -19,9 +19,13 @@
          :recursive t
          :auto-sitemap t
          :sitemap-title "Blog Index"
-         ;; :sitemap-filename "index.org"
+         :sitemap-filename "index.org"
          :sitemap-style list
-         ;; :sitemap-sort-files anti-chronologically
+         ;; I timestamp my files so this should sort them in order by creation date.
+         :sitemap-sort-files chronologically
+         ;; :sitemap-format-entry "%d %t"
+         ;; :sitemap-date-format
+         :sitemap-file-entry-format "%d %t"
          ;; ----------------------------------- experimental
          :html-doctype "html5"
          :html-html5-fancy t
@@ -54,4 +58,4 @@
         ;;  :publishing-function org-publish-attachment)
         ))
 
-(org-publish-all t)
+(org-publish-all 'force)
