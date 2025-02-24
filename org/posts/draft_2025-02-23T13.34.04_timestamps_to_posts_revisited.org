@@ -3,16 +3,18 @@
 
 Always look for an existing package that does what you want to do.  I do not
 know why it did not occur to me to look for existing packages that add
-timestamps but I should have, it would have saved me some time.  I did search
-now and found this nifty package [[foo][date2name]] which prepends a timestamp to a file.
-Definitely I am incorporating this package for creating new blog posts.
+timestamps but I should have, it would have saved me a lot of time.  I did
+search now and found this nifty package [[foo][date2name]] which prepends a timestamp to
+a file.  It has two dired commands, one for adding a timestamp, which is good
+because I also have wanted to see how to write commands that work with dired
+marking.
 
 The only problem now is I have several files that were created a long time ago
 and for those files I want the prefixed date to be the date of creation not the
-current date.  I think the package.  Customizing the package to do this should
+current date.  Customizing the package to do this should
 be as simple as advising a function.
 
-First, of course, I need a way to get the file creation date.
+First, of course, I need a way to get the file creation date and I have already come up with that with the help of chatGPT in a previous post.
 
 #+begin_src emacs-lisp
 (let* ((ctime (string-to-number (shell-command-to-string "stat -c %W draft_writing_tests.org")))
@@ -26,11 +28,7 @@ user-facing functions [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-
 [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--date2name-dired-add-datetime-to-name.html][date2name-dired-add-datetime-to-name]] use internally to compute the time to
 prepend to file names.
 
-#+begin_src emacs-lisp
-#+end_src
-
-
-I also noticed that the date.
+Now I create an advice function.  The macros.
 
 #+begin_src emacs-lisp
 (defun! +date2name-dired-add-creationtime-to-name (arg)
