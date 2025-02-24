@@ -6,11 +6,12 @@ While I was writing my blog post I wanted an abbrev that will insert a link from
 #+begin_src emacs-lisp
 #+end_src
 
-An abbrev that will prompt for a buffer and convert it to html.
+An abbrev that will prompt for a buffer and convert it to html.  The buffer could be a live buffer or a so-called "virtual" buffer.
 
 #+begin_src emacs-lisp
 (defun! oo-expand-blog-buffer ()
   "Prompt for a buffer, convert it into html and save it as a link."
+  (htmlize-buffer (get-buffer))
   )
 #+end_src
 

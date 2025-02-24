@@ -1,8 +1,8 @@
-#+title: excluding draft posts in my blog
+#+title: Excluding Draft Posts In My Blog
 #+author: Luis Henriquez-Perez
 
-Ideally I would write one blog per day.  That would be neat and tidy.  But I
-have not gotten to that point at least not yet.  As it stands I have several
-unfinished posts and I do not want those to be published yet.  My blog posts are
-all in my =Documents/org/posts/= directory.
+In a perfect world I would write one blog per day.  That would be neat and tidy.
+But I have not gotten to that point at least not yet.  As it stands I have
+several unfinished posts and I do not want those to be published yet.  My blog
+posts are all in my =Documents/org/posts/= directory.  My
 
