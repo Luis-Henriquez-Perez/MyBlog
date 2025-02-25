@@ -1,20 +1,25 @@
 #+title:looking into skeletons
 #+author:Luis Henriquez-Perez
 
-I had been thinking about migrating from using [[https://github.com/minad/tempel][tempel]] to skeletons.  I do not
-like tempel's overlays.  I think they are menat to be visually appealing but I
-do not want to have to escape them manually.  If I do not devote at least one
-keypres to aborting the overlays they will annoyingly linger.  And, also,
-frankly skeletons seem much more powerful.  Though I want to be careful in
-saying this because I cannot really point out specific reason why I think so.  I
-saw [[https://blog.einval.eu/2025/02/emacs-skeletons-the-missing-manual/][this post]] and the examples really made me want to give skeletons a try.
-some trouble evaluating arbitrary lisp in tempel snippets.  Also I am having some
-problems getting a space not to be inserted.
+I saw [[https://blog.einval.eu/2025/02/emacs-skeletons-the-missing-manual/][this post]] and the examples really made me want to give skeletons a try.
+
+Because of inconveniences using [[https://github.com/minad/tempel][tempel]] I have considered migrating to some other
+templating system several times.  Tempel's overlays annoyingly presist unless
+you properly finish traversing the snippet.  Furthermore, you cannot delete the
+tempel snippet properly without using the special function [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abort.html][tempel-abort]] which
+actually takes care of cleaning the overlay.  If I do not devote at least one
+keypress to aborting the overlays they will annoyingly linger.  Also I have not
+been able to avoid the insertion of an extra space after I insert a template.  I
+am aware from [[][Xah's]] post on abbrevs I that add the =no-self-insert= property
+to the function, but I tried this and it did not work tempel snippets, however
+it did work for skeletons.
 
 #+begin_src emacs-lisp
+(put 'oo-expand-elisp-defun 'no-self-insert t)
 #+end_src
 
-I am using the following code from the [[https://www.emacswiki.org/emacs/SkeletonMode][emacswiki article]] on skeletons.
+The main thing I would miss from.  I am using the following code from the
+[[https://www.emacswiki.org/emacs/SkeletonMode][emacswiki article]] on skeletons.
 
 #+begin_src emacs-lisp
 (defvar *skeleton-markers* nil
@@ -53,11 +58,11 @@ I want to try skeleton with defun.  In the emacswiki article they provide an exa
   "Expand to a `defun' form."
   nil
   "(defun " @ - " (" @ ")" \n
-  > "\"" @ "\"" \n
+  > "\"" @ "\""
   > @ _ \n ")" @)
 #+end_src
 
-One problem or question I have is how to create a temporary keymap only for the duration of the expansion.  I want to bind =oo-skeleton-next-position= to a key so I can quickly move back and forth.  I know that tempel does this.  And some other package does this that I do not remember, well maybe =yasnippet= but there was another package I was thinking of.  Tempel seems to just temporariy add its map =tempel--map= to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--minor-mode-overriding-map-alist.html][minor-mode-overriding-map-alist]].
+I would like to to create a temporary keymap only for the duration of the expansion.  I want to bind =oo-skeleton-next-position= to a key so I can quickly move back and forth.  I know that tempel does this.  And some other package does this that I do not remember, well maybe =yasnippet= but there was another package I was thinking of.  Tempel seems to just temporariy add its map =tempel--map= to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--minor-mode-overriding-map-alist.html][minor-mode-overriding-map-alist]].
 
 Ideally I would like the map to be disabled after point leaves the bounds of the
 skeleton.  I want to add some hook that tells me when I have moved to the last
