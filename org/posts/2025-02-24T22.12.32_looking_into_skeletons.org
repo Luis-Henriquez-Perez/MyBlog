@@ -5,16 +5,17 @@ I saw [[https://blog.einval.eu/2025/02/emacs-skeletons-the-missing-manual/][this
 
 Because of inconveniences using [[https://github.com/minad/tempel][tempel]] I have considered migrating to some other
 templating system several times.  Some of my woes stem from Tempel's overlays.
-They annoyingly presist unless you properly finish traversing the snippet and
+They annoyingly presist unless you properly finish traversing the template and
 they require special functions to get rid of them such as [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-done.html][tempel-done]] or
 [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abort.html][tempel-abort]].  And also I have not been able to avoid the insertion of an
-extra space after I insert a template.  I am aware from [[][Xah's]] post on
-abbrevs I that add the =no-self-insert= property to the function, but I tried this
-and it did not work tempel snippets.
+extra space after I insert a template.  I am aware from [[http://xahlee.info/emacs/emacs/emacs_abbrev_no_space.html][Xah's post]] post on
+abbrevs that I need to add the =no-self-insert= property to the function, but I tried this
+and it did not work tempel templates.
 
 #+begin_src emacs-lisp
 (defun oo-expand-elisp-defun ()
   "Insert elisp defun template."
+  ;; (tempel-insert '("(defun " (s "name") ")"))
   (tempel-insert 'fn))
 
 ;; Does not work; space is still inserted.
@@ -23,7 +24,7 @@ and it did not work tempel snippets.
 
 I am not sure why the tempel snippts do not work with this.
 
-In contrast, skeleton uses no overlays.  So you never have to think about cleaning overlays up and deleting the snippet is done the same way you would delete any other text.  No fuss.  No hassle.  And the =no-self-insert= property worked fine.
+In contrast, skeleton uses no overlays.  So you never have to think about cleaning overlays up and deleting the template is done the same way you would delete any other text.  No fuss.  No hassle.  And the =no-self-insert= property worked fine.
 
 #+begin_src emacs-lisp
 (define-skeleton oo-elisp-defun
@@ -35,7 +36,7 @@ In contrast, skeleton uses no overlays.  So you never have to think about cleani
 #+end_src
 
 Admittedly, I would also like some "bling" like placeholders.  Well it is not
-all just bling.  When you use this defun snippet you will notice that the
+all just bling.  When you use this defun template you will notice that the
 indentation for the docstring is way off at first and that is because the =defun=
 name is missing and that messes up the rest of the indentation.  Emacs gets
 confused and thinks the arguments are the defun name.  Using [[https://github.com/Malabarba/aggressive-indent-mode][aggressive-indent]]
