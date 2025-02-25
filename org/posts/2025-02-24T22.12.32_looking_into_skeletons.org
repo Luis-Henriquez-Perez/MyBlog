@@ -1,0 +1,87 @@
+#+title:looking into skeletons
+#+author:Luis Henriquez-Perez
+
+I had been thinking about migrating from using [[https://github.com/minad/tempel][tempel]] to skeletons.  I do not
+like tempel's overlays.  I think they are menat to be visually appealing but I
+do not want to have to escape them manually.  If I do not devote at least one
+keypres to aborting the overlays they will annoyingly linger.  And, also,
+frankly skeletons seem much more powerful.  Though I want to be careful in
+saying this because I cannot really point out specific reason why I think so.  I
+saw [[https://blog.einval.eu/2025/02/emacs-skeletons-the-missing-manual/][this post]] and the examples really made me want to give skeletons a try.
+some trouble evaluating arbitrary lisp in tempel snippets.  Also I am having some
+problems getting a space not to be inserted.
+
+#+begin_src emacs-lisp
+#+end_src
+
+I am using the following code from the [[https://www.emacswiki.org/emacs/SkeletonMode][emacswiki article]] on skeletons.
+
+#+begin_src emacs-lisp
+(defvar *skeleton-markers* nil
+  "Markers for locations saved in skeleton-positions")
+
+(oo-add-hook 'skeleton-end-hook 'oo-skeleton-make-markers)
+
+(defun oo-skeleton-make-markers ()
+  (while *skeleton-markers*
+    (set-marker (pop *skeleton-markers*) nil))
+  (setq *skeleton-markers*
+	    (mapcar 'copy-marker (reverse skeleton-positions))))
+
+(defun oo-skeleton-next-position (&optional reverse)
+  "Jump to next position in skeleton.
+         REVERSE - Jump to previous position in skeleton"
+  (interactive "P")
+  (let* ((positions (mapcar 'marker-position *skeleton-markers*))
+	     (positions (if reverse (reverse positions) positions))
+	     (comp (if reverse '> '<))
+	     pos)
+    (when positions
+      (if (catch 'break
+	        (while (setq pos (pop positions))
+	          (when (funcall comp (point) pos)
+		        (throw 'break t))))
+	      (goto-char pos)
+	    (goto-char (marker-position
+		            (car *skeleton-markers*)))))))
+#+end_src
+
+I want to try skeleton with defun.  In the emacswiki article they provide an example of a defun but I odnt want the prompt with the name.  I am fairly satisfied with the skeleton for creating abbrevs went fine.
+
+#+begin_src emacs-lisp
+(define-skeleton oo-elisp-defun
+  "Expand to a `defun' form."
+  nil
+  "(defun " @ - " (" @ ")" \n
+  > "\"" @ "\"" \n
+  > @ _ \n ")" @)
+#+end_src
+
+One problem or question I have is how to create a temporary keymap only for the duration of the expansion.  I want to bind =oo-skeleton-next-position= to a key so I can quickly move back and forth.  I know that tempel does this.  And some other package does this that I do not remember, well maybe =yasnippet= but there was another package I was thinking of.  Tempel seems to just temporariy add its map =tempel--map= to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--minor-mode-overriding-map-alist.html][minor-mode-overriding-map-alist]].
+
+Ideally I would like the map to be disabled after point leaves the bounds of the
+skeleton.  I want to add some hook that tells me when I have moved to the last
+position.  At first I was thinking of.  You could make end on the last skeleton
+position but my concern is what if I will want to go back.
+
+It is funny because I feel that the supposed weaknesses of skeletons are
+precisely what their strenghts are what it is strengths are.
+
+#+begin_src emacs-lisp
+(defvar-keymap tempel-map
+  :doc "Keymap to navigate across template fields."
+  "<remap> <beginning-of-buffer>" #'tempel-beginning
+  "<remap> <end-of-buffer>" #'tempel-end
+  "<remap> <kill-sentence>" #'tempel-kill
+  "<remap> <keyboard-escape-quit>" #'tempel-abort
+  "<remap> <backward-paragraph>" #'tempel-previous
+  "<remap> <forward-paragraph>" #'tempel-next
+  ;; Use concrete keys because of org mode
+  "M-RET" #'tempel-done
+  "M-{" #'tempel-previous
+  "M-}" #'tempel-next
+  "M-<up>" #'tempel-previous
+  "M-<down>" #'tempel-next)
+#+end_src
+
+There is also potential to feed the positions to [[https://github.com/abo-abo/avy][avy]] for an even faster way of jumping around.  Similar to =tempel= I want an abort skeleton command.

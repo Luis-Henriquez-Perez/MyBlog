@@ -28,3 +28,5 @@ This is my configuration for it, its [[../documentation/29.4-130-init-escr.html]
 (autoload #'escr-window-screenshot "escr" nil t 'function)
 (autoload #'escr-frame-screenshot "escr" nil t 'function)
 #+end_src
+
+Of course, I also added keybindings for these function.

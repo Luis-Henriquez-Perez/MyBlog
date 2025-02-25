@@ -1,0 +1,6 @@
+#+title:maybe move to elpaca
+#+author:Luis Henriquez-Perez
+
+My [[][experience]] upgrading to Emacs 30 really made me doubt whether to continue using =package.el=.  After reinstalling =vertico= I still do not see the marginalia docstrings for commands the way I used to and iwht eventually look into it.  I just keep thinking if I had been using =elpaca= iwhb easy to revert because I would have the same versions.  Right now I will summarize the advantage and disadvantages as I see them of =elpaca= and =package.el=.
+
+* 
