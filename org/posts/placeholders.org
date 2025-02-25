@@ -1,0 +1,16 @@
+#+title:placeholders
+#+author:Luis Henriquez-Perez
+
+Leraning about placeholders.  In Emacs this is done via overlays.  Honesl I am scard iajgt make tempel again.
+
+I asked chatGPT how to do this to see if it knew anything.
+
+#+begin_src emacs-lisp
+(define-skeleton oo-elisp-defun
+  "Expand to a `defun' form."
+  nil
+  "(defun " ("Function name: " str) " (" ("Arguments: " str) ")" \n
+  > "\"" ("Docstring: " str) "\""
+  > @ _ \n ")")
+#+end_src
+
