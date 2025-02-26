@@ -34,12 +34,15 @@ create a dedicated function for this.
 * properly use abbrev
 
 For those who want to use abbrevs and snippets, which I highly recommend, this
-is how to do it.  I know tempel provides [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].  That mode
-basically makes abbrevs for every named template you have defined based on their
-name.  This solution is too opinionated solution for my taste.  It assumes that
-you want the names for your templates to be.  system to define abbrevs, it
-creates the abbrev table for you not knowing where you want to put it.  Yuck!
-Maybe for a beginner might find it very convenient.
+is how to do it.  First let me mention the solution that tempel provides
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].  That mode basically makes abbrevs for every named template
+you have defined based, puts them in an abbrev table and adds that table to
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--abbrev-minor-mode-table-alist.html][abbrev-minor-mode-table-alist]], an alist of.  This solution is too crude and
+opinionated solution for my taste.  It assumes that you want the abbrevs to be
+the same name.  Yuck!  Maybe for a beginner or someone who just wants something
+working fast, but not for someone with an attention to detail.  Instead here I
+will show you how to do this manually one abbrev at the time which is more
+general as well.
 
 #+begin_src emacs-lisp
 (define-abbrev global-abbrev-table "dfn" "" #'oo-expand-elisp-defun :enable-function #'oo-in-elisp-mode-p)
