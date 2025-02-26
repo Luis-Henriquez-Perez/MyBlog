@@ -5,6 +5,4 @@
 - [[file:posts/2025-01-16T13.03.15_what-are-some-good-abbrev-ideas.org][Good abbrev ideas]]
 - [[file:posts/2025-01-16T13.03.15_one-of-my-proudest-macros-lef.org][lef!, One of My Best Macros]]
 - [[file:posts/2025-01-16T13.03.15_an-abstraction-for-binding-data-structures:-with-map!.org][Binding Symbols in Maps: with-map!]]
-- [[file:posts/2025-01-19T11.43.56_using-timestamped-posts.org][Using Timestamped Posts]]
-- [[file:posts/2025-01-19T10.56.45_generating-documentation.org][Generating Documentation]]
-- [[file:posts/2025-01-18T06.48.31_creating-a-window-screenshot-function.org][Screenshot Function]]
+- [[file:posts/2025-02-26T03.26.00_tricks_I_learned_to_make_using_tempel_better.org][tricks I learned to make using tempel smoother]]

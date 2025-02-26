@@ -1,0 +1,74 @@
+#+TITLE: tricks I learned to make using tempel smoother
+#+AUTHOR: Luis Henriquez-Perez
+
+In the process of grokking tempel to my liking I faced multiple hurdles.  Learn from these hurdles.
+
+* make =tempel-map= an overriding map
+
+For evil users, make sure you make =tempel-map= an intercept map.  Otherwise any
+keybindings you have in =tempel-map=, such as the ones for moving to the next or
+previous fields, will not work.
+
+#+begin_src emacs-lisp
+(eval-after-load 'tempel
+  '(eval-after-load 'evil
+     (evil-make-overriding-map tempel-map)))
+#+end_src
+
+* ensure insert state
+
+Ensure you are in insert state after inserting a template.  It only makes sense
+because your about to type in text just after you have inserted a template.
+Configuring functions to enter insert state is so common that I recommend you
+create a dedicated function for this.
+
+#+begin_src emacs-lisp
+(defun oo--enter-evil-insert-state-maybe (&rest _)
+  "Enter insert state if `evil-mode' is enabled."
+  (when (bound-and-true-p evil-mode)
+    (evil-insert-state 1)))
+
+(advice-add 'tempel-insert :after #'oo--enter-evil-insert-state-maybe)
+#+end_src
+
+* properly use abbrev
+
+For those who want to use abbrevs and snippets, which I highly recommend, this
+is how to do it.  I know tempel provides [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].  That mode
+basically makes abbrevs for every named template you have defined based on their
+name.  This solution is too opinionated solution for my taste.  It assumes that
+you want the names for your templates to be.  system to define abbrevs, it
+creates the abbrev table for you not knowing where you want to put it.  Yuck!
+Maybe for a beginner might find it very convenient.
+
+#+begin_src emacs-lisp
+(define-abbrev global-abbrev-table "dfn" "" #'oo-expand-elisp-defun :enable-function #'oo-in-elisp-mode-p)
+#+end_src
+
+* simplify creating templates with a macro
+
+Make a macro similar to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-skeleton.html][define-skeleton]].  When I dabbled with [[][skeletons]] I became quite endeard to the =define-skeleton= macro.  It was simple but made things much more convenient.
+
+#+begin_src emacs-lisp
+(defmacro deftempel! (name &rest body)
+  "Define a tempel template."
+  (declare (doc-string 2) (indent defun))
+  (setq documentation (when (stringp (car body)) (list (pop body))))
+  `(progn (defun ,name ()
+            ,@documentation
+            (interactive)
+            (tempel-insert ',body)
+            t)
+          (put ',name 'no-self-insert t)
+          ',name))
+#+end_src
+
+* remember to use the region
+
+Remember to use the =r= element.  This makes it so that when a region is active when you invoke the command it will wrap the snippet around the region.  Only bad thing is that the snippet assumes your done writing the snippet.  As in afte the region but I would prefer the cursor still in the snippet.
+
+#+begin_src emacs-lisp
+(deftempel! oo-expand-to-defun
+  "Expand to defun."
+  "(defun " p " (" p ")" n> "\"" p "\"" n> r ")")
+#+end_src

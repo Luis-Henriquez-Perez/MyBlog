@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: package-recompile-all*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3a5fcd;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #8b2252;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #800080;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #8b2252;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #b6532f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package-recompile-all is an <span class="button">autoloaded</span>, <span class="button">interactive</span> and <span class="button">byte-compiled</span>
+function defined in <span class="button">package.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(package-recompile-all)
+
+<span class="helpful-heading">Documentation
+</span>Byte-compile all installed packages.
+
+This is meant to be used only in the case the byte-compiled files
+are invalid due to changed byte-code, macros or the like.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>package-recompile-all is unused in <span class="button">package.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by package-recompile-all</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/30.1/lisp/emacs-lisp/package.el.gz</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">package-recompile-all</span> ()
+  <span class="doc">"Byte-compile all installed packages.
+This is meant to be used only in the case the byte-compiled files
+are invalid due to changed byte-code, macros or the like."</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">pcase-dolist</span> (`(_ ,pkg-desc) package-alist)
+    (<span class="keyword">with-demoted-errors</span> <span class="string">"Error while recompiling: %S"</span>
+      (package-recompile pkg-desc))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (package-recompile-all 0)
+<span class="constant">event-symbol-elements</span>
+  (package-recompile-all)
+<span class="constant">function-history</span>
+  ("/usr/share/emacs/30.1/lisp/emacs-lisp/package.elc"
+   (autoload "package" ("loaddefs.elc" . 918764) t nil))
+<span class="constant">modifier-cache</span>
+  ((0 . package-recompile-all))</pre>
+  </body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: cape-dabbrev*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3a5fcd;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #8b2252;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #001faf;
+        font-weight: bold;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #800080;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #228b22;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #a0522d;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #b6532f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+cape-dabbrev is an <span class="button">autoloaded</span> and <span class="button">interactive</span> function defined in
+<span class="button">cape.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(cape-dabbrev <span class="type">&amp;optional</span> INTERACTIVE)
+
+<span class="helpful-heading">Documentation
+</span>Complete with Dabbrev at point.
+
+If INTERACTIVE is nil the function acts like a Capf.  In case you
+observe a performance issue with auto-completion and <span class="button">cape-dabbrev</span>
+it is strongly recommended to disable scanning in other buffers.
+See the user options <span class="button">cape-dabbrev-min-length</span> and
+<span class="button">cape-dabbrev-check-other-buffers</span>.
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">cape-prefix-map</span> <span class="help-key-binding">d</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">cape.el</span>:
+(<span class="keyword">defun</span> <span class="function-name">cape-dabbrev</span> ...)            <span class="comment">1 reference</span>
+(<span class="keyword">defvar-keymap</span> cape-prefix-map ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by cape-dabbrev</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/packages/elpa/cape-20250128.819/cape.el</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">cape-dabbrev</span> (<span class="type">&amp;optional</span> interactive)
+  <span class="doc">"Complete with Dabbrev at point.
+
+If INTERACTIVE is nil the function acts like a Capf.  In case you
+observe a performance issue with auto-completion and `</span><span class="doc"><span class="constant">cape-dabbrev</span></span><span class="doc">'
+it is strongly recommended to disable scanning in other buffers.
+See the user options `</span><span class="doc"><span class="constant">cape-dabbrev-min-length</span></span><span class="doc">' and
+`</span><span class="doc"><span class="constant">cape-dabbrev-check-other-buffers</span></span><span class="doc">'."</span>
+  (<span class="keyword">interactive</span> (list t))
+  (<span class="keyword">if</span> interactive
+      (cape-interactive '((cape-dabbrev-min-length 0)) #'cape-dabbrev)
+    (<span class="keyword">when-let</span> ((bounds (cape--dabbrev-bounds)))
+      `(,(car bounds) ,(cdr bounds)
+        ,(completion-table-case-fold
+          (cape--dynamic-table (car bounds) (cdr bounds) #'cape--dabbrev-list)
+          (not (cape--case-fold-p dabbrev-case-fold-search)))
+        ,@cape--dabbrev-properties))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (cape-dabbrev 0)
+<span class="constant">event-symbol-elements</span>
+  (cape-dabbrev)
+<span class="constant">function-history</span>
+  ("/home/luis/.config/emacs/packages/elpa/cape-20250128.819/cape.el"
+   (autoload "cape"
+     "Complete with Dabbrev at point.\n\nIf INTERACTIVE is nil the function acts like a Capf.  In case you\nobserve a performance issue with auto-completion and `cape-dabbrev'\nit is strongly recommended to disable scanning in other buffers.\nSee the user options `cape-dabbrev-min-length' and\n`cape-dabbrev-check-other-buffers'.\n\n(fn &amp;optional INTERACTIVE)"
+     t nil))
+<span class="constant">modifier-cache</span>
+  ((0 . cape-dabbrev))</pre>
+  </body>
+</html>

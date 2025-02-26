@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: tempel-done*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #0000b0;
+        font-weight: bold;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+tempel-done is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function defined in
+<span class="button">tempel.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(tempel-done)
+
+<span class="helpful-heading">Documentation
+</span>Template completion is done.
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">tempel-map</span> <span class="help-key-binding">M-RET</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">tempel.el</span>:
+(<span class="keyword">defvar-keymap</span> tempel-map ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">tempel-beginning</span> ...)   <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">tempel-end</span> ...)         <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">tempel-next</span> ...)        <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by tempel-done</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/elpa/tempel-20250101.927/tempel.el</span>
+(<span class="keyword">defun</span> <span class="function-name">tempel-done</span> ()
+  <span class="doc">"Template completion is done."</span>
+  (<span class="keyword">declare</span> (completion tempel--active-p))
+  (<span class="keyword">interactive</span>)
+  <span class="comment-delimiter">;; </span><span class="comment">TODO disable only the topmost template?
+</span>  (<span class="keyword">while</span> tempel--active (tempel--done)))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">completion-predicate</span>
+  tempel--active-p
+<span class="constant">event-symbol-element-mask</span>
+  (tempel-done 0)
+<span class="constant">event-symbol-elements</span>
+  (tempel-done)
+<span class="constant">modifier-cache</span>
+  ((0 . tempel-done))</pre>
+  </body>
+</html>
