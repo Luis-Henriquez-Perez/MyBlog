@@ -1,0 +1,18 @@
+#+TITLE: completion preview
+#+AUTHOR: Luis Henriquez-Perez
+
+Using.
+
+First I am attempting to install the package.  Ihn done this before.  Looking online the link for installing completion-preview is.  But when I try to install it I get.
+
+#+begin_src emacs-lisp
+(package-vc-install '(completion-preview :url "https://github.com/emacs-mirror/emacs/blob/master/lisp/completion-preview.el"))
+#+end_src
+
+#+begin_src emacs-lisp
+(package-vc-install '(completion-preview :main-file "https://github.com/emacs-mirror/emacs/blob/master/lisp/completion-preview.el"))
+#+end_src
+
+#+begin_src emacs-lisp
+(package-vc-install '(completion-preview :url "https://github.com/emacs-mirror/emacs/blob/master/lisp/completion-preview.el"))
+#+end_src

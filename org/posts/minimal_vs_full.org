@@ -1,0 +1,4 @@
+#+TITLE: minimal vs full
+#+AUTHOR: Luis Henriquez-Perez
+
+It is insane to reflect at how packages are "sold" with Emacs and imparticularly thinking of =company= versus =corfu=.  Many are migrating to corfu because it is completely complient with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-at-point-functions.html][completion-at-point-functions]].
