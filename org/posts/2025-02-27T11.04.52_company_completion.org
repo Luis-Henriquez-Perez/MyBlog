@@ -1,46 +1,40 @@
 #+TITLE: company completion
 #+AUTHOR: Luis Henriquez-Perez
 
-I had used company previously many years ago.  Then for a long time I have not
-used any completion system.  Now I want to provide the first impressions of the
-company right now.
-
-* basic settings
-
-First I set basic settings.
+I had used company previously many years ago.  At some point I stopped and for a
+long time since I have not used any completion system.  Now I am at a point
+where I am working out what tools I should use for text completin and how that
+text completin should look like.  I wanted to see whether company is a good option
+for me.  To achive this the first thing I did is to try to learn about company
+via a minimal example.  I just wanted to get basic [[][dabbrev]] completion from
+this blog post.
 
 See [[https://www.monolune.com/articles/configuring-company-mode-in-emacs/][]]
 
-#+begin_src emacs-lisp
-(hook! prog-mode-hook company-mode)
-#+end_src
-
-#+begin_src emacs-lisp
-(opt! company-minimum-prefix-length 1)
-#+end_src
-
-There are too many backends enabled for org.  Backends 
-
-* simplifying complexity
+By default =company= has a ton of backends.  I removed all backends in
+=company-backends= except =company-capf=.  Considering how popular it has become to
+use built-in Emacs intended extension features, I wanted to specifically test
+company's ability to.
 
 The first thing you see when checking the company backends is a long list of who
 knows what.  For sure you do not need all this stuff at least in the org buffer
-I am using.  To get a handle on the package I first tested in the org buffer
-used to run this post how many packages.
+I am using.
 
 #+begin_src emacs-lisp
-(company-bbdb company-semantic company-cmake company-capf company-clang company-files
-              (company-dabbrev-code company-gtags company-etags company-keywords)
-              company-oddmuse company-dabbrev)
-#+end_src
+(opt! company-minimum-prefix-length 1)
 
-To get a handle on things, I just set it to one.
-
-#+begin_src emacs-lisp
 (setq-local company-backends '(company-capf))
+
+(opt! dabbrev-check-all-buffers nil)
+(opt! dabbrev-check-other-buffers nil)
+(opt! cape-dabbrev-check-other-buffers nil)
 #+end_src
 
-* company unexpected behavior when typing
+# * company unexpected behavior when typing
+
+# #+begin_src emacs-lisp
+# (setq package-pinned-packages '((company . "melpa-stable") (org . "melpa-stable")))
+# #+end_src
 
 I encountered some kind of small unpredicatable behavior.  For example, when
 beginning to type =v= I would get the proper suggestions: "Vivamus", "Volutpat",
@@ -56,7 +50,7 @@ I expected it to do all the time.
 * adding text
 
 I added this latin text from [[https://github.com/jschaf/emacs-lorem-ipsum][lorem-ipsum]] so I would have words in the buffer I
-could try to match with =dabbrev=.  Volutpat eleifend.  v
+could try to match with =dabbrev=.
 
 Aliquam erat volutpat.  Nunc eleifend leo vitae magna.  In id erat non orci
 commodo lobortis.  Proin neque massa, cursus ut, gravida ut, lobortis eget,
@@ -79,9 +73,6 @@ With these settings I got essentially.  I got both company and corfu to
 behave predictably in the current buffer.  volutpat
 
 #+begin_src emacs-lisp
-(opt! dabbrev-check-all-buffers nil)
-(opt! dabbrev-check-other-buffers nil)
-(opt! cape-dabbrev-check-other-buffers nil)
 #+end_src
 
 * isolate a backend
@@ -118,10 +109,6 @@ pell.
 #+end_src
 
 * I was thnking I was getting bugs because of 
-
-#+begin_src emacs-lisp
-(setq package-pinned-packages '((company . "melpa-stable") (org . "melpa-stable")))
-#+end_src
 
 I do not know if it is just me but isolate but I tell you I was getting tons of
 bugs from company.  I could not get it to do this simple thing.  When I
