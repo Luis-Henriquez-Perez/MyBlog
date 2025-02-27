@@ -1,7 +1,11 @@
 #+TITLE: tricks I learned to make using tempel smoother
 #+AUTHOR: Luis Henriquez-Perez
 
-In the process of grokking tempel to my liking I faced multiple hurdles.  Learn from these hurdles.
+Having gotten to a more stable state with my Emacs configuration, I have been
+focused less on file naming and more on enhancing areas that I have neglected.
+One of these is text completion or as Emacs calls it "auto-typing".  In the
+process of grokking tempel to my liking I faced multiple hurdles.  Learn from
+these hurdles.
 
 * make =tempel-map= an overriding map
 
@@ -34,23 +38,38 @@ create a dedicated function for this.
 * properly use abbrev
 
 For those who want to use abbrevs and snippets, which I highly recommend, this
-is how to do it.  First let me mention the solution that tempel provides
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].  That mode basically makes abbrevs for every named template
-you have defined based, puts them in an abbrev table and adds that table to
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--abbrev-minor-mode-table-alist.html][abbrev-minor-mode-table-alist]], an alist of.  This solution is too crude and
-opinionated solution for my taste.  It assumes that you want the abbrevs to be
-the same name.  Yuck!  Maybe for a beginner or someone who just wants something
-working fast, but not for someone with an attention to detail.  Instead here I
-will show you how to do this manually one abbrev at the time which is more
-general as well.
+is how to do it.
+
+First let me mention the solution that tempel provides: [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].
+That mode defines abbrevs for every named template, puts them in an abbrev
+table.  This solution is too crude and opinionated solution for my taste.  It
+assumes that you want the abbrevs to be the same name you defined for your
+tempel templates.  This is designed for someone who just wants something working
+fast.
+
+If you are not in a rush.  What I recommend is just doing it explicitly with good
+old [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-abbrev.html][define-abbrev]].  Specify the circumstances when an abbrev should be active in
+the =:enable-function= property.
 
 #+begin_src emacs-lisp
+(defun oo-expand-elisp-defun ()
+  (interactive)
+  (tempel-insert '"(defun " p " (" p ")" n> "\"" p "\"" n> r ")")
+  ;; This is important, the will still be inserted despite having added the
+  ;; `no-self-insert' property if this function does not return a non-nil value.
+  ;; Note `tempel-insert' returns nil.  I learned this the hard-way.
+  t)
+
+(put 'oo-expand-elisp-defun 'no-self-insert t)
+
 (define-abbrev global-abbrev-table "dfn" "" #'oo-expand-elisp-defun :enable-function #'oo-in-elisp-mode-p)
 #+end_src
 
 * simplify creating templates with a macro
 
-Make a macro similar to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-skeleton.html][define-skeleton]].  When I dabbled with [[][skeletons]] I became quite endeard to the =define-skeleton= macro.  It was simple but made things much more convenient.
+Make a macro similar to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-skeleton.html][define-skeleton]].  When I dabbled with [[][skeletons]] I
+became quite endeard to the =define-skeleton= macro.  It was simple but made
+things much more convenient.
 
 #+begin_src emacs-lisp
 (defmacro deftempel! (name &rest body)
@@ -68,7 +87,10 @@ Make a macro similar to [[file:/home/luis/Documents/MyBlog/org/documentation/29.
 
 * remember to use the region
 
-Remember to use the =r= element.  This makes it so that when a region is active when you invoke the command it will wrap the snippet around the region.  Only bad thing is that the snippet assumes your done writing the snippet.  As in afte the region but I would prefer the cursor still in the snippet.
+Remember to use the =r= element.  This makes it so that when a region is active
+when you invoke the command it will wrap the snippet around the region.  Only
+bad thing is that the snippet assumes your done writing the snippet.  As in afte
+the region but I would prefer the cursor still in the snippet.
 
 #+begin_src emacs-lisp
 (deftempel! oo-expand-to-defun

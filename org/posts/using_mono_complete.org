@@ -1,0 +1,21 @@
+#+TITLE: using mono complete
+#+AUTHOR: Luis Henriquez-Perez
+
+Trying out monocomplete.  I wanted to look at this package which provides an
+overlay.  Yes, Emacs 30 provides a similar package =completion-preview-mode= but I
+am not using Emacs 30 yet and I wanted to experiment with a.
+
+By default in org I only have [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--pcomplete-completions-at-point.html][pcomplete-completions-at-point]].
+
+#+begin_src emacs-lisp
+(add-hook 'completion-at-point-functions #'cape-dabbrev nil 'local)
+(remove-hook 'completion-at-point-functions #'pcomplete-completions-at-point 'local)
+#+end_src
+
+The first question ihv is on the =capf= backend.  It says in the README that it uses [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-at-point-functions.html][completion-at-point-functions]].  So I expect that when I set =completion-at-point-functions= to ~(cape-dabbrev t)~ that it will get the top result from invoking ~(completion-at-point)~ at the current point.  But instead I get weird completions.
+
+#+begin_src emacs-lisp
+(opt! mono-complete-backends '(dabbrev))
+(opt! mono-complete-evil-insert-mode-only t)
+(opt! mono-complete-cache-directory (expand-file-name "monocomplete" oo-var-dir))
+#+end_src

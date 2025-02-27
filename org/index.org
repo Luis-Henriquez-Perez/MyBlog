@@ -6,3 +6,4 @@
 - [[file:posts/2025-01-16T13.03.15_one-of-my-proudest-macros-lef.org][lef!, One of My Best Macros]]
 - [[file:posts/2025-01-16T13.03.15_an-abstraction-for-binding-data-structures:-with-map!.org][Binding Symbols in Maps: with-map!]]
 - [[file:posts/2025-02-26T03.26.00_tricks_I_learned_to_make_using_tempel_better.org][tricks I learned to make using tempel smoother]]
+- [[file:posts/2025-02-26T12.58.40_new_tidbit_howmany.org][new tidbit howmany]]
