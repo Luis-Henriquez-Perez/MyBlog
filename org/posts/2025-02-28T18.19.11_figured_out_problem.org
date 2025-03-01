@@ -1,13 +1,31 @@
 #+title:figured out problem
 #+author:Luis Henriquez-Perez
 
-Finally I figure out figedo out why [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--completion-preview-mode.html][completion-preview-mode]] was not working in my org
-buffers.  God I read about [[][the article]] but I do not know it did not hit
-me.  I did not imagine that org was using it is own variant of
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--self-insert-command.html][self-insert-command]], [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-self-insert-command.html][org-self-insert-command]].
+Finally I figured out why [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--completion-preview-mode.html][completion-preview-mode]] was not working in my org
+buffers.  The reason has to do with how =completion-preview= decides whether to
+expand.  This is explained in [[https://eshelyaron.com/posts/2023-11-17-completion-preview-in-emacs.html][a blog post]] from the author of the package:
 
-So yes to make =completion-preview-mode= work in org-mode you have to add
-=org-self-insert-command= to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-preview-commands.html][completion-preview-commands]].  So have comple.
+#+begin_src text 
+Two simple conditions that must hold for Completion Preview to show the
+preview:
+
+    1. the last command is one of completion-preview-commands, and
+    2. the symbol at point is at least completion-preview-minimum-symbol-length characters long.
+#+end_src
+
+The default value of [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-preview-commands.html][completion-preview-commands]] is ~(self-insert-command)~.  What
+tripped me up is that org uses its own variant called [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-self-insert-command.html][org-self-insert-command]].
+This means if you want =completion-preview= to work for buffers in org-mode you
+need to add =org-self-insert-command= to =completion-preview-commands=.  The author
+himself has the following line in his personal configuration.
+
+#+begin_src emacs-lisp
+;; Org mode has a custom `self-insert-command'
+(push 'org-self-insert-command completion-preview-commands)
+#+end_src
+
+I used [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--cl-pushnew.html][cl-pushnew]] for this just so I can re-evaluate this without worrying about
+adding duplicate commands.
 
 #+begin_src emacs-lisp
 (cl-pushnew #'org-self-insert-command completion-preview-commands)

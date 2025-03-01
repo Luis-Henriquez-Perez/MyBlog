@@ -4,7 +4,7 @@
 When I was trying to write my previous blog post I realized that I did not know
 how to escape an asterix emphasis marker.  I looked up how to do it online.
 
-One anser recommended the use of a [[][]] zero width space.
+One answer recommended the use of a [[][]] zero-width space.
 
 [[https://emacs.stackexchange.com/questions/16688/how-can-i-escape-the-in-org-mode-to-prevent-bold-fontification][]]
 
@@ -13,3 +13,13 @@ what =org-entities= where.  Apparently they are a way of displaying special
 characters in org-mode.
 
 [[][]]
+
+I want to use the entities to censor curse words.  Honestly it is probably
+better just not to use curse words at all but when I thought about the idea of
+having another potential use of abbrevs I got excited. 
+
+#+begin_src emacs-lisp
+(define-abbrev global-abbrev-table "fuck" "\\ast\\ast\\ast\\ast" nil :enable-function #'oo-in-org-mode-p)
+(define-abbrev global-abbrev-table "shit" "\\ast\\ast\\ast\\ast" nil :enable-function #'oo-in-org-mode-p)
+#+end_src
+
