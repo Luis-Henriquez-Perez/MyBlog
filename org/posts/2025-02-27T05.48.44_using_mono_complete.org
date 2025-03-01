@@ -1,9 +1,12 @@
 #+TITLE: using mono complete
 #+AUTHOR: Luis Henriquez-Perez
 
-Trying out monocomplete.  I wanted to look at this package which provides an
-overlay.  Yes, Emacs 30 provides a similar package =completion-preview-mode= but I
-am not using Emacs 30 yet and I wanted to experiment with a.  pack
+Even before Emacs 30 came out with its new built-in package, [[https://git.sr.ht/~eshel/completion-preview][completion-preview]],
+I wanted a package that suggests compltions an unintrusive overlay.  I was
+inspired by the.  This is as a potential replacement to incessant popups from
+[[https://github.com/minad/corfu][corfu]] or company that I find distracting and usually deterimental to
+performance.  I have had a few fraught attempts moving to Emacs 30 so I thought
+why not try this package which is very similar.
 
 #+begin_src emacs-lisp
 (opt! dabbrev-check-all-buffers nil)
@@ -15,9 +18,14 @@ By default in org I only have [[file:/home/luis/Documents/MyBlog/org/documentati
 #+begin_src emacs-lisp
 (add-hook 'completion-at-point-functions #'cape-dabbrev nil 'local)
 (remove-hook 'completion-at-point-functions #'pcomplete-completions-at-point 'local)
+(pop completion-at-point-functions)
 #+end_src
 
-The first question ihv is on the =capf= backend.  It says in the README that it uses [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-at-point-functions.html][completion-at-point-functions]].  So I expect that when I set =completion-at-point-functions= to ~(cape-dabbrev t)~ that it will get the top result from invoking ~(completion-at-point)~ at the current point.  But instead I get weird completions.
+The first question ihv is on the =capf= backend.  It says in the README that it
+uses [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-at-point-functions.html][completion-at-point-functions]].  So I expect that when I set
+=completion-at-point-functions= to ~(cape-dabbrev t)~ that it will get the top
+result from invoking ~(completion-at-point)~ at the current point.  But instead I
+get weird completions.  Question current question curre
 
 #+begin_src emacs-lisp
 (opt! mono-complete-backends '(capf))
@@ -26,3 +34,6 @@ The first question ihv is on the =capf= backend.  It says in the README that it 
 #+end_src
 
 I am not able to get mono.
+
+Obvious I like the mono-complete is flexible.  My main problem with it is that
+it departs a bit from hfl

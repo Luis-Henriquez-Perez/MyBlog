@@ -18,7 +18,7 @@ dependencies.  I looked through some package.el functions such as
 [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-autoremove.html][package-autoremove]] which I do not understand.
 
 Honestly, this makes me want to just switch to elpaca.  One of the big reasons
-of using elpaca is to avoid this \ast\ast\ast\ast, these random errors occurring because
+of using elpaca is to avoid this mess, these random errors occurring because
 of some unstable package version.
 
 This is probably imprecise but to get rid of the problem I invoked

@@ -1,4 +1,4 @@
-#+title:figured out problem
+#+title:figured out why completion-preview did not work in org-mode
 #+author:Luis Henriquez-Perez
 
 Finally I figured out why [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--completion-preview-mode.html][completion-preview-mode]] was not working in my org

@@ -1,18 +1,31 @@
 #+title:escaping org emphasis markers
 #+author:Luis Henriquez-Perez
 
-When I was trying to write my previous blog post I realized that I did not know
-how to escape an asterix emphasis marker.  I looked up how to do it online.
+When I was trying to write my previous blog post I ended up cursing in my
+writing.  I was considering whether to curse mildly in my blog posts.  And it
+was then that I had the idea to use abbrevs to censor any curses I wrote by
+replacing the text.  I was excited because censoring words is a completely new
+way of using abbrevs that I had never thought of.  When I actually set off
+creating abbrevs I realized that I did not know how to escape an asterisk
+emphasis marker.
 
-One answer recommended the use of a [[][]] zero-width space.
+#+begin_src emacs-lisp
+(define-abbrev global-abbrev-table "fuck" "****" nil :enable-function #'oo-use-text-abbrev-p)
+(define-abbrev global-abbrev-table "shit" "****" nil :enable-function #'oo-use-text-abbrev-p)
+#+end_src
 
-[[https://emacs.stackexchange.com/questions/16688/how-can-i-escape-the-in-org-mode-to-prevent-bold-fontification][]]
+I looked up how to do it online.  But in doing this I noticed
+org was interpreting the asterisks as emphasis markers as opposed to literally.
+I tried to add a backslash (=\=) just as I would in a regular expression and that
+did not work either.  Well, it did display the asterisk literally but it also
+displayed the backslash.
 
-Another said that a better solution is to use [[][org-entities]].  I had no idea
-what =org-entities= where.  Apparently they are a way of displaying special
-characters in org-mode.
+I looked for answers in a promising [[https://emacs.stackexchange.com/questions/16688/how-can-i-escape-the-in-org-mode-to-prevent-bold-fontification][emacs stackexchange question]].
 
-[[][]]
+One answer recommended the use of a zero-width space.  But I soon discarded the
+idea when I read the answer below that claimed to be a better solution.
+[[][org-entities]].  I had no idea what =org-entities= where before reading this
+post.  Apparently they are a way of displaying special characters in org-mode.
 
 I want to use the entities to censor curse words.  Honestly it is probably
 better just not to use curse words at all but when I thought about the idea of
@@ -23,3 +36,7 @@ having another potential use of abbrevs I got excited.
 (define-abbrev global-abbrev-table "shit" "\\ast\\ast\\ast\\ast" nil :enable-function #'oo-in-org-mode-p)
 #+end_src
 
+Thinking about this a bit longer I do not think I am going to censor curse words
+after all or at least not all of them.  Instead I think it might be better to
+just tone them down.  So "fuck" would become "darn it".  I am not sure.  I am
+leaning towards "fuck" to become "blast" or "curses".
