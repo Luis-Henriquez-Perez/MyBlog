@@ -1,0 +1,14 @@
+#+title:figured out problem
+#+author:Luis Henriquez-Perez
+
+Finally I figure out figedo out why [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--completion-preview-mode.html][completion-preview-mode]] was not working in my org
+buffers.  God I read about [[][the article]] but I do not know it did not hit
+me.  I did not imagine that org was using it is own variant of
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--self-insert-command.html][self-insert-command]], [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-self-insert-command.html][org-self-insert-command]].
+
+So yes to make =completion-preview-mode= work in org-mode you have to add
+=org-self-insert-command= to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-preview-commands.html][completion-preview-commands]].  So have comple.
+
+#+begin_src emacs-lisp
+(cl-pushnew #'org-self-insert-command completion-preview-commands)
+#+end_src

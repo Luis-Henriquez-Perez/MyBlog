@@ -1,0 +1,10 @@
+#+title:completion at point
+#+author:Luis Henriquez-Perez
+
+This is my investigatoin into [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-at-point-functions.html][completion-at-point-functions]].  Iwtkma completions
+so I can customize completions to help me at a fine-grained level.  I want to
+complete text precisely like with with a scalpel.  For this I probably need to
+know how to write my own capf (completion at point function).
+
+#+begin_src emacs-lisp
+#+end_src

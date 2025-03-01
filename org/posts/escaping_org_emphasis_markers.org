@@ -1,0 +1,15 @@
+#+title:escaping org emphasis markers
+#+author:Luis Henriquez-Perez
+
+When I was trying to write my previous blog post I realized that I did not know
+how to escape an asterix emphasis marker.  I looked up how to do it online.
+
+One anser recommended the use of a [[][]] zero width space.
+
+[[https://emacs.stackexchange.com/questions/16688/how-can-i-escape-the-in-org-mode-to-prevent-bold-fontification][]]
+
+Another said that a better solution is to use [[][org-entities]].  I had no idea
+what =org-entities= where.  Apparently they are a way of displaying special
+characters in org-mode.
+
+[[][]]

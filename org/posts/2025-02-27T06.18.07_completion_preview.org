@@ -16,3 +16,14 @@ First I am attempting to install the package.  Ihn done this before.  Looking on
 #+begin_src emacs-lisp
 (package-vc-install '(completion-preview :url "https://github.com/emacs-mirror/emacs/blob/master/lisp/completion-preview.el"))
 #+end_src
+
+Trying it out.  try
+
+#+begin_src emacs-lisp
+(opt! completion-preview-minimum-symbol-length 1)
+(opt! completion-preview-minimum-symbol-length 1)
+(opt! completion-preview-idle-delay 0.2)
+
+(remove-hook 'completion-at-point-functions #'ispell-completion-at-point t)
+#+end_src
+ 
