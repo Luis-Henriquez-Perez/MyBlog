@@ -1,4 +1,4 @@
-#+title:more-emacs-30-experiences
+#+title:more emacs 30 experiences
 #+author:Luis Henriquez-Perez
 
 I want to go through my sometimes falty decision making.  I was looking at the
