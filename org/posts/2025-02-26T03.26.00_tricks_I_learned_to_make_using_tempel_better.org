@@ -2,8 +2,9 @@
 #+AUTHOR: Luis Henriquez-Perez
 
 Having gotten to a more stable state with my Emacs configuration, I have been
-focused less on file naming and more on enhancing areas that I have neglected.
-One of these is text completion or as Emacs calls it "auto-typing".  In the
+focused less on its structure and more on enhancing the areas that I have
+neglected.  One of these is text completion or as Emacs calls it "auto-typing".
+This had lead me to revisit and enhance my configuration for [[https://github.com/minad/tempel][tempel]].  In the
 process of grokking tempel to my liking I have accrued several useful settings
 which I share here.
 
@@ -11,8 +12,8 @@ which I share here.
 
 Frustratingly when I first began using tempel the keybindings to =tempel-map= in
 =evil-insert-state= were not working.  That is because default evil bindings still
-took precedence over.  To tell evil to make those keybindings precedence we need
-to make =tempel-map= an intercept map.
+took precedence over the ones in =tempel-map=.  To tell evil to make those
+keybindings precedence make =tempel-map= an intercept map.
 
 #+begin_src emacs-lisp
 (eval-after-load 'tempel
@@ -44,8 +45,8 @@ First let me mention the solution that tempel provides: [[file:/home/luis/Docume
 That mode defines abbrevs for every named template, puts them in an abbrev
 table.  This solution is too crude and opinionated for my taste.  It assumes
 that you want the abbrevs to be the same name you defined for your tempel
-templates.  And it decides how to set up the abbrev table.  This is designed for
-someone who just wants something working fast.
+templates.  And it decides how to set up the abbrev table for you.  This is
+designed for someone who just wants something working fast.
 
 If you are not in a rush.  What I recommend is just doing it explicitly with good
 old [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-abbrev.html][define-abbrev]].  Specify the circumstances when an abbrev should be active in
