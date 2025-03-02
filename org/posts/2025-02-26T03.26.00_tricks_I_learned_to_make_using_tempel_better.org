@@ -4,14 +4,15 @@
 Having gotten to a more stable state with my Emacs configuration, I have been
 focused less on file naming and more on enhancing areas that I have neglected.
 One of these is text completion or as Emacs calls it "auto-typing".  In the
-process of grokking tempel to my liking I faced multiple hurdles.  Learn from
-these hurdles.
+process of grokking tempel to my liking I have accrued several useful settings
+which I share here.
 
 * make =tempel-map= an overriding map
 
-For evil users, make sure you make =tempel-map= an intercept map.  Otherwise any
-keybindings you have in =tempel-map=, such as the ones for moving to the next or
-previous fields, will not work.
+Frustratingly when I first began using tempel the keybindings to =tempel-map= in
+=evil-insert-state= were not working.  That is because default evil bindings still
+took precedence over.  To tell evil to make those keybindings precedence we need
+to make =tempel-map= an intercept map.
 
 #+begin_src emacs-lisp
 (eval-after-load 'tempel
@@ -19,14 +20,16 @@ previous fields, will not work.
      (evil-make-overriding-map tempel-map)))
 #+end_src
 
-* ensure insert state
+* ensure insert state after inserting a template
 
-Ensure you are in insert state after inserting a template.  It only makes sense
-because your about to type in text just after you have inserted a template.
-Configuring functions to enter insert state is so common that I recommend you
-create a dedicated function for this.
+You can be just about certain you will be typing text just after inserting a
+tempel template because there will be fields you have to fill out.  That is why
+I recommend advising [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-insert.html][tempel-insert]] to enter insert state after it is done.  In
+general, configuring functions to enter insert state is so common that I
+recommend you create a dedicated function for this.
 
 #+begin_src emacs-lisp
+(setq-local completion-at-point-functions '(cape-dabbrev t))
 (defun oo--enter-evil-insert-state-maybe (&rest _)
   "Enter insert state if `evil-mode' is enabled."
   (when (bound-and-true-p evil-mode)
@@ -35,10 +38,7 @@ create a dedicated function for this.
 (advice-add 'tempel-insert :after #'oo--enter-evil-insert-state-maybe)
 #+end_src
 
-* properly use abbrev
-
-For those who want to use abbrevs and snippets, which I highly recommend, this
-is how to do it.
+* properly use map an abbrev to a tempel expansion
 
 First let me mention the solution that tempel provides: [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].
 That mode defines abbrevs for every named template, puts them in an abbrev
