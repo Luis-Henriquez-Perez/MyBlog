@@ -18,11 +18,11 @@ dependencies.  I looked through some package.el functions such as
 [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-autoremove.html][package-autoremove]] which I do not understand.
 
 Honestly, this makes me want to just switch to elpaca.  One of the big reasons
-of using elpaca is to avoid this mess, these random errors occurring because
+of using elpaca is to avoid these random errors occurring because
 of some unstable package version.
 
 This is probably imprecise but to get rid of the problem I invoked
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-delete.html][package-delete]] on magit, pineed magit to magit to melpa-stable and reinstalled
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-delete.html][package-delete]] on magit, pinned magit to magit to melpa-stable and reinstalled
 it.  I did not deal with it is dependencies and indeed when I look at the
 strings it seems like the dependencies like [[https://github.com/magit/transient][transient]] are still at the latest
 version.

@@ -42,10 +42,10 @@ recommend you create a dedicated function for this.
 
 First let me mention the solution that tempel provides: [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].
 That mode defines abbrevs for every named template, puts them in an abbrev
-table.  This solution is too crude and opinionated solution for my taste.  It
-assumes that you want the abbrevs to be the same name you defined for your
-tempel templates.  This is designed for someone who just wants something working
-fast.
+table.  This solution is too crude and opinionated for my taste.  It assumes
+that you want the abbrevs to be the same name you defined for your tempel
+templates.  And it decides how to set up the abbrev table.  This is designed for
+someone who just wants something working fast.
 
 If you are not in a rush.  What I recommend is just doing it explicitly with good
 old [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-abbrev.html][define-abbrev]].  Specify the circumstances when an abbrev should be active in
