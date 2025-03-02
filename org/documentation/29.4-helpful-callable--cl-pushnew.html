@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful macro: cl-pushnew*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffffff;
+        background-color: #000000;
+      }
+      .button {
+        /* button */
+        color: #79a8ff;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #989898;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #989898;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #00bcff;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #9ac8e0;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #feacd0;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #ffffff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #b6a0ff;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #79a8ff;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #6ae4b9;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+cl-pushnew is a macro defined in <span class="button">cl-lib.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(<span class="keyword">cl-pushnew</span> X PLACE [KEYWORD VALUE]...)
+
+<span class="helpful-heading">Documentation
+</span>Add X to the list stored in PLACE unless X is already in the list.
+
+PLACE is a generalized variable that stores a list.
+
+Like (push X PLACE), except that PLACE is unmodified if X is <span class="button">eql</span>
+to an element already in the list stored in PLACE.
+
+
+Keywords supported:  :test :test-not :key
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>cl-pushnew is unused in <span class="button">cl-lib.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by cl-pushnew</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/cl-lib.el.gz</span>
+(<span class="keyword">defmacro</span> <span class="function-name">cl-pushnew</span> (x place <span class="type">&amp;rest</span> keys)
+  <span class="doc">"Add X to the list stored in PLACE unless X is already in the list.
+PLACE is a generalized variable that stores a list.
+
+Like (push X PLACE), except that PLACE is unmodified if X is `</span><span class="doc"><span class="constant">eql</span></span><span class="doc">'
+to an element already in the list stored in PLACE.
+
+\nKeywords supported:  :test :test-not :key
+\n(fn X PLACE [KEYWORD VALUE]...)"</span>
+  (<span class="keyword">declare</span> (debug
+            (form place <span class="type">&amp;rest</span>
+                  <span class="type">&amp;or</span> [[<span class="type">&amp;or</span> <span class="string">":test"</span> <span class="string">":test-not"</span> <span class="string">":key"</span>] form]
+                  [keywordp form])))
+  (<span class="keyword">if</span> (symbolp place)
+      (<span class="keyword">if</span> (null keys)
+          (<span class="keyword">macroexp-let2</span> nil var x
+            `(<span class="keyword">if</span> (memql ,var ,place)
+                 <span class="comment-delimiter">;; </span><span class="comment">This symbol may later on expand to actual code which then
+</span>                 <span class="comment-delimiter">;; </span><span class="comment">trigger warnings like "value unused" since cl-pushnew's
+</span>                 <span class="comment-delimiter">;; </span><span class="comment">return value is rarely used.  It should not matter that
+</span>                 <span class="comment-delimiter">;; </span><span class="comment">other warnings may be silenced, since `</span><span class="comment"><span class="constant">place</span></span><span class="comment">' is used
+</span>                 <span class="comment-delimiter">;; </span><span class="comment">earlier and should have triggered them already.
+</span>                 (with-no-warnings ,place)
+               (<span class="keyword">setq</span> ,place (cons ,var ,place))))
+	`(<span class="keyword">setq</span> ,place (cl-adjoin ,x ,place ,@keys)))
+    `(<span class="keyword">cl-callf2</span> cl-adjoin ,x ,place ,@keys)))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">edebug-form-spec</span>
+  (form place &amp;rest &amp;or
+        [[&amp;or ":test" ":test-not" ":key"]
+         form]
+        [keywordp form])</pre>
+  </body>
+</html>

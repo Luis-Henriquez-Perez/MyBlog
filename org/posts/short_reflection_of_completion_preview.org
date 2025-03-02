@@ -1,0 +1,4 @@
+#+title:short reflection of completion preview
+#+author:Luis Henriquez-Perez
+
+I do not feel that =completion-preview= has not been that useful in aiding me to write plain ttext faster.  Maybe a little it?  But not too much.  I think I have heard this before in some post I read that this kind of completion is much more useful for programming lnags which have long names that you cannot remember.

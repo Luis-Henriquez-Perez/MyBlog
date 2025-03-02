@@ -1,0 +1,4 @@
+#+title:should I just let emacs manage abbrev file
+#+author:Luis Henriquez-Perez
+
+Should I just let Emacs manage abbrev file?  I had my own abbrev file separate from Emacs's that I was version controlling.  But I do not know that entails writing my own abbrev fun for saving it to the file and getting the reverse abbrev and I was thinking Emacs's already have functions that do that for you so why am I doing it.  Maybe I should just say \ast\ast\ast\ast it, let Emacs just make changes to the file and I will commit them.

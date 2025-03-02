@@ -1,4 +1,4 @@
-#+TITLE:Cool New Command: howmany
+#+TITLE:cool New Command: howmany
 #+AUTHOR: Luis Henriquez-Perez
 
 I wanted to know how many abbrevs I had defined in [[../documentation/29.4-999-abbrevs.html][the file]] I use to store all

@@ -1,0 +1,43 @@
+#+title:abbrev file or not
+#+author:Luis Henriquez-Perez
+
+I have always struggled with the question of whether I should save the abbrev
+file to a file myself (which is what I do now) or let just Emacs manage it with
+it is existing fascilities.
+
+The one thing that is certain is I want to save the abbrev file.  I do not want
+it to be machine specific.  Because I have written many abbrevs (over 1500 at
+time of writing) and I want to use them everywhere I go.
+
+I have decided I am going to try keeping my abbrev file in one.  Another benefit
+I the all my abbrevs would go into into just one file.  I could simplify my
+configuration from having two files to just one.
+
+So the thing is Emacs already does it for you so I have an incentive to use
+existing resources instead of reinventing the wheel.  Emacs already has
+functions for adding abbrevs such as [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--add-global-abbrev.html][add-global-abbrev]] and
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--inverse-add-global-abbrev.html][inverse-add-global-abbrev]] that I would essentially need to reimplement if I did
+not use Emacs abbrev file saving support.  On the one hand, the existing
+functions do not do exacly what I want to do.  For example, =add-global-abbrev=
+does not provide a way to specify the [[][:enable-function]] property which I
+use heavily.  Additionally I am not happy with the way that it is actually
+mentioned in another post that.  Also these are not hard functions to write and
+I have already done most of the preliminary work when I writing
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-dwim-add-abbrev.html][oo-dwim-add-abbrev]].
+
+Another consideration is that Emacs tracks the count of the abbrevs which is
+information I might be interested in but it also means that there is going to be
+constant commits to this abbrev file all the time.  I mean there already are
+frequent commits because I add abbrevs all the time but I imagine there would be
+even more.
+
+* cons just write my own
+
+** format of the file is not want I want
+
+I may just try it to be
+honest and see if it is easier.  I could try to automate the committing process
+a good time to commit would probably be after saving the file which happens just
+before I kill Emacs; that way committing these changes is only done once.
+Probably either way I am going to.
+

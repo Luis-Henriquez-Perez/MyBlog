@@ -43,7 +43,12 @@ add it to =package-selected-packages= and called
 
 Of course it is possible to install it directly with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-vc-install.html][package-vc-install]].
 
-On Emacs 30 I found that a function =ispell-completion-at-point= in =completion-at-point-functions=.
+#+begin_src emacs-lisp
+(package-vc-install '(completion-preview :url "https://git.sr.ht/~eshel/completion-preview"))
+#+end_src
+
+On Emacs 30 I found that a function =ispell-completion-at-point= in
+=completion-at-point-functions=.
 
 #+begin_src emacs-lisp
 (opt! completion-preview-minimum-symbol-length 1)

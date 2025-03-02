@@ -1,12 +1,9 @@
-#+title:draft finally-writing-a-function-to-insert-abbrevs
+#+title:writing a function to automatically add abbrevs
 #+author:Luis Henriquez-Perez
 
-I had been embarrasingly long time since I have been manually copy pasting abbrevs.
+The first question might be why use abbrevs.  The answer was I did not want to support an abbrev file because Emacs constantly changes it.
 
-This is the last function I wrote to do this.
-
-#+begin_src emacs-lisp
-#+end_src
+I had been embarrasingly long time since I have been manually copy pasting abbrevs.  I wrote a function to do this before but I cannot easily find it.  I would wrather just write it over again.
 
 I also want to set up some sort of auto alignment of the abbrevs.
 
@@ -21,7 +18,7 @@ record the previous word, prompt me for what the expansion of it should be.
 After I give it this information it should add an abbrev form into my plain text
 abbrev file reflecting this, it should make sure it is aligned with the other
 forms, and it should commit this.  For now it can assume it is always a
-plain-text abbrev.
+plain-text abbrev.  Foo
 
 #+begin_src emacs-lisp
 (defun oo-dwim-add-abbrev ()
@@ -62,33 +59,39 @@ This is what chatGPT recommends:
       (message "Added abbrev: %s -> %s" prev-word expansion))))
 #+end_src
 
+Understandably, chatGPT does not know that I do not use an the typical abbrev file.
+
 Even though it is not exactly what I want, seeing an implementation over no
 implementation is extremely useful.  I can see why this makes experienced
 developers so much more efficient.  Without further ado this is the function
 after my modifications.  Mainly, I incorporate the macros from
 [[][Cautolet-macros]].
 
+This is just.
+
 #+begin_src emacs-lisp
 (defun! oo-dwim-add-abbrev ()
   "Add an abbrev entry interactively and update the abbrev file."
   (interactive)
-  (set! prev-word (save-excursion (backward-word) (thing-at-point 'word t)))
-  (set! expansion (read-string (format "Expand '%s' to: " prev-word)))
+  (set! abbrev (save-excursion (backward-word) (thing-at-point 'word t)))
+  (set! expansion (read-string (format "Expand '%s' to: " abbrev)))
   (set! lisp-dir (locate-user-emacs-file "lisp/"))
   ;; TODO ensure abbrev is not already defined.
-  (quitif! () "Abbrev %S already expands to %S, aborting.")
+  ;; (quitif! () "Abbrev %S already expands to %S, aborting.")
   ;; TODO warn and ask if abbrev already expands to something else.
-  (set! abbrev-file (expand-file-name "990-plain-text-abbrevs.el" "lisp/"))
-  (quitif! (not prev-word) "No previous word found.")
+  (set! abbrev-file (expand-file-name "999-abbrevs.el" lisp-dir))
+  (quitif! (not abbrev) "No previous word found.")
   (quitif! (string-empty-p expansion) "No expansion given.")
   ;; Find where the first `define-abbrev' starts.
   (set! form `(define-abbrev global-abbrev-table ,abbrev ,expansion nil :enable-function #'oo-use-text-abbrev-p))
-  (with-temp-buffer
-    (insert-file-contents abbrev-file)
-    (goto-char (point-max))
-    (unless (bolp) (insert "\n"))
-    (insert (format "%s" form))
-    (write-region (point-min) (point-max) abbrev-file))
-  ;; (define-abbrev global-abbrev-table prev-word expansion)
+  (with-current-buffer (get-buffer-create abbrev-file)
+    (if (buffer-modified-p) (write-region (point-min) (point-max) abbrev-file))
+    (goto-char (point-min))
+    (re-search-forward "^(define-abbrev" nil t nil)
+    (insert (format "%S" form))
+    ;; (save-buffer)
+    )
   (message "Added abbrev: %s -> %s" prev-word expansion))
 #+end_src
+
+https://endlessparentheses.com/ispell-and-abbrev-the-perfect-auto-correct.html
