@@ -4,12 +4,14 @@
 When I was trying to write my previous blog post I ended up cursing in my
 writing.  After writing it I considered what to do about it.  Should I just
 leave it as is and not care about cursing in posts?  Should I tone it down using
-only mild expletive like "darn".  Or maybe I should not use any expletives at
+only mild expletive like "darn"?  Or maybe I should not use any expletives at
 all?  It was then that I had the idea to use abbrevs to censor any curses I
-wrote by replacing the text.  The concern I had over whether censoring curse
-words was eclipsed by my excitement for the prospect of using abbrevs in a
-completely new way.  When I actually set off creating abbrevs I realized that I
-did not know how to escape an asterisk emphasis marker.
+wrote by replacing the text with asterisks.  The concern I had over the best way
+to deal with curse words was eclipsed by my excitement for the prospect of using
+abbrevs in a completely new way.
+
+When I actually set off creating abbrevs I realized that I did not know how to
+escape an asterisk emphasis marker.
 
 #+begin_src emacs-lisp
 (define-abbrev global-abbrev-table "fuck" "****" nil :enable-function #'oo-use-text-abbrev-p)
