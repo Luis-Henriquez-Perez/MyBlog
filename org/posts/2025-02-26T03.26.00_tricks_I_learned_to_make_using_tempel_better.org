@@ -2,11 +2,10 @@
 #+AUTHOR: Luis Henriquez-Perez
 
 Having gotten to a more stable state with my Emacs configuration, I have been
-focused less on its structure and more on enhancing the areas that I have
+focused less on its structure and more on enhancing the features that I have
 neglected.  One of these is text completion or as Emacs calls it "auto-typing".
-This had lead me to revisit and enhance my configuration for [[https://github.com/minad/tempel][tempel]].  In the
-process of grokking tempel to my liking I have accrued several useful settings
-which I share here.
+This had lead me to revisit and enhance my configuration for [[https://github.com/minad/tempel][tempel]] and in the
+process collect several useful tricks which I share here.
 
 * make =tempel-map= an overriding map
 
@@ -23,11 +22,11 @@ keybindings precedence make =tempel-map= an intercept map.
 
 * ensure insert state after inserting a template
 
-You can be just about certain you will be typing text just after inserting a
-tempel template because there will be fields you have to fill out.  That is why
-I recommend advising [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-insert.html][tempel-insert]] to enter insert state after it is done.  In
-general, configuring functions to enter insert state is so common that I
-recommend you create a dedicated function for this.
+You can certain you will be typing text right after inserting a template because
+there will be fields you have to fill out.  That is why I recommend advising
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-insert.html][tempel-insert]] to enter insert state after it is done.  In general, configuring
+functions to enter insert state is so common that I recommend a dedicated
+function for this.
 
 #+begin_src emacs-lisp
 (setq-local completion-at-point-functions '(cape-dabbrev t))

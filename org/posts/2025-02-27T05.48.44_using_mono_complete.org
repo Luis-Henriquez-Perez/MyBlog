@@ -2,7 +2,7 @@
 #+AUTHOR: Luis Henriquez-Perez
 
 Even before Emacs 30 came out with its new built-in package, [[https://git.sr.ht/~eshel/completion-preview][completion-preview]],
-I wanted a package that suggests compltions an unintrusive overlay.  I was
+I wanted a package that suggested completions in an unintrusive overlay.  I was
 inspired by the.  This is as a potential replacement to incessant popups from
 [[https://github.com/minad/corfu][corfu]] or company that I find distracting and usually deterimental to
 performance.  I have had a few fraught attempts moving to Emacs 30 so I thought
@@ -18,7 +18,6 @@ By default in org I only have [[file:/home/luis/Documents/MyBlog/org/documentati
 #+begin_src emacs-lisp
 (add-hook 'completion-at-point-functions #'cape-dabbrev nil 'local)
 (remove-hook 'completion-at-point-functions #'pcomplete-completions-at-point 'local)
-(pop completion-at-point-functions)
 #+end_src
 
 The first question ihv is on the =capf= backend.  It says in the README that it
