@@ -1,5 +1,5 @@
-#+TITLE: tricks I learned to make using tempel smoother
-#+AUTHOR: Luis Henriquez-Perez
+#+TITLE:tricks I learned to make using tempel smoother
+#+AUTHOR:Luis Henriquez-Perez
 
 Having gotten to a more stable state with my Emacs configuration, I have been
 focused less on its structure and more on enhancing the features that I have

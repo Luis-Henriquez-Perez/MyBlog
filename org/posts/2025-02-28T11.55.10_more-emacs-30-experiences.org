@@ -25,7 +25,7 @@ Instead if I wanted it so badly I should just install it from its repo.
 (package-vc-install '(completion-preview :url "https://git.sr.ht/~eshel/completion-preview"))
 #+end_src
 
-Speaking of this package icnftlom get it to to work using =cape-dabbrev= as a
-completion-at-point-function.  I do not know why because [[https://github.com/minad/corfu][corfu]] also uses
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-at-point-functions.html][completion-at-point-functions]] and it produces the correct candidates when I set
-it up.
+Speaking of this package I can not for the life of me get it to to work using
+=cape-dabbrev= as a completion-at-point-function.  I do not know why because [[https://github.com/minad/corfu][corfu]]
+also uses [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-at-point-functions.html][completion-at-point-functions]] and it produces the correct candidates
+when I set it up.
