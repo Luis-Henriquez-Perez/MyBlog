@@ -24,4 +24,25 @@ From the manual there is no option to sort by filename.
      The date of a file is retrieved with ‘org-publish-find-date’.
 #+end_src
 
-My idea right now is to.
+My idea right now is to set =:sitemap-sort-files= to =chronologically= to get
+org-publish to use the function [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-publish-find-date.html][org-publish-find-date]].  Then we override
+=org-publish-find-date= with a function that returns the time of a file based on
+the timestamped filename.  It is a bit indirect I know but it gets the job done.
+
+#+begin_src emacs-lisp
+(defun oo--publish-find-date (file _)
+  (string-match "[0-9]\\{4\\}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9].[0-5][0-9].[0-5][0-9]" file)
+  (if-let (timestamp (match-string 0 file))
+      (encode-time (parse-time-string (string-replace "." ":" timestamp)))
+    (error "No timestamp")))
+
+(advice-add 'org-publish-find-date :override 'oo--publish-find-date)
+#+end_src
+
+I got the regular expression from [[https://github.com/DerBeutlin/date2name.el][date2name]], a package for adding timestamps to
+files.  I took a long time figuring out how to go from a timestamp string to an
+elisp time object the same as when Emacs calls [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--current-time.html][current-time]].  chatGPT said to
+use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--parse-time-string.html][parse-time-string]] and then convert its output with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--encode-time.html][encode-time]].  Luckily the
+default timestamp format chosen by =date2name= is very similar to an "ISO 8601"
+string that looks like =2020-01-15T16:12:21-08:00=.  All I had to do is replace
+the =.= with =:=. 

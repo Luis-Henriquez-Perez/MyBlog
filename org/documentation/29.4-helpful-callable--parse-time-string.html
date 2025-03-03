@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: parse-time-string*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffffff;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #f78fe7;
+      }
+      .button {
+        /* button */
+        color: #79a8ff;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #989898;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #989898;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #00bcff;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #9ac8e0;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #feacd0;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #ffffff;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #b6a0ff;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #6ae4b9;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #fec43f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+parse-time-string is an <span class="button">autoloaded</span> and <span class="button">byte-compiled</span> function defined
+in <span class="button">parse-time.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(parse-time-string STRING <span class="type">&amp;optional</span> FORM)
+
+<span class="helpful-heading">Documentation
+</span>Parse the time in STRING into (SEC MIN HOUR DAY MON YEAR DOW DST TZ).
+
+STRING should be an ISO 8601 time string, e.g., "2020-01-15T16:12:21-08:00",
+or something resembling an RFC 822 (or later) date-time, e.g.,
+"Wed, 15 Jan 2020 16:12:21 -0800".  This function is
+somewhat liberal in what format it accepts, and will attempt to
+return a "likely" value even for somewhat malformed strings.
+The values returned are identical to those of <span class="button">decode-time</span>, but
+any unknown values other than DST are returned as nil, and an
+unknown DST value is returned as -1.
+
+See <span class="button">decode-time</span> for the meaning of FORM.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">parse-time.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">parse-iso8601-time-string</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by parse-time-string</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/calendar/parse-time.el.gz</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">(put 'parse-time-rules 'risky-local-variable t)
+</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">parse-time-string</span> (string <span class="type">&amp;optional</span> form)
+  <span class="doc">"Parse the time in STRING into (SEC MIN HOUR DAY MON YEAR DOW DST TZ).
+STRING should be an ISO 8601 time string, e.g., \"2020-01-15T16:12:21-08:00\",
+or something resembling an RFC 822 (or later) date-time, e.g.,
+\"Wed, 15 Jan 2020 16:12:21 -0800\".  This function is
+somewhat liberal in what format it accepts, and will attempt to
+return a \"likely\" value even for somewhat malformed strings.
+The values returned are identical to those of `</span><span class="doc"><span class="constant">decode-time</span></span><span class="doc">', but
+any unknown values other than DST are returned as nil, and an
+unknown DST value is returned as -1.
+
+See `</span><span class="doc"><span class="constant">decode-time</span></span><span class="doc">' for the meaning of FORM."</span>
+  (<span class="keyword">condition-case</span> ()
+      (iso8601-parse string form)
+    (wrong-type-argument
+     (<span class="keyword">let</span> ((time (list nil nil nil nil nil nil nil -1 nil))
+	   (temp (parse-time-tokenize (downcase string))))
+       (<span class="keyword">while</span> temp
+	 (<span class="keyword">let</span> ((parse-time-elt (<span class="keyword">pop</span> temp))
+	       (rules parse-time-rules)
+	       (exit nil))
+	   (<span class="keyword">while</span> (<span class="keyword">and</span> rules (not exit))
+	     (<span class="keyword">let*</span> ((rule (<span class="keyword">pop</span> rules))
+		    (slots (<span class="keyword">pop</span> rule))
+		    (predicate (<span class="keyword">pop</span> rule))
+		    (parse-time-val))
+	       (<span class="keyword">when</span> (<span class="keyword">and</span> (not (nth (car slots) time)) <span class="comment-delimiter">;</span><span class="comment">not already set
+</span>			  (<span class="keyword">setq</span> parse-time-val
+				(<span class="keyword">cond</span> ((<span class="keyword">and</span> (consp predicate)
+					    (not (functionp predicate)))
+				       (<span class="keyword">and</span> (numberp parse-time-elt)
+					    (&lt;= (car predicate) parse-time-elt)
+					    (<span class="keyword">or</span> (not (cdr predicate))
+						(&lt;= parse-time-elt
+						    (cadr predicate)))
+					    parse-time-elt))
+				      ((symbolp predicate)
+				       (cdr (assoc parse-time-elt
+						   (symbol-value predicate))))
+				      ((funcall predicate)))))
+		 (<span class="keyword">setq</span> exit t)
+		 (<span class="keyword">while</span> slots
+		   (<span class="keyword">let</span> ((new-val (<span class="keyword">if</span> rule
+				      (<span class="keyword">let</span> ((this (<span class="keyword">pop</span> rule)))
+					(<span class="keyword">if</span> (vectorp this)
+					    (cl-parse-integer
+					     parse-time-elt
+					     <span class="builtin">:start</span> (aref this 0)
+					     <span class="builtin">:end</span> (aref this 1))
+					  (funcall this)))
+				    parse-time-val)))
+		     (<span class="keyword">setf</span> (nth (<span class="keyword">pop</span> slots) time) new-val))))))))
+       time))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">function-history</span>
+  ("/usr/share/emacs/29.4/lisp/calendar/parse-time.elc"
+   (autoload "parse-time" nil nil nil)
+   "/usr/share/emacs/29.4/lisp/calendar/time-date.elc"
+   (autoload "parse-time"
+     ("loaddefs.elc" . 913153)
+     nil nil))</pre>
+  </body>
+</html>

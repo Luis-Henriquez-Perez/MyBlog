@@ -57,7 +57,13 @@
         ;;  :recursive t
         ;;  :publishing-function org-publish-attachment)
         ))
-
 ;; Sort sitemap entries by the filename.
+(defun oo--publish-find-date (file _)
+  (string-match "[0-9]\\{4\\}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9].[0-5][0-9].[0-5][0-9]" file)
+  (if-let (timestamp (match-string 0 file))
+      (encode-time (parse-time-string (string-replace "." ":" timestamp)))
+    (error "No timestamp")))
+
+(advice-add 'org-publish-find-date :override 'oo--publish-find-date)
 
 (org-publish-all 'force)
