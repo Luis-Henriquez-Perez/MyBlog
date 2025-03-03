@@ -64,3 +64,45 @@ Abbrevs marked as \"system abbrevs\" are ignored."
           (insert "   ))\n\n")))
       nil)))
 #+end_src
+
+#+begin_src emacs-lisp
+(defun write-abbrev-file (&optional file verbose)
+  "Write all user-level abbrev definitions to a file of Lisp code.
+This does not include system abbrevs; it includes only the abbrev tables
+listed in `abbrev-table-name-list'.
+The file written can be loaded in another session to define the same abbrevs.
+The argument FILE is the file name to write.  If omitted or nil, it defaults
+to the value of `abbrev-file-name'.
+If VERBOSE is non-nil, display a message indicating the file where the
+abbrevs have been saved."
+  (interactive
+   (list
+    (read-file-name "Write abbrev file: "
+		            (file-name-directory (expand-file-name abbrev-file-name))
+		            abbrev-file-name)))
+  (or (and file (> (length file) 0))
+      (setq file abbrev-file-name))
+  (let ((coding-system-for-write 'utf-8))
+    (with-temp-buffer
+      (dolist (table
+	           ;; We sort the table in order to ease the automatic
+	           ;; merging of different versions of the user's abbrevs
+	           ;; file.  This is useful, for example, when the
+	           ;; user keeps their home directory in a revision
+	           ;; control system, and therefore keeps multiple
+	           ;; slightly-differing loosely synchronized copies.
+	           (sort (copy-sequence abbrev-table-name-list)
+		             (lambda (s1 s2)
+		               (string< (symbol-name s1)
+				                (symbol-name s2)))))
+	    (if (abbrev--table-symbols table)
+            (insert-abbrev-table-description table nil)))
+      (when (unencodable-char-position (point-min) (point-max) 'utf-8)
+	    (setq coding-system-for-write 'utf-8-emacs))
+      (goto-char (point-min))
+      (insert (format ";;-*-coding: %s;-*-\n" coding-system-for-write))
+      (write-region nil nil file nil (and (not verbose) 0)))))
+#+end_src
+
+The way Emacs handles abbrevs may be better.  When I tried my function it was
+very slow mostly because of the aligning.  I am wondering if.

@@ -58,4 +58,6 @@
         ;;  :publishing-function org-publish-attachment)
         ))
 
+;; Sort sitemap entries by the filename.
+
 (org-publish-all 'force)

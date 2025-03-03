@@ -1,0 +1,27 @@
+#+title:sorting when publishing
+#+author:Luis Henriquez-Perez
+
+Right now my website index page looks like complete garbage.  And this is one of
+the reasons I have not updated my blog for a long time.  Maybe this is not a
+good reason because I should be building the website incrementally not caring
+about it is initial appearance and instead focusing on incremental improvements.
+
+The first thing I have want to do to sort the blog entries in the index by date
+created and this is more difficult than it seems.  When you ask =org-publish=.
+This option sorts chronologically by modification time by default or the date if
+you specify it at the top of the org file.  I hate sorting by modification time
+because it means my blog posts are sorted in an inconsistent order.
+
+From the manual there is no option to sort by filename.
+
+#+begin_src text
+‘:sitemap-sort-files’
+     How the files are sorted in the site map.  Set this to
+     ‘alphabetically’ (default), ‘chronologically’ or
+     ‘anti-chronologically’.  ‘chronologically’ sorts the files with
+     older date first while ‘anti-chronologically’ sorts the files with
+     newer date first.  ‘alphabetically’ sorts the files alphabetically.
+     The date of a file is retrieved with ‘org-publish-find-date’.
+#+end_src
+
+My idea right now is to.
