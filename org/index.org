@@ -2,8 +2,6 @@
 
 #+begin_nav
 - [[file:contact.org][Contact]]
-- [[file:interesting-links.org][Interesting Links]]
-- [[file:blog/index.org][Blog]]
 #+end_nav
 
 Welcome to my blog!
@@ -12,10 +10,10 @@ Welcome to my blog!
 #+begin_projects
 - [[https://github.com/Luis-Henriquez-Perez/dotfiles/tree/develop][My Dotfiles]]
 - [[https://github.com/Luis-Henriquez-Perez/.emacs.d][My Emacs Configuration]]
+- [[https://github.com/Luis-Henriquez-Perez/MyBlog][This Blog]]
 #+end_projects
 
 * Blog
-
 #+begin_blog-entries
 #+INCLUDE: "sitemap.org" :lines "3-"
 #+end_blog-entries
