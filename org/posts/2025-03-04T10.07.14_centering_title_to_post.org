@@ -1,0 +1,29 @@
+#+title:centering title to post
+#+author:Luis Henriquez-Perez
+
+And so my thousand-step journey to make my blog look good continues.  My first
+now is just to center all of the the titles.  I has been so long since since I
+have used CSS that I forgot how to do this basic thing but I found out [[https://www.w3.org/Style/Examples/007/center.en.html][here]].
+
+I suspected that org published the titles in the title div but just to make sure
+I checked the source code of [[file:2025-01-16T13.03.15_downloading-music-from-youtube.org][one of my posts]] and indeed my suspicion was
+correct.  It is title is in the title div.
+
+#+begin_src html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>downloading music from youtube (part 1)</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+#+end_src
+
+And finally I added this to [[file:../style.css][style.css]] and voilà!  Step 1 done; 999 to go.
+
+#+begin_src css
+.title {
+    text-align: center;
+}
+#+end_src
