@@ -6,13 +6,15 @@ the reasons I have not updated my blog for a long time.  Maybe this is not a
 good reason because I should be building the website incrementally not caring
 about it is initial appearance and instead focusing on incremental improvements.
 
-The first thing I have want to do to sort the blog entries in the index by date
-created and this is more difficult than it seems.  When you ask =org-publish=.
-This option sorts chronologically by modification time by default or the date if
-you specify it at the top of the org file.  I hate sorting by modification time
-because it means my blog posts are sorted in an inconsistent order.
+To clarify what I am talking about I have things setup in the [[][publish.el]]
+file so that the blog.  You want to do this because you do not want to manually
+"sync" the files.
 
-From the manual there is no option to sort by filename.
+The first thing I have want to do to sort the blog entries in the index by date
+created.  The closest option I could find for this is =:sitemap-sort-files= which
+sorts chronologically by modification time by default or the date if you specify
+it at the top of the org file.  I hate sorting by modification time because it
+means the order of my posts is inconsistent.
 
 #+begin_src text
 ‘:sitemap-sort-files’

@@ -1,0 +1,56 @@
+#+title:formatting entry
+#+author:Luis Henriquez-Perez
+
+This is a post on how to format an entry.
+
+I learned many things in creating this blog from [[][]].  And thankfully he
+posted the repo of his blog so that I could clone it and learn even more.  He
+used his own custom format function.  This function affects the format of the
+sitemap.  By default the links are named from the title block in the org file.
+Changing this format was actually on my list.  It does not show any date by
+default and I wanted to add a date.
+
+#+begin_src emacs-lisp
+#+end_src
+
+
+‘:sitemap-format-entry’
+     With this option one can tell how a site-map entry is formatted in
+     the site-map.  It is a function called with three arguments: the
+     file or directory name relative to base directory of the project,
+     the site-map style and the current project.  It is expected to
+     return a string.  Default value turns file names into links and use
+     document titles as descriptions.  For specific formatting needs,
+     one can use ‘org-publish-find-date’, ‘org-publish-find-title’ and
+     ‘org-publish-find-property’, to retrieve additional information
+     about published documents.
+
+I took a function from [[https://taingram.org/]] and modified it a little bit.  This
+function determines how entries should be formatted in the sitemap.  For the
+tilde (=~=) I also took some inspiration from [[https://eshelyaron.com/]].  For now I
+did not include the year because all my posts are from 2025 and I did not want
+the bloat.  Of course before 2026 comes around I will figure something out about
+the year.  Again, this probably will not be my final product bali it is a step
+in the right direction.
+
+#+begin_src emacs-lisp
+(defun taingram--sitemap-dated-entry-format (entry style project)
+  "Sitemap PROJECT ENTRY STYLE format that includes date."
+  (cond ((not (directory-name-p entry))
+	     (let* ((file (org-publish--expand-file-name entry project))
+		        (title (org-publish-find-title entry project))
+		        (date (format-time-string "%m-%d"
+					                      (org-publish-find-date entry project)))
+		        (link (concat (file-name-sans-extension entry) ".html")))
+	       (with-temp-buffer
+	         (insert (format "[[file:%s][%s ~ %s]]\n" file date title))
+	         (buffer-string))))
+	    ((eq style 'tree)
+	     (file-name-nondirectory (directory-file-name entry)))
+	    (t entry)))
+#+end_src
+
+I made a few changes to his function.  First I stopeed using the absolute path
+for the file.  The absolute path will work on my local machine but not on a my
+website.  I printed out the ntry and by default it is the relative path.  I
+looked at what the entry was and by default it is the path relative to the.

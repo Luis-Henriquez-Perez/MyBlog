@@ -1,19 +1,21 @@
 #+TITLE: Blog Index
 
-- [[file:posts/2025-01-16T13.03.14_showcasing-the-progn-bang-macro-part-1.org][Showcasing the =progn!= macro (part 1)]]
-- [[file:posts/2025-01-16T13.03.15_what-are-some-good-abbrev-ideas.org][Good abbrev ideas]]
-- [[file:posts/2025-01-16T13.03.15_downloading-music-from-youtube.org][downloading music from youtube (part 1)]]
-- [[file:posts/2025-01-16T13.03.15_one-of-my-proudest-macros-lef.org][lef!, One of My Best Macros]]
-- [[file:posts/2025-01-16T13.03.15_an-abstraction-for-binding-data-structures:-with-map!.org][Binding Symbols in Maps: with-map!]]
-- [[file:posts/2025-02-18T21.23.28_finally-writing-a-function-to-insert-abbrevs.org][writing a function to automatically add abbrevs]]
-- [[file:posts/2025-02-26T03.26.00_tricks_I_learned_to_make_using_tempel_better.org][tricks I learned to make using tempel smoother]]
-- [[file:posts/2025-02-26T12.58.40_new_tidbit_howmany.org][cool New Command: howmany]]
-- [[file:posts/2025-02-27T05.48.44_using_mono_complete.org][using mono complete]]
-- [[file:posts/2025-02-27T06.18.07_completion_preview.org][installing completion preview for Emacs 29.4]]
-- [[file:posts/2025-02-27T11.04.52_company_completion.org][company completion]]
-- [[file:posts/2025-02-28T11.55.10_more-emacs-30-experiences.org][more emacs 30 experiences]]
-- [[file:posts/2025-02-28T18.19.11_figured_out_problem.org][figured out why completion-preview did not work in org-mode]]
-- [[file:posts/2025-03-01T09.50.23_no_applicable_method_magit.org][no applicable method magit]]
-- [[file:posts/2025-03-01T10.20.42_escaping_org_emphasis_markers.org][escaping org emphasis markers]]
-- [[file:posts/2025-03-01T18.53.40_abbrev_file_or_not.org][abbrev file or not]]
-- [[file:posts/2025-03-02T17.17.25_sorting_when_publishing.org][sorting when publishing]]
+#+begin_nav
+- [[file:contact.org][Contact]]
+- [[file:interesting-links.org][Interesting Links]]
+- [[file:blog/index.org][Blog]]
+#+end_nav
+
+Welcome to my blog!
+
+* Projects
+#+begin_projects
+- [[https://github.com/Luis-Henriquez-Perez/dotfiles/tree/develop][My Dotfiles]]
+- [[https://github.com/Luis-Henriquez-Perez/.emacs.d][My Emacs Configuration]]
+#+end_projects
+
+* Blog
+
+#+begin_blog-entries
+#+INCLUDE: "sitemap.org" :lines "3-"
+#+end_blog-entries
