@@ -1,8 +1,13 @@
 #+title:learning how to style my blog
 #+author:Luis Henriquez-Perez
 
-I need to figure out how to style my blog because it looks horrible.  CSS
-styling my blog has been intimidating for me.  I see how other blogs look
+CSS styling my blog has been intimidating for me.  I see how other blogs look
 amazing and with my little knowledge of CSS it is hard to see how I will make my
 blog look even has as nice as theirs.  That is why I am focusing on just
 painting general brush strokes and gradually improving my blog more and more.
+
+https://niklasfasching.de/posts/just-enough-css/
+
+https://empressthemes.com/css-basics-to-improve-your-blog-design/
+
+https://dev.to/5t3ph/style-a-blog-layout-with-css-3elh

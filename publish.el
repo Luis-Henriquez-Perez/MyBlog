@@ -1,6 +1,8 @@
 (require 'ox)
 
 (require 'htmlize)
+(require 'rainbow-delimiters)
+(rainbow-delimiters-mode 1)
 
 (setq org-html-htmlize-output-type 'inline-css
       org-html-htmlize-font-prefix "org-")
