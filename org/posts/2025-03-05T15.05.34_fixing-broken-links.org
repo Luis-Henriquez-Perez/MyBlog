@@ -1,0 +1,24 @@
+#+title:fixing broken links in my posts
+#+author:Luis Henriquez-Perez
+
+I was on the verge of publishing my blog when I realized to my dismay that many
+of the file links were broken in some older posts.  I had migrated from another
+blog directory and I think I forgot to include them.  This is something that it
+is good to be able to handle programmatically.
+
+#+begin_src emacs-lisp
+(defun oo-fix-broken-links ()
+  ""
+  ;; search trough my blog posts.
+  ;; If any file link is broken check to see if it points to the documentatoin
+  ;; directory, and if it does then check to see if it is a helpful link to a
+  ;; variable or function, if it is then create the file in the current format
+  ;; that I have and change the link so that it points to it.
+  (let ((file-link-regexp (rx ""))
+        (file nil))
+    (while (re-search-forward file-link-regexp nil t nil)
+      (setq file ())
+      (unless (file-exists-p file))))
+  )
+#+end_src
+

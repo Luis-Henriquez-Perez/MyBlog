@@ -1,0 +1,31 @@
+#+title:automatic blog post creation
+#+author:Luis Henriquez-Perez
+
+First thing is I want to ensure files created in the blog have a timestamp.  I
+actually have a code block in my setup that will fail to publish if a blog does
+not have a timestamp.  I think the way to do this is to
+add to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--find-file-hook.html][find-file-hook]].
+
+You know I am actually not sure whether getting this works because according to
+its documentation the =find-file-hook= occurs just after the buffer is loaded from
+the file but I need it.
+
+#+begin_src emacs-lisp
+(defhook! ensure-timestamp-if-blog-post (find-file-hook)
+  "Ensure the timestamp is added to file if it is a blog post."
+  )
+#+end_src
+
+To create a new post I can also just rely on a function.
+
+#+begin_src emacs-lisp
+(defun oo-new-blog-post ()
+  "Create a new blog post, prompting for the name."
+  (interactive)
+  (let* (blog-dir name)
+    (setq blog-dir "~/Documents/MyBlog/org/posts/")
+    ;; Prompt of the name.
+    (setq name (read-string "Name: "))
+    ;; Prepend the timestamp to the name.
+    (find-file (expand-file-name name blog-dir))))
+#+end_src
