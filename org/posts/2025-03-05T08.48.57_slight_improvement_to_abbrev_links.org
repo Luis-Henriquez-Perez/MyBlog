@@ -1,0 +1,2 @@
+#+title:slight improvement to abbrev links
+#+author:Luis Henriquez-Perez

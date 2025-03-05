@@ -1,5 +1,7 @@
-#+title:draft timestamps to posts revisited
+#+title:timestamps to posts revisited
 #+author:Luis Henriquez-Perez
+
+After I first started writing blog posts inconveinience. 
 
 Always look for an existing package that does what you want to do.  I do not
 know why it did not occur to me to look for existing packages that add
@@ -54,4 +56,3 @@ for the timestamp."
   (interactive "P")
   (date2name-add-date-to-name arg t))
 #+end_src
-

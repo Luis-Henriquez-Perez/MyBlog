@@ -1,4 +1,4 @@
-#+TITLE:cool New Command: howmany
+#+TITLE:A Cool New Command: howmany
 #+AUTHOR: Luis Henriquez-Perez
 
 I wanted to know how many abbrevs I had defined in [[../documentation/29.4-999-abbrevs.html][the file]] I use to store all
@@ -9,5 +9,5 @@ of lines.  I tried narrowing but there are some comments intermingled with
 define-abbrev lines.  Finally, I asked chatGPT how to do this from Emacs and it
 recommended a command I never knew existed: [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--how-many.html][how-many]].  It does exactly what I
 need: it prints the count of lines that match a given regular expression.  I
-simply invoked how many and gave it the regexp ~^(define-abbrev~ and voilà.  I
-have a whopping =1574= abbrevs.
+simply invoked how many and gave it the regexp ~^(define-abbrev~ and voilà.  As of
+writing this, I have a whopping =1574= abbrevs.

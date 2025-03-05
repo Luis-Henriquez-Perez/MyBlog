@@ -3,11 +3,11 @@
 
 Twice now I have migrated to Emacs 30 only to have to revert back to Emacs 29.4
 because of various annoying little problems.  The biggest motivating factor for
-me was the cool new built-in package =completion-preview=.  In hindsigt I rlize
-this is not nearly a good enough reason for switching but.  Now I realize I can
-simply install that package.  Just for stability reasons.  I mean the new Emacs
-release was just a few days ago, so its fresh and not as rigoriously tested as
-the forurth release of version 29.
+me was the cool new built-in package =completion-preview=.  In hindsight I realize
+this is not even close to a good enough reason for switching but.  Now I realize
+I can simply install that package.  Just for stability reasons.  I mean the new
+Emacs release was just a few days ago, so its fresh and not as rigoriously
+tested as the forurth release of version 29.
 
 First I am attempting to install the package.  Ihn done this before.  Looking
 online the link for installing completion-preview is.  But when I try to install

@@ -1,12 +1,12 @@
-#+TITLE: using mono complete
+#+TITLE: using mono-complete
 #+AUTHOR: Luis Henriquez-Perez
 
-Even before Emacs 30 came out with its new built-in package, [[https://git.sr.ht/~eshel/completion-preview][completion-preview]],
-I wanted a package that suggested completions in an unintrusive overlay.  This
-is as a potential replacement to incessant popups from [[https://github.com/minad/corfu][corfu]] or company that I
-find distracting and usually deterimental to performance.  I have had a few
-fraught attempts moving to Emacs 30 so I thought why not try this package which
-is very similar.
+Even before Emacs 30 came out with a new built-in package, [[https://git.sr.ht/~eshel/completion-preview][completion-preview]], I
+had wanted a package that suggested completions in a more minimal and less
+unintrusive display than the staple popups menu from packages like [[https://github.com/minad/corfu][corfu]] and
+[[http://company-mode.github.io/][company]].  I was looking which are distracting and lend themselves to being
+deterimental to performance.  I have had a few fraught attempts moving to Emacs
+30 so I thought why not try this package which is very similar.
 
 #+begin_src emacs-lisp
 (opt! dabbrev-check-all-buffers nil)

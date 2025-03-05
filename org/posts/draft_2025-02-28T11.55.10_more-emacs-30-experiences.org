@@ -1,0 +1,34 @@
+#+title:more emacs 30 experiences
+#+author:Luis Henriquez-Perez
+
+After I read Mikey Petersons's [[https://www.masteringemacs.org/article/whats-new-in-emacs-301][summary]] of Emacs 30 changes and in paricular his
+bright review of [[https://git.sr.ht/~eshel/completion-preview][completion-preview]], a package and I got so exited that I
+upgraded to Emacs 30 right away.  This was a mistake.  Just from package
+installation there was a problem where =package-vc= was asking me: "Overwrite
+previous checkout for package `emacs-wallpaper`?".  This never happened before
+with Emacs 29.4.  Something code changed in =package-vc= that.  Initially when I
+pressed yes I would get another error saying something along the lines of a
+buffer exceeding max length.
+
+Recently I had deleted my pacman cache (another lapse of judgemeent).  But at
+least this was an experience of how to downgrade a package with arch that.  I
+looked up on the archwiki.  I did not check the signature and I definitely sdha
+(do not do what I do do what I say).  I need to learn how to do that and
+automate it.
+
+Instead if I wanted it so badly I should just install it from its repo.
+
+#+begin_src emacs-lisp
+(package-vc-install '(completion-preview :url "https://git.sr.ht/~eshel/completion-preview"))
+#+end_src
+
+Speaking of this package I can not for the life of me get it to to work using
+=cape-dabbrev= as a completion-at-point-function.  I do not know why because [[https://github.com/minad/corfu][corfu]]
+also uses [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--completion-at-point-functions.html][completion-at-point-functions]] and it produces the correct candidates
+when I set it up.
+
+What is the lesson in all this?  Well I think people--not just me--have a
+tendency to be drawn by shiny new things.  It is almost as if your so bored with
+the status quo you just want to switch without realizing the consequences.  Only
+update if you have a strong reason to do so or if your sure there are no known
+bugs or of course if you are consciously testing the next version.

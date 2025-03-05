@@ -4,14 +4,15 @@
 Having gotten to a more stable state with my Emacs configuration, I have been
 focused less on its structure and more on enhancing the features that I have
 neglected.  One of these is text completion or as Emacs calls it "auto-typing".
-This had lead me to revisit and enhance my configuration for [[https://github.com/minad/tempel][tempel]] and in the
-process collect several useful tricks which I share here.
+This had lead me to revisit and enhance my configuration for [[https://github.com/minad/tempel][tempel]].  And in the
+process I collected several useful tricks which I share here.
 
 * make =tempel-map= an overriding map
 
-Frustratingly when I first began using tempel the keybindings to =tempel-map= in
-=evil-insert-state= were not working.  That is because default evil bindings still
-took precedence over the ones in =tempel-map=.  To tell evil to make those
+Frustratingly, when I first began using tempel the keybindings to =tempel-map= in
+=evil-insert-state= were not working.  It took me forever to fix this.  The
+problem was that despite binding insert state keys for tempel-map, default evil
+bindings still took precedence.  The solution is to tell evil to make those
 keybindings precedence make =tempel-map= an intercept map.
 
 #+begin_src emacs-lisp
@@ -22,11 +23,11 @@ keybindings precedence make =tempel-map= an intercept map.
 
 * ensure insert state after inserting a template
 
-You can certain you will be typing text right after inserting a template because
-there will be fields you have to fill out.  That is why I recommend advising
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-insert.html][tempel-insert]] to enter insert state after it is done.  In general, configuring
-functions to enter insert state is so common that I recommend a dedicated
-function for this.
+You can be certain you will be typing text right after inserting a template
+because there will be fields you have to fill out.  That is why I recommend
+advising [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-insert.html][tempel-insert]] to enter insert state after it is done.  In general,
+configuring functions to enter insert state is so common when using [[https://github.com/emacs-evil/evil][evil]] that I
+recommend a dedicated function for this.
 
 #+begin_src emacs-lisp
 (setq-local completion-at-point-functions '(cape-dabbrev t))
@@ -67,9 +68,9 @@ the =:enable-function= property.
 
 * simplify creating templates with a macro
 
-Make a macro similar to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-skeleton.html][define-skeleton]].  When I dabbled with [[][skeletons]] I
-became quite endeard to the =define-skeleton= macro.  It was simple but made
-things much more convenient.
+I recommend making a macro similar to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-skeleton.html][define-skeleton]].  When I dabbled with
+[[][skeletons]] I became quite endeard to the =define-skeleton= macro.  It was
+simple but made things much more convenient.
 
 #+begin_src emacs-lisp
 (defmacro deftempel! (name &rest body)

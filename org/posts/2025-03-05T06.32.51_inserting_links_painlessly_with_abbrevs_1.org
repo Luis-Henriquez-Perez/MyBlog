@@ -1,0 +1,90 @@
+#+title:inserting links painlessly with abbrevs (part 1)
+#+author:Luis Henriquez-Perez
+
+Since most of my blog posts concern emacs-lisp I often refer to Emacs functions
+and variables.  Since I use [[https://www.gnu.org/software/emacs/][Emacs]], one of the best documented software, I have
+docstrings for nearly every function and variable available to me on demand,
+visible via neat and thorough documentation displays like [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][this one]] and [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--user-emacs-directory.html][this one]].
+However, I know my users might not have the same privilege.  What if they do not
+use Emacs?  even if they did, would it not be inconvenient to look up every
+elisp symbol I refer to?  And even if it was not what guarantee is there they
+are even using the same version of Emacs as I am?  I want to enrich the
+experience of reading my blog for my readers by adding links to comprehensive
+documentation every time I refer to a elisp variable or function.  And of course
+I want this linking to be easy, quick and painless for me to do.
+
+My solution is to use [[https://github.com/hniksic/emacs-htmlize][htmlize]] to convert documentation buffers into html and
+then to save them as org buffers.  In practice, this is what the workflow will
+look like: I type =vlk= (which stands for "variable link") followed by a space,
+Emacs prompts me for a variable to get the documentation from, then when I
+select the symbol, the abbrev will expand into a link pointing to the
+documentation of the symbol.  Under the hood the function will check the
+[[][documentation folder]] for documentation for the variable and make the link
+to that file.  And if the documentation is not found it will open the
+documentation buffer for that variable, htmlize with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--htmlize-buffer.html][htmlize-buffer]], and write
+it to a file first.  The result of all this is what I believe to be the most
+efficient documentation link possible.
+
+#+begin_src emacs-lisp
+(defun! oo-expand-variable-doc-link ()
+  "Insert an org link to a helpful callable snapshot.
+Find the appropriate documentation for the callable in the documentation
+directory.  If it does not exist create it and add it."
+  (set! doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
+  (set! helpful-switch-buffer-function #'identity)
+  (set! symbol (helpful--read-symbol "Variable: " (helpful--variable-at-point) #'helpful--variable-p))
+  (set! html-file (expand-file-name (format "%s-helpful-variable--%s.html" emacs-version symbol) doc-dir))
+  (unless (file-exists-p html-file)
+    (set! help-buffer (helpful-variable symbol))
+    (quitif! (not help-buffer) "No help buffer.")
+    (set! html-buffer (htmlize-buffer help-buffer))
+    (quitif! (not html-buffer) "No html buffer.")
+    (with-current-buffer html-buffer
+      (write-region (point-min) (point-max) html-file)
+      (kill-buffer help-buffer)
+      (kill-buffer)))
+  (insert (format "[[file:%s][%s]]"  html-file symbol)))
+#+end_src
+
+To define the abbrev we specify the function as a hook.
+
+#+begin_src emacs-lisp
+(define-abbrev global-abbrev-table "vlk" "" #'oo-expand-variable-doc-link :enable-function #'oo-in-blog-post-p)
+#+end_src
+
+This abbrev is specific to my blog posts.  I do not want it expanding anywhere
+but blog posts.  Giving the abbrev =vlk= the =:enable-property= ensures the abbrev
+will only expand in blog posts.
+
+#+begin_src emacs-lisp
+(defun oo-in-blog-post-p ()
+  "Return non-nil if the current buffer is for one of my blog posts."
+  (declare (pure t) (side-effect-free error-free))
+  (and (derived-mode-p 'org-mode)
+       (stringp default-directory)
+       (string= (expand-file-name default-directory)
+                (expand-file-name "~/Documents/MyBlog/org/posts/"))))
+#+end_src
+
+The process is similar to a function.
+
+#+begin_src emacs-lisp
+(defun! oo-expand-callable-doc-link ()
+  "Insert an org link to a helpful callable snapshot.
+Find the appropriate documentation for the callable in the documentation
+directory.  If it does not exist create it and add it."
+  (set! doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
+  (set! helpful-switch-buffer-function #'identity)
+  (set! symbol (helpful--read-symbol "Callable: " (helpful--callable-at-point) #'fboundp))
+  (set! html-file (expand-file-name (format "%s-helpful-callable--%s.html" emacs-version symbol) doc-dir))
+  (unless (file-exists-p html-file)
+    (set! help-buffer (quiet! (helpful-callable symbol)))
+    (quitif! (not help-buffer) "No help buffer.")
+    (set! html-buffer (quiet! (htmlize-buffer help-buffer)))
+    (quitif! (not html-buffer) "No html buffer.")
+    (with-current-buffer html-buffer
+      (quiet! (write-region (point-min) (point-max) html-file))
+      (kill-buffer help-buffer)
+      (kill-buffer)))
+  (insert (format "[[file:%s][%s]]"  html-file symbol)))
+#+end_src

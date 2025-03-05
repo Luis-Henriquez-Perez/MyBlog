@@ -1,4 +1,5 @@
-#+TITLE: Blog Index
+#+TITLE:Luis Henriquez-Perez
+#+author:Luis Henriquez-Perez
 
 #+begin_nav
 - [[file:contact.org][Contact]]
@@ -13,7 +14,7 @@ Welcome to my blog!
 - [[https://github.com/Luis-Henriquez-Perez/MyBlog][This Blog]]
 #+end_projects
 
-* Blog
+* Posts
 #+begin_blog-entries
 #+INCLUDE: "sitemap.org" :lines "3-"
 #+end_blog-entries

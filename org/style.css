@@ -1,9 +1,33 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap'); */
+@import url('https://fonts.googleapis.com/css?family=JetBrains Mono');
 
 .title {
     text-align: center;
 }
+
+/* nav li { */
+/* 	padding: 0.5ex 0; */
+/* } */
+
+/* nav a { */
+/* 	padding: 0.2ex 0.4ex; */
+/* 	text-decoration: none; */
+/* } */
+
+/* ul { */
+/*   list-style-type: none; */
+/*   margin: 0; */
+/*   padding: 0; */
+/* } */
+
+/* header { */
+/* 	max-width: 65rem; */
+/* 	margin: auto 0; */
+/* 	padding-top: 2.8em; */
+/* } */
 
 body {
     font-family: 'Fira Sans', sans-serif;
@@ -79,7 +103,8 @@ p + h2 {
     border-radius: 3px;
     background-color: whitesmoke;
     /* padding: 8pt; */
-    font-family: monospace;
+    font-family: 'JetBrains Mono', monospace;
+    /* font-family: 'Fira Code', monospace; */
     /* overflow: auto; */
     /* margin: 1.2em; */
 }

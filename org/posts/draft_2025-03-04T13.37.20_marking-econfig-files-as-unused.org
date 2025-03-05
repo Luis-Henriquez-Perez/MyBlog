@@ -1,0 +1,12 @@
+#+title:marking Emacs configuration files as unused
+#+author:Luis Henriquez-Perez
+
+Thus far I have created a directory called "unused" I have been using for my
+unused Emacs configuration files.  It would be simpler to just have the files
+name changed like in my.  In my blog to mark blogs as unused I just prepended
+their names with "draft_".  Directory called unused.  I ultimately decided to
+just mar.
+
+#+begin_src emacs-lisp
+#+end_src
+

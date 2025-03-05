@@ -7,10 +7,11 @@ where I am working out what tools I should use for text completion and how that
 text completion should look like.  I am sure I will incorporate abbrevs and
 [[https://github.com/minad/tempel][tempel]] snippets but in addition to these I also want some sort of completion
 suggestions.  I am leaning towards something minimal and non-obtrusive such as
-[[][mono-complete]] or.  But I have not yet completely discarded the possibility
-using typical more flashy completion tools like =corfu= and =company=.  The first
-thing I did is to try to learn about company via a minimal example.  I just
-wanted to get basic [[][dabbrev]] completion from this blog post.  Initially installed completion completely
+[[][mono-complete]] or [[][completion-preview]].  But I have not yet completely
+discarded the possibility using typical more flashy completion tools like =corfu=
+and =company=.  The first thing I did is to try to learn about company via a
+minimal example.  I just wanted to get basic [[][dabbrev]] completion from this
+blog post.
 
 First I made sure to install a stable version of company.  Actually I did not
 initially do this and installed the latest version of company from =melpa=.  vivamus
