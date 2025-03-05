@@ -1,0 +1,38 @@
+#+title:link-to-other-posts
+#+author:Luis Henriquez-Perez
+
+In the same spirit of a previous post.
+
+#+begin_src emacs-lisp
+(cl-defun oo-expand-org-link-to-blog-post ()
+  "Prompt for another blog post and insert link to that post."
+  (let (blog-dir current-post posts chosen description)
+    (setq blog-dir "~/Documents/MyBlog/org/posts/")
+    (setq current-post (expand-file-name (buffer-file-name)))
+    (setq posts (remove current-post (directory-files t date2name-datetime-regexp)))
+    ;; Some sanity checks.
+    ;; Ensure we are in the blog directory.
+    (cl-assert (equal current-post (expand-file-name )) nil)
+    ;; Find the other posts, do not include drafts and of course do not include
+    ;; the current post.
+    ;; Select one of these posts.
+    (setq chosen (completing-read "Post: " posts))
+    ;; If no blog post is chosen just abort and try to put things back.
+    (unless chosen (unexpand-abbrev) (cl-return))
+    ;; Enter the text of what you want the link to say.  By default it should be
+    ;; the title of the post.
+    ;; Get tittle of the post
+    (read-string "link description: " nil nil )
+    ;; Make a link to it relative to the current-post directory.
+    (insert (format "[[file:%s][%s]]" chosen description)))
+  ;; Make sure to return non-nil.
+  t
+  )
+#+end_src
+
+Now to make the abbrev.
+
+#+begin_src emacs-lisp
+(define-abbrev )
+#+end_src
+

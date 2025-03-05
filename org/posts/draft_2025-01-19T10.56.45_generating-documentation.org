@@ -1,23 +1,6 @@
 #+title: Generating Documentation
 #+author: Luis Henriquez-Perez
 
-Whenever I mention an emacs variable or function for the first time I will link
-it to an html page containing its documentation.  The html page is generated
-from an actual documentation buffer I use in emacs.  That is one of the best
-ideas I have had for this blog.  Instead of just inferring what variables or
-functions I mention do based on how I use them or what I say about them, readers
-can actually see the official documentation for these functions in the exact
-same way I can.  The only problem is that actually setting this up on my end for
-me requires several steps.  I need to look the symbol up with [[/home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-variable.html][helpful-variable]]
-or, if it is a function or macro, [[/home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-function.html][helpful-function]]; then I need to convert the
-buffer to html using [[https://github.com/hniksic/emacs-htmlize][htmlize]]; and finally I need to save that htmlized buffer to
-a file in my documentation folder.  That is quite the bit of work and something
-I am not too keen on doing for every variable or function I happen to reference.
-In this post I showcase how I automate this.  The idea is to write a function
-that jumps to a particular link, determines if it refer to a variable or
-function, takes an html "buffer snapshot" of its documentation, and saves it to
-a file in the appropriate place.
-
 One of the first things I am considering is how the "unfinished" link will look
 like.  Obviously, I am not going to be changing all links, only a subset.  And I
 need to be able to distinguish that subset from other links.  Moreover, I need

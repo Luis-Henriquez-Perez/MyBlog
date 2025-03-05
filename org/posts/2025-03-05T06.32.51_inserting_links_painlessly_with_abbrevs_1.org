@@ -1,29 +1,50 @@
 #+title:inserting links painlessly with abbrevs (part 1)
 #+author:Luis Henriquez-Perez
 
-Since most of my blog posts concern emacs-lisp I often refer to Emacs functions
-and variables.  With [[https://www.gnu.org/software/emacs/][Emacs]], one of the best documented software, I have
-docstrings for nearly every elisp function and variable available to me on
-demand and visible via neat and thorough documentation displays like [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][this one]]
-and [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--user-emacs-directory.html][this one]].  However, I know my users might not have the same privilege.  What
-if they do not use Emacs?  Even if they did, would it not be inconvenient to
-look up every elisp symbol I refer to?  And even if it was not what guarantee is
-there they are even using the same version of Emacs as I am?  I want to enrich
-the experience of my readers by adding links to comprehensive documentation
-every time I refer to a elisp variable or function.  And of course I want this
-linking to be easy, quick and painless for me to do.
+Whenever I mention an emacs variable or function for the first time I will link
+it to an html page containing its documentation.  The html page is generated
+from an actual documentation buffer I use in emacs.  That is one of the best
+ideas I have had for this blog.  Instead of just inferring what variables or
+functions I mention do based on how I use them or what I say about them, readers
+can actually see the official documentation for these functions in the exact
+same way I can.  The only problem is that the process of actually setting the
+link up on my end for me requires several steps.  I need to look the symbol up
+with [[/home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-variable.html][helpful-variable]] or, if it is a function or macro, [[/home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-function.html][helpful-function]]; then I
+need to convert the buffer to html using [[https://github.com/hniksic/emacs-htmlize][htmlize]]; and I need to save that
+htmlized buffer to a file in my documentation folder; and then I need to
+actually link my file to the documentation.  That is quite the bit of work.
+Something I am not too keen on doing for every variable or function I happen to
+reference.  In this post I showcase how I leverage [[][abbrevs]] to automate
+this.
 
-My solution is to use [[https://github.com/hniksic/emacs-htmlize][htmlize]] to convert documentation buffers into html and
-then to save them into the documentation directory of my blog.  In practice,
+The idea is to write a function that jumps to a particular link, determines if
+it refer to a variable or function, takes an html "buffer snapshot" of its
+documentation, and saves it to a file in the appropriate place.  In practice,
 this is what the workflow will look like: I type =vlk= (which stands for "variable
 link") followed by a space, Emacs prompts me for a variable to get the
 documentation from, then when I select the symbol, the abbrev will expand into a
 link pointing to the documentation of the symbol.  Under the hood the function
-will check the [[][documentation folder]] for documentation for the variable and
-make the link to that file.  And if the documentation is not found it will open
-the documentation buffer for that variable, htmlize with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--htmlize-buffer.html][htmlize-buffer]], and
-write it to a file first.  The result of all this is what I believe to be the
-most efficient documentation link possible.
+will check the [[file:../documentation/][documentation folder]] for documentation for the variable and make
+the link to that file.  And if the documentation is not found it will open the
+documentation buffer for that variable, htmlize with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--htmlize-buffer.html][htmlize-buffer]], and write
+it to a file first.  The result of all this is what I believe to be the most
+efficient documentation link possible.
+
+# Since most of my blog posts concern emacs-lisp I often refer to Emacs functions
+# and variables.  With [[https://www.gnu.org/software/emacs/][Emacs]], one of the best documented software, I have
+# docstrings for nearly every elisp function and variable available to me on
+# demand and visible via neat and thorough documentation displays like [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emacs-init-time.html][this one]]
+# and [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--user-emacs-directory.html][this one]].  However, I know my users might not have the same privilege.  What
+# if they do not use Emacs?  Even if they did, would it not be inconvenient to
+# look up every elisp symbol I refer to?  And even if it was not what guarantee is
+# there they are even using the same version of Emacs as I am?  What I am getting
+# at here is.  I want to enrich
+# the experience of my readers by adding links to comprehensive documentation
+# every time I refer to a elisp variable or function.  And of course I want this
+# linking to be easy, quick and painless for me to do.
+
+# My solution is to use [[https://github.com/hniksic/emacs-htmlize][htmlize]] to convert documentation buffers into html and
+# then to save them into the documentation directory of my blog.
 
 #+begin_src emacs-lisp
 (defun oo-expand-variable-doc-link ()
@@ -33,7 +54,8 @@ directory.  If it does not exist create it and add it."
   (let* ((doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
          (helpful-switch-buffer-function #'identity)
          (symbol (helpful--read-symbol "Variable: " (helpful--variable-at-point) #'helpful--variable-p))
-         (html-file (expand-file-name (format "%s-helpful-variable--%s.html" emacs-version symbol) doc-dir)))
+         (html-file (expand-file-name (format "%s-helpful-variable--%s.html" emacs-version symbol) doc-dir))
+         (html-buffer nil))
     (unless (file-exists-p html-file)
       (setq help-buffer (helpful-variable symbol))
       (unless help-buffer (error "No help buffer."))
@@ -45,6 +67,9 @@ directory.  If it does not exist create it and add it."
         (kill-buffer)))
     (insert (format "[[file:%s][%s]]"  html-file symbol))))
 #+end_src
+
+For some added flair I name the file according to the Emacs version I am using
+so that if I upgrade my current Emacs version (29.4) to say Emacs 30, then.
 
 To define the abbrev we specify the function as a hook.
 

@@ -1,4 +1,4 @@
-#+title: Latency Problem
+#+title: Diagnosing a Latency Problem
 #+author: Luis Henriquez-Perez
 
 Recently I started experiencing latency in emacs.  I could tell the typing and
