@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: find-file*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #0000b0;
+        font-weight: bold;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+find-file is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function defined in
+<span class="button">files.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(find-file FILENAME <span class="type">&amp;optional</span> WILDCARDS)
+
+<span class="helpful-heading">Documentation
+</span>Edit file FILENAME.
+
+Switch to a buffer visiting file FILENAME, creating one if none
+already exists.
+Interactively, the default if you just type RET is the current directory,
+but the visited file name is available through the minibuffer history:
+type <span class="help-key-binding">M-n</span> to pull it into the minibuffer.
+
+The first time <span class="help-key-binding">M-n</span> is used after Emacs prompts for the file name,
+the result is affected by <span class="button">file-name-at-point-functions</span>, which by
+default try to guess the file name by looking at point in the current
+buffer.  Customize the value of <span class="button">file-name-at-point-functions</span> or set
+it to nil, if you want only the visited file name and the current
+directory to be available on first <span class="help-key-binding">M-n</span> request.
+
+You can visit files on remote machines by specifying something
+like /ssh:SOME_REMOTE_MACHINE:FILE for the file name.  You can
+also visit local files as a different user by specifying
+/sudo::FILE for the file name.
+See the Info node <span class="button">(tramp)File name Syntax</span> in the Tramp Info
+manual, for more about this.
+
+Interactively, or if WILDCARDS is non-nil in a call from Lisp,
+expand wildcards (if any) and visit multiple files.  You can
+suppress wildcard expansion by setting <span class="button">find-file-wildcards</span> to nil.
+
+To visit a file without any kind of conversion and without
+automatically choosing a major mode, use <span class="help-key-binding">M-x find-file-literally</span>.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">ctl-x-map</span> <span class="help-key-binding">C-f</span>
+<span class="variable-name">global-map</span> <span class="help-key-binding">&lt;open&gt;</span>
+<span class="variable-name">global-map</span> <span class="help-key-binding">C-x C-f</span>
+<span class="variable-name">oo-find-map</span> <span class="help-key-binding">o</span>
+<span class="variable-name">oo-leader-map</span> <span class="help-key-binding">f o</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">&lt;insert-state&gt; M-SPC f o</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">&lt;motion-state&gt; SPC f o</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">&lt;normal-state&gt; SPC f o</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">&lt;visual-state&gt; SPC f o</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">C-c SPC f o</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">C-c l f o</span>
+<span class="variable-name">term-raw-map</span> <span class="help-key-binding">C-c C-f</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">files.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">find-file-existing</span> ...)  <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">find-file-read-only</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">find-sibling-file</span> ...)   <span class="comment">2 references</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by find-file</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/files.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">find-file</span> (filename <span class="type">&amp;optional</span> wildcards)
+  <span class="doc">"Edit file FILENAME.
+\\&lt;</span><span class="doc"><span class="variable-name">minibuffer-local-map</span></span><span class="doc">&gt;Switch to a buffer visiting file FILENAME, creating one if none
+already exists.
+Interactively, the default if you just type RET is the current directory,
+but the visited file name is available through the minibuffer history:
+type \\[</span><span class="doc"><span class="constant">next-history-element</span></span><span class="doc">] to pull it into the minibuffer.
+
+The first time \\[</span><span class="doc"><span class="constant">next-history-element</span></span><span class="doc">] is used after Emacs prompts for the file name,
+the result is affected by `</span><span class="doc"><span class="constant">file-name-at-point-functions</span></span><span class="doc">', which by
+default try to guess the file name by looking at point in the current
+buffer.  Customize the value of `</span><span class="doc"><span class="constant">file-name-at-point-functions</span></span><span class="doc">' or set
+it to nil, if you want only the visited file name and the current
+directory to be available on first \\[</span><span class="doc"><span class="constant">next-history-element</span></span><span class="doc">] request.
+
+You can visit files on remote machines by specifying something
+like /ssh:SOME_REMOTE_MACHINE:FILE for the file name.  You can
+also visit local files as a different user by specifying
+/sudo::FILE for the file name.
+See the Info node `(tramp)File name Syntax' in the Tramp Info
+manual, for more about this.
+
+Interactively, or if WILDCARDS is non-nil in a call from Lisp,
+expand wildcards (if any) and visit multiple files.  You can
+suppress wildcard expansion by setting `</span><span class="doc"><span class="constant">find-file-wildcards</span></span><span class="doc">' to nil.
+
+\\&lt;</span><span class="doc"><span class="variable-name">global-map</span></span><span class="doc">&gt;To visit a file without any kind of conversion and without
+automatically choosing a major mode, use \\[</span><span class="doc"><span class="constant">find-file-literally</span></span><span class="doc">]."</span>
+  (<span class="keyword">interactive</span>
+   (find-file-read-args <span class="string">"Find file: "</span>
+                        (confirm-nonexistent-file-or-buffer)))
+  (<span class="keyword">let</span> ((value (find-file-noselect filename nil nil wildcards)))
+    (<span class="keyword">if</span> (listp value)
+	(mapcar 'pop-to-buffer-same-window (nreverse value))
+      (pop-to-buffer-same-window value))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">custom-group</span>
+  ((directory-abbrev-alist custom-variable)
+   (find-file-existing-other-name custom-variable)
+   (find-file-visit-truename custom-variable)
+   (revert-without-query custom-variable)
+   (find-file-run-dired custom-variable)
+   (find-directory-functions custom-variable)
+   (file-name-at-point-functions custom-variable)
+   (find-file-hook custom-variable)
+   (enable-local-variables custom-variable)
+   (enable-local-eval custom-variable)
+   (confirm-nonexistent-file-or-buffer custom-variable)
+   (large-file-warning-threshold custom-variable)
+   (out-of-memory-warning-percentage custom-variable)
+   (query-about-changed-file custom-variable)
+   (major-mode-remap-alist custom-variable)
+   (safe-local-variable-values custom-variable)
+   (ignored-local-variable-values custom-variable)
+   (safe-local-eval-forms custom-variable)
+   (enable-remote-dir-locals custom-variable)
+   (revert-buffer-quick-short-answers custom-variable)
+   (find-sibling-rules custom-variable))
+<span class="constant">custom-loads</span>
+  (find-file)
+<span class="constant">event-symbol-element-mask</span>
+  (find-file 0)
+<span class="constant">event-symbol-elements</span>
+  (find-file)
+<span class="constant">group-documentation</span>
+  "Finding files."
+<span class="constant">modifier-cache</span>
+  ((0 . find-file))</pre>
+  </body>
+</html>

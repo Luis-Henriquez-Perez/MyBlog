@@ -1,0 +1,5 @@
+#+title:draft 2025-03-06T06.46.34 blast I found more faulty links
+#+author:Luis Henriquez-Perez
+
+Writing another blog post I noticed some links had absolute paths and did not
+have the "file:" prepended.

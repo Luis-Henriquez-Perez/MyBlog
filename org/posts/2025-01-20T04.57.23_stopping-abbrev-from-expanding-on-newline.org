@@ -1,12 +1,44 @@
 #+title: Stop abbrev from expanding on newline
 #+author: Luis Henriquez-Perez
 
-For a long time I wanted to fix a particular behavior with abbrev expansion.
-Namely, that by default =abbrev= will skip newlines when looking for a word to
-expand.  This can causes me unexpected and more often than not undesired abbrev
-expansions.
+I have always I wanted to fix a particular behavior with abbrev expansion: by
+default =abbrev= will skip newlines when looking for a word to expand.  Let me
+illustrate with what happened when I found out.  I had an abbrev, "args", that
+expanded into "arguments".  If I typed in the docstring below where the carrot
+is, the symbol "args" in the previous line would expand into "arguments".
 
-To find the root of the problems I looked inside [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--expand-abbrev.html][expand-abbrev]] and then the
+#+begin_src emacs-lisp
+;; The cursor would be on the ^ symbol would cause args to expand to
+;; `arguments'.
+(defun foo (a b &rest args)
+  "^")
+#+end_src
+
+Curiously, this would even get around =oo-use-text-abbrev-p= which I use as the
+abbrevs enable property because point is still in even though the symbol =args= is outside of . I used [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html][oo-use-text-abbrev-p]], the value of [[][the
+:enable-functioin property]]. so abbrevs would only expand in but it would
+actually meet that condition because I am in the string.  I do not know.  I need
+something that stops expanding the abbrev if its.
+
+In practice this means that there could be 10 newlines between your cursor and
+the previous word.  This is not what you would usually want.  I first noticed
+this when typing in.  This can causes me unexpected and more often than not
+undesired abbrev expansions.
+
+Even with several newlines, =args= would still be expanded.
+
+#+begin_src emacs-lisp
+;; The cursor would be on the ^ symbol would cause args to expand to
+;; `arguments'.
+(defun foo (a b &rest args)
+
+
+
+  "^")
+#+end_src
+
+
+To find the root of the problem I looked inside [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--expand-abbrev.html][expand-abbrev]] and then the
 [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev-expand-function.html][abbrev-expand-function]], which was set to [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev--default-expand.html][abbrev--default-expand]], until finally I
 found the culprit, [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev--before-point.html][abbrev--before-point]].  The body of =abbrev--before-point= is
 long but the only part that concerns this problem is the following chunk.

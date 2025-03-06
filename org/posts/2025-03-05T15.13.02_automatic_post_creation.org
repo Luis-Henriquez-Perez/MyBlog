@@ -1,39 +1,26 @@
 #+title:automate blog post creation
 #+author:Luis Henriquez-Perez
 
-First thing is I want to ensure files created in the blog have a timestamp.  I
-actually have a code block in my setup that will fail to publish if a blog does
-not have a timestamp.  I think the way to do this is to
-add to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--find-file-hook.html][find-file-hook]].
-
-You know I am actually not sure whether getting this works because according to
-its documentation the =find-file-hook= occurs just after the buffer is loaded from
-the file but I need it.
+I have always created blog posts manually.  This means calling [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--find-file.html][find-file]],
+entering the filename (this excludes the timestamp but includes the separating
+underscores), and then calling prepend the timestamp (via [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--date2name-prepend-date.html][date2name-prepend-date]]
+) onto the file from the dired buffer.  This is something that can and should be
+automated.  I have been experimenting with this function I wrote for generating
+a new blog post.
 
 #+begin_src emacs-lisp
-(defhook! ensure-timestamp-if-blog-post (find-file-hook)
-  "Ensure the timestamp is added to file if it is a blog post."
-  )
-#+end_src
-
-To create a new post I can also just rely on a function.
-
-#+begin_src emacs-lisp
-(defun oo-new-blog-post (&optional arg)
+(defun! oo-new-blog-post ()
   "Create a new blog post, prompting for the name."
-  ;; With a prefix argument make a draft instead.
   (interactive)
-  (let* (blog-dir name)
-    (setq blog-dir "~/Documents/MyBlog/org/posts/")
-    ;; Prompt of the name.
-    (setq name (read-string "Name: "))
-    ;; I need to join any spaces in name by underscores.
-    (setq name (replace-regexp-in-string (rx (1+ white)) "_" name))
-    (setq name (date2name-prepend-date (expand-file-name name blog-dir) (current-time) 'with-time))
-    ;; Make it a draft by default.
-    (setq name (concat "draft_" name))
-    ;; Ensure the org extension is there.
-    (setq name (if (string-match-p (rx ".org" eol)) name (concat name ".org")))
-    ;; Prepend the timestamp to the name.
-    (find-file (expand-file-name name blog-dir))))
+  (set! blog-dir "~/Documents/MyBlog/org/posts/")
+  (set! name (read-string "Post: "))
+  (set! name (replace-regexp-in-string (rx (1+ white)) "_" name))
+  (set! name (date2name-prepend-date name (current-time) 'with-time))
+  (set! name (concat "draft_" name))
+  (set! name (if (string-match-p "\\.org$" name) name (concat name ".org")))
+  (find-file (expand-file-name name blog-directory)))
 #+end_src
+
+I do not know if this is the end all be all solution.  I am also considering
+advising =find-file= to act differently if the file I am creating is in the blog
+directory.  For another post.
