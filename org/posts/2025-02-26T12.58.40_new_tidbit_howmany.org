@@ -1,7 +1,7 @@
 #+TITLE:A Cool New Command: howmany
 #+AUTHOR: Luis Henriquez-Perez
 
-I wanted to know how many abbrevs I had defined in [[../documentation/29.4-999-abbrevs.html][the file]] I use to store all
+I wanted to know how many abbrevs I had defined in [[file:../documentation/29.4-999-abbrevs.html][the file]] I use to store all
 my abbrevs.  The number of abbrevs correspond to the number of lines in the
 files that begin with =(define-abbrev=.  But it is not as simple as counting the
 number of lines in the file itself because there are more than just those kinds

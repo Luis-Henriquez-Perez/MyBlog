@@ -11,9 +11,9 @@ compromise and use an external package I have known about called [[https://githu
 the only package I could find that could do window, region and frame
 screenshots for Emacs.
 
-I install it via =package.el= in [[../documentation/29.4-110-init-package.html][110-init-package.el]].
+I install it via =package.el= in [[file:../documentation/29.4-110-init-package.html][110-init-package.el]].
 
-This is my configuration for it, its [[../documentation/29.4-130-init-escr.html][130-init-escr.el]].  I do not do much.  I
+This is my configuration for it, its [[file:../documentation/29.4-130-init-escr.html][130-init-escr.el]].  I do not do much.  I
 just declare and autoload the main =escr= commands and set the directory where
 screenshots will go.
 
