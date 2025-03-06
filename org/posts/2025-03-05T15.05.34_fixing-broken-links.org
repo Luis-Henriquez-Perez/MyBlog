@@ -10,6 +10,7 @@ I have and fix them.
 #+begin_src emacs-lisp
 (defun oo-fix-broken-help-links ()
   ""
+  ;; Check to see if the link is to a path and if it is an absolute path make it into a relative path.
   ;; search through my blog posts.
   ;; If any file link is broken check to see if it points to the documentatoin
   ;; directory, and if it does then check to see if it is a helpful link to a
@@ -27,3 +28,7 @@ I have and fix them.
   )
 #+end_src
 
+Toggle a path to make it relative to the current directory.
+
+#+begin_src emacs-lisp
+#+end_src

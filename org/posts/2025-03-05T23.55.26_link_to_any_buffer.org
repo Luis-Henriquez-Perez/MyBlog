@@ -22,7 +22,7 @@ purpose.
 
 Before writing this function I had actually forgotten about how to make
 filenames unique in Emacs but a quick google search lead me to this info node.
-And from the documentation of [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--with-temp-file.html][with-temp-file]] it looks like it handles writing
+And from the documentation of [[file:../documentation/29.4-helpful-callable--with-temp-file.html][with-temp-file]] it looks like it handles writing
 the file for me.
 
 #+begin_src emacs-lisp

@@ -15,10 +15,11 @@ is, the symbol "args" in the previous line would expand into "arguments".
 #+end_src
 
 Curiously, this would even get around =oo-use-text-abbrev-p= which I use as the
-abbrevs enable property because point is still in even though the symbol =args= is outside of . I used [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html][oo-use-text-abbrev-p]], the value of [[][the
-:enable-functioin property]]. so abbrevs would only expand in but it would
-actually meet that condition because I am in the string.  I do not know.  I need
-something that stops expanding the abbrev if its.
+abbrevs enable property because point is still in even though the symbol =args= is
+outside of . I used [[file:../documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html][oo-use-text-abbrev-p]], the value of  [[][the :enable-function
+property]]. so abbrevs would only expand in but it would actually meet that
+condition because I am in the string.  I do not know.  I need something that
+stops expanding the abbrev if its.
 
 In practice this means that there could be 10 newlines between your cursor and
 the previous word.  This is not what you would usually want.  I first noticed
@@ -38,9 +39,9 @@ Even with several newlines, =args= would still be expanded.
 #+end_src
 
 
-To find the root of the problem I looked inside [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--expand-abbrev.html][expand-abbrev]] and then the
-[[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev-expand-function.html][abbrev-expand-function]], which was set to [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev--default-expand.html][abbrev--default-expand]], until finally I
-found the culprit, [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev--before-point.html][abbrev--before-point]].  The body of =abbrev--before-point= is
+To find the root of the problem I looked inside [[../documentation/29.4-helpful--expand-abbrev.html][expand-abbrev]] and then the
+[[../documentation/29.4-helpful--abbrev-expand-function.html][abbrev-expand-function]], which was set to [[../documentation/29.4-helpful--abbrev--default-expand.html][abbrev--default-expand]], until finally I
+found the culprit, [[../documentation/29.4-helpful--abbrev--before-point.html][abbrev--before-point]].  The body of =abbrev--before-point= is
 long but the only part that concerns this problem is the following chunk.
 
 #+begin_src emacs-lisp
@@ -59,18 +60,18 @@ long but the only part that concerns this problem is the following chunk.
       (setq end   (match-end 1)))))
 #+end_src
 
-If the abbrev table has no =:regexp= property (the default) it uses [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--backward-word.html][backward-word]]
+If the abbrev table has no =:regexp= property (the default) it uses [[../documentation/29.4-helpful--backward-word.html][backward-word]]
 to find the previous expansion.  Therein lies the problem.  The function
 =backward-word= finds the last word regardless of how many lines it is behind
 point.  It has no boundaries.  However, as is apparent from the call to
-[[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--looking-back.html][looking-back]] in ~(looking-back re (line-beginning-position))~, using any regexp
+[[../documentation/29.4-helpful--looking-back.html][looking-back]] in ~(looking-back re (line-beginning-position))~, using any regexp
 will automatically bound the search to the beginning of the current line[fn:: I do
 not know if this was intentional.  If you bound =looking-back= why not bound
 =backward-word=?]
 
 In any case, this suggests that what I need to do is provide a regexp and it
 will automatically be bounded.  Conveniently the comment in the code provides a
-good regexp to go by[fn:: Sure, I know it mentions [[/home/luis/Documents/MyBlog/org/documentation/29.4-helpful--words-include-escapes.html][words-include-escapes]] but to be
+good regexp to go by[fn:: Sure, I know it mentions [[../documentation/29.4-helpful--words-include-escapes.html][words-include-escapes]] but to be
 honest I do not really care about that.  I have =words-include-escapes= set to nil
 have do not plan on enabling it any time soon.].
 

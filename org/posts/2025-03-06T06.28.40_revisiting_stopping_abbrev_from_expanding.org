@@ -11,7 +11,7 @@ previous line.  I mean this makes sense.  But at least I do not expect it to
 happen across multiple lines.
 
 Some context: that abbrev had an [[][:enable-property]] set to
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html][oo-use-text-abbrev-p]].  This means that abbrev would only expand if the current
+[[file:../documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html][oo-use-text-abbrev-p]].  This means that abbrev would only expand if the current
 major mode was derived from text mode or if the cursor was in a string or
 docstring.  The example is in emacs-lisp-mode so the first condition will always
 be false.  Although the symbol "args" was not in a docstring, the reason it was
@@ -24,9 +24,9 @@ underlying problem here is that with these enable properties.  So I need to
 figure out how to code it so that if.  For this I need to review how abbrev
 expansion works again.
 
-I think the pertinent function is [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--abbrev--default-expand.html][abbrev--default-expand]].  It collects
+I think the pertinent function is [[file:../documentation/29.4-helpful-callable--abbrev--default-expand.html][abbrev--default-expand]].  It collects
 information about the abbrev before point with the aptly named
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--abbrev--before-point.html][abbrev--before-point]] and records the information before actually inserting the
+[[file:../documentation/29.4-helpful-callable--abbrev--before-point.html][abbrev--before-point]] and records the information before actually inserting the
 abbrev.
 
 #+begin_src emacs-lisp

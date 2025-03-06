@@ -1,10 +1,10 @@
 #+title:automate blog post creation
 #+author:Luis Henriquez-Perez
 
-I have always created blog posts manually.  This means calling [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--find-file.html][find-file]],
+I have always created blog posts manually.  This means calling [[file:../documentation/29.4-helpful-callable--find-file.html][find-file]],
 entering the filename (this excludes the timestamp but includes the separating
-underscores), and then calling prepend the timestamp (via [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--date2name-prepend-date.html][date2name-prepend-date]]
-) onto the file from the dired buffer.  This is something that can and should be
+underscores), and then prepending the timestamp (via [[file:../documentation/29.4-helpful-callable--date2name-prepend-date.html][date2name-prepend-date]])
+onto the file from the dired buffer.  This is something that can and should be
 automated.  I have been experimenting with this function I wrote for generating
 a new blog post.
 
@@ -23,4 +23,5 @@ a new blog post.
 
 I do not know if this is the end all be all solution.  I am also considering
 advising =find-file= to act differently if the file I am creating is in the blog
-directory.  For another post.
+directory.  And I think this might be better because everything will be done
+consistently via =find-file= as opposed to using two different functions.
