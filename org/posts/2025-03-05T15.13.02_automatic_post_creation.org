@@ -1,4 +1,4 @@
-#+title:automatic blog post creation
+#+title:automate blog post creation
 #+author:Luis Henriquez-Perez
 
 First thing is I want to ensure files created in the blog have a timestamp.  I
@@ -19,13 +19,21 @@ the file but I need it.
 To create a new post I can also just rely on a function.
 
 #+begin_src emacs-lisp
-(defun oo-new-blog-post ()
+(defun oo-new-blog-post (&optional arg)
   "Create a new blog post, prompting for the name."
+  ;; With a prefix argument make a draft instead.
   (interactive)
   (let* (blog-dir name)
     (setq blog-dir "~/Documents/MyBlog/org/posts/")
     ;; Prompt of the name.
     (setq name (read-string "Name: "))
+    ;; I need to join any spaces in name by underscores.
+    (setq name (replace-regexp-in-string (rx (1+ white)) "_" name))
+    (setq name (date2name-prepend-date (expand-file-name name blog-dir) (current-time) 'with-time))
+    ;; Make it a draft by default.
+    (setq name (concat "draft_" name))
+    ;; Ensure the org extension is there.
+    (setq name (if (string-match-p (rx ".org" eol)) name (concat name ".org")))
     ;; Prepend the timestamp to the name.
     (find-file (expand-file-name name blog-dir))))
 #+end_src

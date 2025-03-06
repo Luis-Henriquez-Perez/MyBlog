@@ -5,7 +5,7 @@
 - [[file:contact.org][Contact]]
 #+end_nav
 
-Welcome to my blog!
+Hi and welcome to my blog.  At least right now this log is mostly on Emacs.
 
 * Projects
 #+begin_projects

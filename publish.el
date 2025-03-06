@@ -27,7 +27,6 @@
   (string-match "[0-9]\\{4\\}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9].[0-5][0-9].[0-5][0-9]" file)
   (if-let (timestamp (match-string 0 file))
       (progn
-        (message "timestamp->%S | file->%S" timestamp file)
         (encode-time (parse-time-string (string-replace "." ":" timestamp))))
     (error "No timestamp")))
 
