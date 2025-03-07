@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: refill-mode*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #c5c8c6;
+        background-color: #1d1f21;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #81a2be;
+      }
+      .button {
+        /* button */
+        color: #81a2be;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #5a5b5a;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #5a5b5a;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #de935f;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #717171;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #81a2be;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-size: 120%;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #b294bb;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #b5bd68;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #f0c674;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #f0c674;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+refill-mode is an <span class="button">autoloaded</span>, <span class="button">interactive</span> and <span class="button">byte-compiled</span> function
+defined in <span class="button">refill.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(refill-mode <span class="type">&amp;optional</span> ARG)
+
+<span class="helpful-heading">Documentation
+</span>Toggle automatic refilling (Refill mode).
+
+Refill mode is a buffer-local minor mode.  When enabled, the
+current paragraph is refilled as you edit.  Self-inserting
+characters only cause refilling if they would cause
+auto-filling.
+
+For true "word wrap" behavior, use <span class="button">visual-line-mode</span> instead.
+
+This is a minor mode.  If called interactively, toggle the
+<span class="constant">Refill mode</span> mode.  If the prefix argument is positive, enable
+the mode, and if it is zero or negative, disable the mode.
+
+If called from Lisp, toggle the mode if ARG is <span class="constant">toggle</span>.  Enable
+the mode if ARG is nil, omitted, or is a positive number.
+Disable the mode if ARG is a negative number.
+
+To check whether the minor mode is enabled in the current buffer,
+evaluate <span class="button">refill-mode</span>.
+
+The mode's hook is called both when the mode is enabled and when
+it is disabled.
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>refill-mode is unused in <span class="button">refill.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by refill-mode</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/textmodes/refill.el.gz</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">define-minor-mode</span> <span class="function-name">refill-mode</span>
+  <span class="doc">"Toggle automatic refilling (Refill mode).
+
+Refill mode is a buffer-local minor mode.  When enabled, the
+current paragraph is refilled as you edit.  Self-inserting
+characters only cause refilling if they would cause
+auto-filling.
+
+For true \"word wrap\" behavior, use `</span><span class="doc"><span class="constant">visual-line-mode</span></span><span class="doc">' instead."</span>
+  <span class="comment-delimiter">;; </span><span class="comment">Not global, so no effect.
+</span><span class="comment-delimiter">;;;  </span><span class="comment">:group 'refill
+</span>  <span class="builtin">:lighter</span> <span class="string">" Refill"</span>
+  <span class="builtin">:keymap</span> '((<span class="string">"\177"</span> . backward-delete-char-untabify))
+  <span class="comment-delimiter">;; </span><span class="comment">Remove old state if necessary
+</span>  (<span class="keyword">when</span> refill-ignorable-overlay
+    (delete-overlay refill-ignorable-overlay)
+    (kill-local-variable 'refill-ignorable-overlay))
+  (<span class="keyword">when</span> (local-variable-p 'refill-saved-state)
+    (<span class="keyword">dolist</span> (x refill-saved-state)
+      (set (make-local-variable (car x)) (cdr x)))
+    (kill-local-variable 'refill-saved-state))
+  (<span class="keyword">if</span> refill-mode
+      (<span class="keyword">progn</span>
+	(add-hook 'after-change-functions #'refill-after-change-function nil t)
+	(add-hook 'post-command-hook #'refill-post-command-function nil t)
+	(add-hook 'pre-command-hook #'refill-pre-command-function nil t)
+        (<span class="keyword">setq-local</span> refill-saved-state
+                    (mapcar (<span class="keyword">lambda</span> (s) (cons s (symbol-value s)))
+                            '(fill-paragraph-function auto-fill-function)))
+	<span class="comment-delimiter">;; </span><span class="comment">This provides the test for recursive paragraph filling.
+</span>        (<span class="keyword">setq-local</span> fill-paragraph-function #'refill-fill-paragraph)
+	<span class="comment-delimiter">;; </span><span class="comment">When using justification, doing DEL on 2 spaces should remove
+</span>	<span class="comment-delimiter">;; </span><span class="comment">both, otherwise, the subsequent refill will undo the DEL.
+</span>        (<span class="keyword">setq-local</span> backward-delete-char-untabify-method 'hungry)
+	(<span class="keyword">setq</span> refill-ignorable-overlay (make-overlay 1 1 nil nil t))
+	(overlay-put refill-ignorable-overlay 'modification-hooks
+		     '(refill-adjust-ignorable-overlay))
+	(overlay-put refill-ignorable-overlay 'insert-behind-hooks
+		     '(refill-adjust-ignorable-overlay))
+	(auto-fill-mode 0))
+    (remove-hook 'after-change-functions #'refill-after-change-function t)
+    (remove-hook 'post-command-hook #'refill-post-command-function t)
+    (kill-local-variable 'backward-delete-char-untabify-method)))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (refill-mode 0)
+<span class="constant">event-symbol-elements</span>
+  (refill-mode)
+<span class="constant">function-history</span>
+  ("/usr/share/emacs/29.4/lisp/textmodes/refill.elc"
+   (autoload "refill"
+     ("loaddefs.elc" . 1023134)
+     t nil))
+<span class="constant">modifier-cache</span>
+  ((0 . refill-mode))
+<span class="constant">variable-documentation</span>
+  ("/usr/share/emacs/29.4/lisp/textmodes/refill.elc" . 3057)</pre>
+  </body>
+</html>

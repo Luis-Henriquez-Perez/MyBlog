@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: package-delete*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3a5fcd;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #b22222;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #b22222;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #008b8b;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #8b2252;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #0000ff;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #a020f0;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #8b2252;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #228b22;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ff0000;
+        font-weight: bold;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package-delete is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function defined in
+<span class="button">package.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(package-delete PKG-DESC <span class="type">&amp;optional</span> FORCE NOSAVE)
+
+<span class="helpful-heading">Documentation
+</span>Delete package PKG-DESC.
+
+Argument PKG-DESC is a full description of package as vector.
+Interactively, prompt the user for the package name and version.
+
+When package is used elsewhere as dependency of another package,
+refuse deleting it and return an error.
+If prefix argument FORCE is non-nil, package will be deleted even
+if it is used elsewhere.
+If NOSAVE is non-nil, the package is not removed from
+<span class="button">package-selected-packages</span>.
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">package.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">package-upgrade</span> ...)                   <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-reinstall</span> ...)                 <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-autoremove</span> ...)                <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-delete-button-action</span> ...)      <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-menu--perform-transaction</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by package-delete</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/package.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">package-delete</span> (pkg-desc <span class="type">&amp;optional</span> force nosave)
+  <span class="doc">"Delete package PKG-DESC.
+
+Argument PKG-DESC is a full description of package as vector.
+Interactively, prompt the user for the package name and version.
+
+When package is used elsewhere as dependency of another package,
+refuse deleting it and return an error.
+If prefix argument FORCE is non-nil, package will be deleted even
+if it is used elsewhere.
+If NOSAVE is non-nil, the package is not removed from
+`</span><span class="doc"><span class="constant">package-selected-packages</span></span><span class="doc">'."</span>
+  (<span class="keyword">interactive</span>
+   (<span class="keyword">progn</span>
+     (<span class="keyword">let*</span> ((package-table
+             (mapcar
+              (<span class="keyword">lambda</span> (p) (cons (package-desc-full-name p) p))
+              (delq nil
+                    (mapcar (<span class="keyword">lambda</span> (p) (<span class="keyword">unless</span> (package-built-in-p p) p))
+                            (apply #'append (mapcar #'cdr (package--alist)))))))
+            (package-name (completing-read <span class="string">"Delete package: "</span>
+                                           (mapcar #'car package-table)
+                                           nil t)))
+       (list (cdr (assoc package-name package-table))
+             current-prefix-arg nil))))
+  (<span class="keyword">let</span> ((dir (package-desc-dir pkg-desc))
+        (name (package-desc-name pkg-desc))
+        pkg-used-elsewhere-by)
+    <span class="comment-delimiter">;; </span><span class="comment">If the user is trying to delete this package, they definitely
+</span>    <span class="comment-delimiter">;; </span><span class="comment">don't want it marked as selected, so we remove it from
+</span>    <span class="comment-delimiter">;; </span><span class="comment">`</span><span class="comment"><span class="constant">package-selected-packages</span></span><span class="comment">' even if it can't be deleted.
+</span>    (<span class="keyword">when</span> (<span class="keyword">and</span> (null nosave)
+               (package--user-selected-p name)
+               <span class="comment-delimiter">;; </span><span class="comment">Don't deselect if this is an older version of an
+</span>               <span class="comment-delimiter">;; </span><span class="comment">upgraded package.
+</span>               (package--newest-p pkg-desc))
+      (package--save-selected-packages (remove name package-selected-packages)))
+    (<span class="keyword">cond</span> ((not (string-prefix-p (file-name-as-directory
+                                  (expand-file-name package-user-dir))
+                                 (expand-file-name dir)))
+           <span class="comment-delimiter">;; </span><span class="comment">Don't delete "system" packages.
+</span>           (<span class="warning">error</span> <span class="string">"Package `</span><span class="string"><span class="constant">%s</span></span><span class="string">' is a system package, not deleting"</span>
+                  (package-desc-full-name pkg-desc)))
+          ((<span class="keyword">and</span> (null force)
+                (<span class="keyword">setq</span> pkg-used-elsewhere-by
+                      (package--used-elsewhere-p pkg-desc)))
+           <span class="comment-delimiter">;; </span><span class="comment">Don't delete packages used as dependency elsewhere.
+</span>           (<span class="warning">error</span> <span class="string">"Package `</span><span class="string"><span class="constant">%s</span></span><span class="string">' is used by `</span><span class="string"><span class="constant">%s</span></span><span class="string">' as dependency, not deleting"</span>
+                  (package-desc-full-name pkg-desc)
+                  (package-desc-name pkg-used-elsewhere-by)))
+          (t
+           (add-hook 'post-command-hook #'package-menu--post-refresh)
+           (package--delete-directory dir)
+           <span class="comment-delimiter">;; </span><span class="comment">Remove NAME-VERSION.signed and NAME-readme.txt files.
+</span>           <span class="comment-delimiter">;;</span><span class="comment">
+</span>           <span class="comment-delimiter">;; </span><span class="comment">NAME-readme.txt files are no longer created, but they
+</span>           <span class="comment-delimiter">;; </span><span class="comment">may be left around from an earlier install.
+</span>           (<span class="keyword">dolist</span> (suffix '(<span class="string">".signed"</span> <span class="string">"readme.txt"</span>))
+             (<span class="keyword">let*</span> ((version (package-version-join (package-desc-version pkg-desc)))
+                    (file (concat (<span class="keyword">if</span> (string= suffix <span class="string">".signed"</span>)
+                                      dir
+                                    (substring dir 0 (- (length version))))
+                                  suffix)))
+               (<span class="keyword">when</span> (file-exists-p file)
+                 (delete-file file))))
+           <span class="comment-delimiter">;; </span><span class="comment">Update package-alist.
+</span>           (<span class="keyword">let</span> ((pkgs (assq name package-alist)))
+             (delete pkg-desc pkgs)
+             (<span class="keyword">unless</span> (cdr pkgs)
+               (<span class="keyword">setq</span> package-alist (delq pkgs package-alist))))
+           (package--quickstart-maybe-refresh)
+           (message <span class="string">"Package `</span><span class="string"><span class="constant">%s</span></span><span class="string">' deleted."</span>
+                    (package-desc-full-name pkg-desc))))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (package-delete 0)
+<span class="constant">event-symbol-elements</span>
+  (package-delete)
+<span class="constant">modifier-cache</span>
+  ((0 . package-delete))</pre>
+  </body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: package--query-desc*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package--query-desc is a <span class="button">byte-compiled</span> function defined in
+<span class="button">package.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(package--query-desc <span class="type">&amp;optional</span> ALIST)
+
+<span class="helpful-heading">Documentation
+</span>Query the user for a package or return the package at point.
+
+The optional argument ALIST must consist of elements with the
+form (PKG-NAME PKG-DESC).  If not specified, it will default to
+<span class="button">package-alist</span>.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">package.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">package-browse-url</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-report-bug</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by package--query-desc</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/package.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">package--query-desc</span> (<span class="type">&amp;optional</span> alist)
+  <span class="doc">"Query the user for a package or return the package at point.
+The optional argument ALIST must consist of elements with the
+form (PKG-NAME PKG-DESC).  If not specified, it will default to
+`</span><span class="doc"><span class="constant">package-alist</span></span><span class="doc">'."</span>
+  (<span class="keyword">or</span> (tabulated-list-get-id)
+      (<span class="keyword">let</span> ((alist (<span class="keyword">or</span> alist package-alist)))
+        (cadr (assoc (completing-read <span class="string">"Package: "</span> alist nil t)
+                     alist #'string=)))))
+
+</pre>
+  </body>
+</html>

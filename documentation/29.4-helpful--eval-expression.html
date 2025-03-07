@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: eval-expression*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #0000b0;
+        font-weight: bold;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+eval-expression is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function defined
+in <span class="button">simple.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(eval-expression EXP <span class="type">&amp;optional</span> INSERT-VALUE NO-TRUNCATE CHAR-PRINT-LIMIT)
+
+<span class="helpful-heading">Documentation
+</span>Evaluate EXP and print value in the echo area.
+
+When called interactively, read an Emacs Lisp expression and
+evaluate it.  Value is also consed on to front of the variable
+<span class="button">values</span>.  Optional argument INSERT-VALUE non-nil (interactively,
+with a non <span class="button">-</span> prefix argument) means insert the result into the
+current buffer instead of printing it in the echo area.
+
+Normally, this function truncates long output according to the
+value of the variables <span class="button">eval-expression-print-length</span> and
+<span class="button">eval-expression-print-level</span>.  When NO-TRUNCATE is
+non-nil (interactively, with a prefix argument of zero), however,
+there is no such truncation.
+
+If the resulting value is an integer, and CHAR-PRINT-LIMIT is
+non-nil (interactively, unless given a non-zero prefix argument)
+it will be printed in several additional formats (octal,
+hexadecimal, and character).  The character format is used only
+if the value is below CHAR-PRINT-LIMIT (interactively, if the
+prefix argument is -1 or the value doesn't exceed
+<span class="button">eval-expression-print-maximum-character</span>).
+
+Runs the hook <span class="button">eval-expression-minibuffer-setup-hook</span> on entering the
+minibuffer.
+
+If <span class="button">eval-expression-debug-on-error</span> is non-nil, which is the default,
+this command arranges for all errors to enter the debugger.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">esc-map</span> <span class="help-key-binding">:</span>
+<span class="variable-name">global-map</span> <span class="help-key-binding">M-:</span>
+<span class="variable-name">global-map</span> <span class="help-key-binding">M-ESC :</span>
+<span class="variable-name">oo-leader-map</span> <span class="help-key-binding">t e</span>
+<span class="variable-name">oo-toggle-map</span> <span class="help-key-binding">e</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">&lt;insert-state&gt; M-SPC t e</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">&lt;motion-state&gt; SPC t e</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">&lt;normal-state&gt; SPC t e</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">&lt;visual-state&gt; SPC t e</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">C-c SPC t e</span>
+<span class="variable-name">override-global-map</span> <span class="help-key-binding">C-c l t e</span>
+
+<span class="helpful-heading">References
+</span>eval-expression is unused in <span class="button">simple.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by eval-expression</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/simple.el.gz</span>
+<span class="comment-delimiter">;; </span><span class="comment">We define this, rather than making `</span><span class="comment"><span class="constant">eval</span></span><span class="comment">' interactive,
+</span><span class="comment-delimiter">;; </span><span class="comment">for the sake of completion of names like eval-region, eval-buffer.
+</span>(<span class="keyword">defun</span> <span class="function-name">eval-expression</span> (exp <span class="type">&amp;optional</span> insert-value no-truncate char-print-limit)
+  <span class="doc">"Evaluate EXP and print value in the echo area.
+When called interactively, read an Emacs Lisp expression and
+evaluate it.  Value is also consed on to front of the variable
+`</span><span class="doc"><span class="constant">values</span></span><span class="doc">'.  Optional argument INSERT-VALUE non-nil (interactively,
+with a non `</span><span class="doc"><span class="constant">-</span></span><span class="doc">' prefix argument) means insert the result into the
+current buffer instead of printing it in the echo area.
+
+Normally, this function truncates long output according to the
+value of the variables `</span><span class="doc"><span class="constant">eval-expression-print-length</span></span><span class="doc">' and
+`</span><span class="doc"><span class="constant">eval-expression-print-level</span></span><span class="doc">'.  When NO-TRUNCATE is
+non-nil (interactively, with a prefix argument of zero), however,
+there is no such truncation.
+
+If the resulting value is an integer, and CHAR-PRINT-LIMIT is
+non-nil (interactively, unless given a non-zero prefix argument)
+it will be printed in several additional formats (octal,
+hexadecimal, and character).  The character format is used only
+if the value is below CHAR-PRINT-LIMIT (interactively, if the
+prefix argument is -1 or the value doesn't exceed
+`</span><span class="doc"><span class="constant">eval-expression-print-maximum-character</span></span><span class="doc">').
+
+Runs the hook `</span><span class="doc"><span class="constant">eval-expression-minibuffer-setup-hook</span></span><span class="doc">' on entering the
+minibuffer.
+
+If `</span><span class="doc"><span class="constant">eval-expression-debug-on-error</span></span><span class="doc">' is non-nil, which is the default,
+this command arranges for all errors to enter the debugger."</span>
+  (<span class="keyword">interactive</span>
+   (cons (read--expression <span class="string">"Eval: "</span>)
+         (eval-expression-get-print-arguments current-prefix-arg)))
+
+  (<span class="keyword">let</span> (result)
+    (<span class="keyword">if</span> (null eval-expression-debug-on-error)
+        (<span class="keyword">setq</span> result
+              (values--store-value
+               (eval (<span class="keyword">let</span> ((lexical-binding t)) (macroexpand-all exp)) t)))
+      (<span class="keyword">let</span> ((old-value (make-symbol <span class="string">"t"</span>)) new-value)
+        <span class="comment-delimiter">;; </span><span class="comment">Bind debug-on-error to something unique so that we can
+</span>        <span class="comment-delimiter">;; </span><span class="comment">detect when evalled code changes it.
+</span>        (<span class="keyword">let</span> ((debug-on-error old-value))
+          (<span class="keyword">setq</span> result
+	        (values--store-value
+                 (eval (<span class="keyword">let</span> ((lexical-binding t)) (macroexpand-all exp)) t)))
+	  (<span class="keyword">setq</span> new-value debug-on-error))
+        <span class="comment-delimiter">;; </span><span class="comment">If evalled code has changed the value of debug-on-error,
+</span>        <span class="comment-delimiter">;; </span><span class="comment">propagate that change to the global binding.
+</span>        (<span class="keyword">unless</span> (eq old-value new-value)
+	  (<span class="keyword">setq</span> debug-on-error new-value))))
+
+    (<span class="keyword">let</span> ((print-length (<span class="keyword">unless</span> no-truncate eval-expression-print-length))
+          (print-level  (<span class="keyword">unless</span> no-truncate eval-expression-print-level))
+          (eval-expression-print-maximum-character char-print-limit)
+          (deactivate-mark))
+      (<span class="keyword">let</span> ((out (<span class="keyword">if</span> insert-value (current-buffer) t)))
+        (<span class="keyword">prog1</span>
+            (prin1 result out)
+          (<span class="keyword">let</span> ((str (<span class="keyword">and</span> char-print-limit
+                          (eval-expression-print-format result))))
+            (<span class="keyword">when</span> str (princ str out))))))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (eval-expression 0)
+<span class="constant">event-symbol-elements</span>
+  (eval-expression)
+<span class="constant">evil--command-plist</span>
+  (:repeat abort)
+<span class="constant">modifier-cache</span>
+  ((0 . eval-expression))</pre>
+  </body>
+</html>

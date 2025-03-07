@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: define-abbrev*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+define-abbrev is a <span class="button">byte-compiled</span> function defined in <span class="button">abbrev.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(define-abbrev TABLE ABBREV EXPANSION <span class="type">&amp;optional</span> HOOK <span class="type">&amp;rest</span> PROPS)
+
+<span class="helpful-heading">Documentation
+</span>Define ABBREV in TABLE, to expand into EXPANSION and optionally call HOOK.
+
+ABBREV must be a string, and should be lower-case.
+EXPANSION should usually be a string.
+To undefine an abbrev, define it with EXPANSION = nil.
+If HOOK is non-nil, it should be a function of no arguments;
+it is called after EXPANSION is inserted.
+If EXPANSION is not a string (and not nil), the abbrev is a
+ special one, which does not expand in the usual way but only
+ runs HOOK.
+
+If HOOK is a non-nil symbol with a non-nil <span class="constant">no-self-insert</span> property,
+it can control whether the character that triggered abbrev expansion
+is inserted.  If such a HOOK returns non-nil, the character is not
+inserted.  If such a HOOK returns nil, then so does <span class="button">abbrev-insert</span>
+(and <span class="button">expand-abbrev</span>), as if no abbrev expansion had taken place.
+
+PROPS is a property list.  The following properties are special:
+- <span class="builtin">:count</span>: the value for the abbrev's usage-count, which is incremented each
+  time the abbrev is used (the default is zero).
+- <span class="builtin">:system</span>: if non-nil, says that this is a "system" abbreviation
+  which should not be saved in the user's abbreviation file.
+  Unless <span class="builtin">:system</span> is <span class="constant">force</span>, a system abbreviation will not
+  overwrite a non-system abbreviation of the same name.
+- <span class="builtin">:case-fixed</span>: non-nil means that abbreviations are looked up without
+  case-folding, and the expansion is not capitalized/upcased.
+- <span class="builtin">:enable-function</span>: a function of no arguments which returns non-nil
+  if the abbrev should be used for a particular call of <span class="button">expand-abbrev</span>.
+
+An obsolete but still supported calling form is:
+
+(define-abbrev TABLE NAME EXPANSION &amp;optional HOOK COUNT SYSTEM).
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">abbrev.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">copy-abbrev-table</span> ...)    <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">add-abbrev</span> ...)           <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">inverse-add-abbrev</span> ...)   <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">define-global-abbrev</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">define-mode-abbrev</span> ...)   <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">define-abbrev-table</span> ...)  <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by define-abbrev</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/abbrev.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">define-abbrev</span> (table abbrev expansion <span class="type">&amp;optional</span> hook <span class="type">&amp;rest</span> props)
+  <span class="doc">"Define ABBREV in TABLE, to expand into EXPANSION and optionally call HOOK.
+ABBREV must be a string, and should be lower-case.
+EXPANSION should usually be a string.
+To undefine an abbrev, define it with EXPANSION = nil.
+If HOOK is non-nil, it should be a function of no arguments;
+it is called after EXPANSION is inserted.
+If EXPANSION is not a string (and not nil), the abbrev is a
+ special one, which does not expand in the usual way but only
+ runs HOOK.
+
+If HOOK is a non-nil symbol with a non-nil `</span><span class="doc"><span class="constant">no-self-insert</span></span><span class="doc">' property,
+it can control whether the character that triggered abbrev expansion
+is inserted.  If such a HOOK returns non-nil, the character is not
+inserted.  If such a HOOK returns nil, then so does `</span><span class="doc"><span class="constant">abbrev-insert</span></span><span class="doc">'
+\(and `</span><span class="doc"><span class="constant">expand-abbrev</span></span><span class="doc">'), as if no abbrev expansion had taken place.
+
+PROPS is a property list.  The following properties are special:
+- `</span><span class="doc"><span class="constant">:count</span></span><span class="doc">': the value for the abbrev's usage-count, which is incremented each
+  time the abbrev is used (the default is zero).
+- `</span><span class="doc"><span class="constant">:system</span></span><span class="doc">': if non-nil, says that this is a \"system\" abbreviation
+  which should not be saved in the user's abbreviation file.
+  Unless `</span><span class="doc"><span class="constant">:system</span></span><span class="doc">' is `</span><span class="doc"><span class="constant">force</span></span><span class="doc">', a system abbreviation will not
+  overwrite a non-system abbreviation of the same name.
+- `</span><span class="doc"><span class="constant">:case-fixed</span></span><span class="doc">': non-nil means that abbreviations are looked up without
+  case-folding, and the expansion is not capitalized/upcased.
+- `</span><span class="doc"><span class="constant">:enable-function</span></span><span class="doc">': a function of no arguments which returns non-nil
+  if the abbrev should be used for a particular call of `</span><span class="doc"><span class="constant">expand-abbrev</span></span><span class="doc">'.
+
+An obsolete but still supported calling form is:
+
+\(define-abbrev TABLE NAME EXPANSION &amp;optional HOOK COUNT SYSTEM)."</span>
+  (<span class="keyword">declare</span> (indent defun))
+  (<span class="keyword">when</span> (<span class="keyword">and</span> (consp props) (<span class="keyword">or</span> (null (car props)) (numberp (car props))))
+    <span class="comment-delimiter">;; </span><span class="comment">Old-style calling convention.
+</span>    (<span class="keyword">setq</span> props `(<span class="builtin">:count</span> ,(car props)
+                  ,@(<span class="keyword">if</span> (cadr props) (list <span class="builtin">:system</span> (cadr props))))))
+  (<span class="keyword">unless</span> (plist-get props <span class="builtin">:count</span>)
+    (<span class="keyword">setq</span> props (plist-put props <span class="builtin">:count</span> 0)))
+  (<span class="keyword">setq</span> props (plist-put props <span class="builtin">:abbrev-table-modiff</span>
+                         (abbrev-table-get table <span class="builtin">:abbrev-table-modiff</span>)))
+  (<span class="keyword">let</span> ((system-flag (plist-get props <span class="builtin">:system</span>))
+        (sym (obarray-put table abbrev)))
+    <span class="comment-delimiter">;; </span><span class="comment">Don't override a prior user-defined abbrev with a system abbrev,
+</span>    <span class="comment-delimiter">;; </span><span class="comment">unless system-flag is `</span><span class="comment"><span class="constant">force</span></span><span class="comment">'.
+</span>    (<span class="keyword">unless</span> (<span class="keyword">and</span> (not (memq system-flag '(nil force)))
+                 (boundp sym) (symbol-value sym)
+                 (not (abbrev-get sym <span class="builtin">:system</span>)))
+      (<span class="keyword">unless</span> (<span class="keyword">or</span> system-flag
+                  (<span class="keyword">and</span> (boundp sym)
+                       <span class="comment-delimiter">;; </span><span class="comment">load-file-name
+</span>                       (equal (symbol-value sym) expansion)
+                       (equal (symbol-function sym) hook)))
+        (<span class="keyword">setq</span> abbrevs-changed t))
+      (set sym expansion)
+      (fset sym hook)
+      (setplist sym
+                <span class="comment-delimiter">;; </span><span class="comment">Don't store the `</span><span class="comment"><span class="constant">force</span></span><span class="comment">' value of `</span><span class="comment"><span class="constant">system-flag</span></span><span class="comment">' into
+</span>                <span class="comment-delimiter">;; </span><span class="comment">the :system property.
+</span>                (<span class="keyword">if</span> (eq 'force system-flag) (plist-put props <span class="builtin">:system</span> t) props))
+      (abbrev-table-put table <span class="builtin">:abbrev-table-modiff</span>
+                        (1+ (abbrev-table-get table <span class="builtin">:abbrev-table-modiff</span>))))
+    abbrev))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">lisp-indent-function</span>
+  defun</pre>
+  </body>
+</html>

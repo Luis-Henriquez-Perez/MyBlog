@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: looking-back*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #ECEFF4;
+        background-color: #2E3440;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #81A1C1;
+      }
+      .button {
+        /* button */
+        color: #81A1C1;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #6f7787;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #81A1C1;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #78808f;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #88C0D0;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-size: 120%;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #81A1C1;
+      }
+      .regexp-grouping-backslash {
+        /* font-lock-regexp-grouping-backslash */
+        color: #81A1C1;
+        font-weight: bold;
+      }
+      .regexp-grouping-construct {
+        /* font-lock-regexp-grouping-construct */
+        color: #81A1C1;
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #A3BE8C;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #8FBCBB;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+looking-back is a <span class="button">byte-compiled</span> function defined in <span class="button">subr.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(looking-back REGEXP LIMIT <span class="type">&amp;optional</span> GREEDY)
+
+<span class="helpful-heading">Documentation
+</span>Return non-nil if text before point matches regular expression REGEXP.
+
+Like <span class="button">looking-at</span> except matches before point, and is slower.
+LIMIT if non-nil speeds up the search by specifying a minimum
+starting position, to avoid checking matches that would start
+before LIMIT.
+
+If GREEDY is non-nil, extend the match backwards as far as
+possible, stopping when a single additional previous character
+cannot be part of a match for REGEXP.  When the match is
+extended, its starting position is allowed to occur before
+LIMIT.
+
+As a general recommendation, try to avoid using <span class="button">looking-back</span>
+wherever possible, since it is slow.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>looking-back is unused in <span class="button">subr.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by looking-back</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Aliases
+</span><span class="button">org-looking-back</span> (obsolete since 9.0)
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/subr.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">looking-back</span> (regexp <span class="type">&amp;optional</span> limit greedy)
+  <span class="doc">"Return non-nil if text before point matches regular expression REGEXP.
+Like `</span><span class="doc"><span class="constant">looking-at</span></span><span class="doc">' except matches before point, and is slower.
+LIMIT if non-nil speeds up the search by specifying a minimum
+starting position, to avoid checking matches that would start
+before LIMIT.
+
+If GREEDY is non-nil, extend the match backwards as far as
+possible, stopping when a single additional previous character
+cannot be part of a match for REGEXP.  When the match is
+extended, its starting position is allowed to occur before
+LIMIT.
+
+As a general recommendation, try to avoid using `</span><span class="doc"><span class="constant">looking-back</span></span><span class="doc">'
+wherever possible, since it is slow."</span>
+  (<span class="keyword">declare</span>
+   (advertised-calling-convention (regexp limit <span class="type">&amp;optional</span> greedy) <span class="string">"25.1"</span>))
+  (<span class="keyword">let</span> ((start (point))
+	(pos
+	 (<span class="keyword">save-excursion</span>
+	   (<span class="keyword">and</span> (re-search-backward (concat <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(?:</span></span><span class="string">"</span> regexp <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string"><span class="builtin">\\=</span></span><span class="string">"</span>) limit t)
+		(point)))))
+    (<span class="keyword">if</span> (<span class="keyword">and</span> greedy pos)
+	(<span class="keyword">save-restriction</span>
+	  (narrow-to-region (point-min) start)
+	  (<span class="keyword">while</span> (<span class="keyword">and</span> (&gt; pos (point-min))
+		      (<span class="keyword">save-excursion</span>
+			(goto-char pos)
+			(backward-char 1)
+			(looking-at (concat <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(?:</span></span><span class="string">"</span>  regexp <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\\'"</span>))))
+	    (<span class="keyword">setq</span> pos (1- pos)))
+	  (<span class="keyword">save-excursion</span>
+	    (goto-char pos)
+	    (looking-at (concat <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(?:</span></span><span class="string">"</span>  regexp <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\\'"</span>)))))
+    (not (null pos))))
+
+</pre>
+  </body>
+</html>

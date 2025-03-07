@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>link to any buffer</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">link to any buffer</h1>
+</header><p>
+This is yet another continuation of creating abbrev hooks that expand into links
+for my blog.  There are some odd buffers I have wanted to make documentation for
+like info buffers for example.  In that case I want an abbrev hook to expand
+into a link for an html snapshot of that buffer.  To be precise, the hook
+should prompt me for a buffer, create an html file of that buffer in my
+documentation directory (assuming I selected one), and insert a link to that
+file.
+</p>
+
+<p>
+Perhaps my biggest question was what should I decide to do if I forget I have a
+link to a certain buffer and try to link it again.  Should I make a new.  This
+would be appropriate for info buffers whose names are the same in Emacs.  For
+now I will keep it simple and just reuse the documentation if a buffer already
+exists for that.
+</p>
+
+<p>
+chatGPT recommended I do not use the following characters.  For the conversion
+to a buffer name to a filename I need to "sanitize" the buffer name, removing
+any illegal characters for that I use a function I defined for this very
+purpose.
+</p>
+
+<p>
+Before writing this function I had actually forgotten about how to make
+filenames unique in Emacs but a quick google search lead me to this info node.
+And from the documentation of <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--with-temp-file.html">with-temp-file</a> it looks like it handles writing
+the file for me.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun!</span> <span style="font-weight: bold;">oo-expand-blog-buffer-link</span> ()
+  <span style="font-style: italic;">"Prompt for buffer and insert link to that buffer."</span>
+  (<span style="font-weight: bold;">set!</span> docs-dir <span style="font-style: italic;">"~/Documents/MyBlog/org/documentation/"</span>)
+  (<span style="font-weight: bold;">set!</span> buffer (completing-read <span style="font-style: italic;">"Select buffer: "</span> (buffer-list)))
+  (<span style="font-weight: bold;">with-current-buffer</span> (htmlize-buffer buffer)
+    (<span style="font-weight: bold;">setq</span> buffer-contents (buffer-string))
+    (kill-buffer))
+  (<span style="font-weight: bold;">set!</span> name (oo-sanitize-filename (buffer-name buffer)))
+  (<span style="font-weight: bold;">with-temp-file</span> (expand-file-name name docs-dir)
+    (insert-file-contents buffer-contents))
+  (<span style="font-weight: bold;">set!</span> description (read-string <span style="font-style: italic;">"link description: "</span>))
+  (insert (format <span style="font-style: italic;">"[[file:%s][%s]]"</span> file description)))
+</pre>
+</div>
+
+<p>
+And finally, I need an abbrev to this function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">
+</pre>
+</div>
+</div>
+</body>
+</html>

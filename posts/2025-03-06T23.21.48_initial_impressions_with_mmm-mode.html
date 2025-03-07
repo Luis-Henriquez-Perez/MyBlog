@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="../style.css" type="text/css"/>
+    <title>initial impressions with mmm-mode</title>
+  </head>
+  <body>
+    <h1 class="title">initial impressions on mmm-mode</h1>
+    <p>
+      I remember reading bad things about <a href="">mmm-mode</a> and great
+      things about <a href="">polymode</a>.  From experience usig both I have
+      found the complete opposite.  I had such a hard time getting polymode to
+      even start working.  Whereas  <b>mmm-mode</b> was so easy to get working.
+      To be honest, I am not sure about whether to use.  <b>web-mode</b> or b
+    </p>
+    <div class="org-src-container">
+      <pre>
+        <code class="elisp">
+(mmm-add-classes
+ '((elisp-in-html
+    :submode emacs-lisp-mode
+    :front "<code class=\"elisp\">"
+    :back "</code>")))
+(mmm-add-mode-ext-class 'web-mode nil 'elisp-in-html)
+(mmm-add-mode-ext-class 'mhtml-mode nil 'elisp-in-html)
+        </code>
+      </pre>
+    </div>
+    <div class="org-src-container">
+      <pre>
+        <code class="elisp">
+(mmm-add-mode-ext-class 'web-mode nil 'text-in-html)
+(mmm-add-mode-ext-class 'mhtml-mode nil 'text-in-html)
+        </code>
+      </pre>
+    </div>
+  </body>
+</html>

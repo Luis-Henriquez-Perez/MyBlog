@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Screenshot Function</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">Screenshot Function</h1>
+</header><p>
+I have always had the goal of being able to document something at the speed of
+thought. I want something to take a screenshot.  Specifically, I want functions
+for window, region and full screen screenshots.  It is something that is
+particularly important for things like this blog but also just generally
+important for documenting information that is better described with a picture.
+I have written a function to do this but I could not find it.  I decided to
+compromise and use an external package I have known about called <a href="https://github.com/Luis-Henriquez-Perez/escr">escr</a>.  It is
+the only package I could find that could do window, region and frame
+screenshots for Emacs.
+</p>
+
+<p>
+I install it via <code>package.el</code> in <a href="../documentation/29.4-110-init-package.html">110-init-package.el</a>.
+</p>
+
+<p>
+This is my configuration for it, its <a href="../documentation/29.4-130-init-escr.html">130-init-escr.el</a>.  I do not do much.  I
+just declare and autoload the main <code>escr</code> commands and set the directory where
+screenshots will go.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">require</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">050-base</span>)
+
+(<span style="font-weight: bold;">opt!</span> escr-screenshot-directory (expand-file-name <span style="font-style: italic;">"~/Pictures"</span>))
+
+(<span style="font-weight: bold;">declare-function</span> escr-region-screenshot <span style="font-style: italic;">"escr"</span>)
+(<span style="font-weight: bold;">declare-function</span> escr-window-screenshot <span style="font-style: italic;">"escr"</span>)
+(<span style="font-weight: bold;">declare-function</span> escr-frame-screenshot <span style="font-style: italic;">"escr"</span>)
+
+(autoload <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">escr-region-screenshot</span> <span style="font-style: italic;">"escr"</span> nil t <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">function</span>)
+(autoload <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">escr-window-screenshot</span> <span style="font-style: italic;">"escr"</span> nil t <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">function</span>)
+(autoload <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">escr-frame-screenshot</span> <span style="font-style: italic;">"escr"</span> nil t <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">function</span>)
+</pre>
+</div>
+
+<p>
+Of course, I also added keybindings for these function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">bind!</span> oo-app-map <span style="font-style: italic;">"s r"</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">escr-region-screenshot</span>)
+(<span style="font-weight: bold;">bind!</span> oo-app-map <span style="font-style: italic;">"s f"</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">escr-frame-screenshot</span>)
+(<span style="font-weight: bold;">bind!</span> oo-app-map <span style="font-style: italic;">"s w"</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">escr-window-screenshot</span>)
+</pre>
+</div>
+</div>
+</body>
+</html>

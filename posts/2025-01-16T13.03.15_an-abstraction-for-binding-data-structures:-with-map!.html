@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Binding Symbols in Maps: with-map!</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">Binding Symbols in Maps: with-map!</h1>
+</header><p>
+Three of the most common data structures in emacs-lisp are <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html">alists</a>, <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Property-Lists.html">plists</a>, and
+<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Hash-Tables.html">hash-tables</a>.  They are used so frequently that it is not surprising that
+situations arise in which you have to access elements from these.  And although
+each corresponding data structure has their own getter, fetching more than two
+elements in a single lisp form can quickly get out of hand as is apparent from
+the repetition of <code>(plist-get SOME-PLIST KEY)</code> from the following example.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">let</span> ((a (plist-get some-plist <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span>))
+      (b (plist-get some-plist <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span>))
+      (c (plist-get some-plist <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span>)))
+  (+ a b c))
+</pre>
+</div>
+
+<p>
+The <a href="../documentation/helpful-macro---let.html">-let</a> macro from <a href="https://github.com/magnars/dash.el">dash</a> actually has specific syntax to make this kind of thing
+easier.  With it you can specify syntax of the form <code>(&amp;THING key1 key2...keyN)</code>
+where <code>THING</code> can be one of <code>alist</code>, <code>plist</code> or <code>hash</code> and each key is a the key of the
+data structure.  This syntax tells dash to let-bind a symbol that is by default
+the name of the key to its corresponding value.  And, as you can see below, it
+is much more concise than the example above.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">-let</span> (((<span style="font-weight: bold; text-decoration: underline;">&amp;plist</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span>) <span style="font-weight: bold;">'</span>(a 1 b 2 c 3)))
+  (list a b c))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 6</span>
+
+(<span style="font-weight: bold;">-let</span> (((<span style="font-weight: bold; text-decoration: underline;">&amp;alist</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span>) <span style="font-weight: bold;">'</span>((a . 1) (b . 2) (c . 3))))
+  (+ a b c))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 6</span>
+
+(<span style="font-weight: bold;">-let</span> (((<span style="font-weight: bold; text-decoration: underline;">&amp;hash</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span>) (aprog1 (make-hash-table)
+                           (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> 1 <span style="font-weight: bold; text-decoration: underline;">it</span>)
+                           (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> 2 <span style="font-weight: bold; text-decoration: underline;">it</span>)
+                           (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span> 3 <span style="font-weight: bold; text-decoration: underline;">it</span>))))
+  (+ a b c))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 6</span>
+</pre>
+</div>
+
+<p>
+In the corresponding macroexpansions we see that the <code>-let</code> expands to getting the
+corresponding getters from the data structures.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">let</span> ((input0 <span style="font-weight: bold;">'</span>(a 1 b 2 c 3)))
+  (<span style="font-weight: bold;">let*</span> ((a (plist-get input0 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span>))
+         (b (plist-get input0 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span>))
+         (c (plist-get input0 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span>)))
+    (+ a b c)))
+
+(<span style="font-weight: bold;">let</span> ((input0 <span style="font-weight: bold;">'</span>((a . 1) (b . 2) (c . 3))))
+  (<span style="font-weight: bold;">let*</span> ((a (cdr (assoc <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> input0)))
+         (b (cdr (assoc <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> input0)))
+         (c (cdr (assoc <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span> input0))))
+    (+ a b c)))
+
+(<span style="font-weight: bold;">let</span> ((input0 (aprog1 (make-hash-table)
+                (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> 1 <span style="font-weight: bold; text-decoration: underline;">it</span>)
+                (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> 2 <span style="font-weight: bold; text-decoration: underline;">it</span>)
+                (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span> 3 <span style="font-weight: bold; text-decoration: underline;">it</span>))))
+  (<span style="font-weight: bold;">let*</span> ((a (gethash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> input0))
+         (b (gethash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> input0))
+         (c (gethash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span> input0)))
+    (+ a b c)))
+</pre>
+</div>
+
+<p>
+There is a built-in solution as well: the macro <a href="../documentation/helpful-macro--let-alist.html">let-alist</a>.  With it you can
+access the values of an alist using a <code>.KEY</code>.  Unlike dash's <code>-let</code>, <code>let-alist</code> does
+not make you declare the key symbols beforehand; rather <code>let-alist</code> infers which
+keys your using based on the symbols prefixed by a period in the macro
+body&#x2013;making the syntax much more concise.  On the other hand, as the name
+"let-alist" suggests it only works on alists which is certainly a downgrade from
+<code>-let</code>.  Additionally, according to <a href="https://www.reddit.com/r/emacs/comments/b325ae/letplist_a_version_of_the_useful_letalist_macro/">this reddit post</a> the period notation it uses
+to prefix its symbols is prone to being confused with emacs-lisp cons cell
+syntax when evaluating symbols in a backquoted form.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">let-alist</span> <span style="font-weight: bold;">'</span>((a . 1) (b . 2) (c . 3))
+  (+ .a .b .c))
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 6</span>
+</pre>
+</div>
+
+<p>
+I wanted to combine the best of both dash's <code>-let</code> and Emacs's built-in <code>let-alist</code>.
+Specifically, I wanted it to have the brevity of <code>let-alist</code> while avoiding its
+dot syntax and the ability of <code>-let</code> to work with all three data structures.  Thus
+I came up with the macro <a href="../documentation/helpful-macro--with-map-bang.html">with-map!</a>.  It accepts any one of the three
+aforementioned data structures as well as a body of forms and let-binds
+specially-named symbols in its body.  Unlike <code>let-alist</code> it uses symbols prefixed
+by the bang symbol thereby avoiding the aforementioned problem with dot symbols.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(with-map! <span style="font-weight: bold;">'</span>(a 1 b 2 c 3)
+  (+ !a !b !c))
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 6</span>
+
+(with-map! <span style="font-weight: bold;">'</span>((a . 1) (b . 2) (c . 3))
+  (+ !a !b !c))
+
+6
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 6</span>
+
+(with-map! (aprog1 (make-hash-table)
+             (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> 1 <span style="font-weight: bold; text-decoration: underline;">it</span>)
+             (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> 2 <span style="font-weight: bold; text-decoration: underline;">it</span>)
+             (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span> 3 <span style="font-weight: bold; text-decoration: underline;">it</span>))
+  (+ !a !b !c))
+
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 6</span>
+</pre>
+</div>
+
+<p>
+The following macroexpansion provides insight in how my macro works.  I bind the
+alist to a generated symbol in this case <code>map85</code>.  In this example because the map
+is a static form that evaluates to itself it would not make a difference.  But
+if the map was a lisp expression that returns a map, then having that expression
+on each binding would cause multiple unintended evaluation.
+</p>
+
+<p>
+Notably, my expansions are virtually homogeneous despite using different maps
+because I am deferring the built-in <a href="../documentation/map-library.html">map.el</a>, a library that provides a generic
+interface between three main emacs-lisp data structures alists, plists and
+hash-tables.  The function <a href="../documentation/helpful-function--map-elt.html">map-elt</a> checks what kind of map it has and uses the
+appropriate getter to return the correct value.  Consequently, in contrast to
+<code>-let</code> the user does not need to specify which kind of map (alist, plist or
+hash-table) they need to use beforehand&#x2013;in fact, they do not even need to know
+which map their dealing with themselves.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">let*</span> ((map85 <span style="font-weight: bold;">'</span>(a 1 b 2 c 3))
+       (!a (map-elt map85 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span>))
+       (!b (map-elt map85 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span>))
+       (!c (map-elt map85 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span>)))
+  (+ !a !b !c))
+
+(<span style="font-weight: bold;">let*</span> ((map402 <span style="font-weight: bold;">'</span>((a . 1) (b . 2) (c . 3)))
+       (!a (map-elt map402 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span>))
+       (!b (map-elt map402 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span>))
+       (!c (map-elt map402 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span>)))
+  (+ !a !b !c))
+
+(<span style="font-weight: bold;">let*</span> ((map403 (aprog1 (make-hash-table)
+                 (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span> 1 <span style="font-weight: bold; text-decoration: underline;">it</span>)
+                 (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span> 2 <span style="font-weight: bold; text-decoration: underline;">it</span>)
+                 (puthash <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span> 3 <span style="font-weight: bold; text-decoration: underline;">it</span>)))
+       (!a (map-elt map403 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">a</span>))
+       (!b (map-elt map403 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">b</span>))
+       (!c (map-elt map403 <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">c</span>)))
+  (+ !a !b !c))
+</pre>
+</div>
+
+<p>
+The following helper is what I use to actually generate the macro expansion.
+The function loops through all the symbols in the body of the macro, collecting
+any symbols that match the regular expression <code>regexp</code>; then, it binds them to the
+key which is given by their name.  The optional argument <code>use-keywords</code> tells the
+function to get the value <code>!SYMBOL</code> by using the key <code>:SYMBOL</code> as opposed to <code>SYMBOL</code>
+as normal.  Maps often use keywords&#x2013;symbols prepened by a <code>:</code>&#x2013;as keys and
+although it is possible to specify keywords as <code>!:KEY</code> I did not find it
+aesthetically pleasing or satisfactorily concise to type prefix symbols with <code>!:</code>.
+Accordingly, I created this <code>use-keywords</code> argument so that in the future I can
+add an option to the <code>with-map!</code> macro or even create a spin-off macro that
+assumes keyword keys.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo--map-let-binds</span> (map body regexp <span style="font-weight: bold; text-decoration: underline;">&amp;optional</span> use-keywords)
+  <span style="font-style: italic;">"Return a list of let-bindings for `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">with-map!</span><span style="font-style: italic;">'.</span>
+<span style="font-style: italic;">Collect symbols matching REGEXP in BODY into an alist."</span>
+  (<span style="font-weight: bold;">let*</span> ((mapsym (cl-gensym <span style="font-style: italic;">"map"</span>))
+         (let-binds <span style="font-weight: bold;">`</span>((,mapsym ,map)))
+         (name nil)
+         (key nil))
+    (<span style="font-weight: bold;">dolist</span> (obj (flatten-tree body))
+      (<span style="font-weight: bold;">when</span> (<span style="font-weight: bold;">and</span> obj
+                 (symbolp obj)
+                 (<span style="font-weight: bold;">setq</span> name (symbol-name obj))
+                 (string-match regexp name)
+                 (not (assoc obj let-binds)))
+        (<span style="font-weight: bold;">setq</span> key (funcall (<span style="font-weight: bold;">if</span> use-keywords <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">oo-into-keyword</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">oo-into-symbol</span>)
+                           (match-string 1 name)))
+        (<span style="font-weight: bold;">push</span> <span style="font-weight: bold;">`</span>(,obj (map-elt ,mapsym <span style="font-weight: bold;">'</span>,key)) let-binds)))
+    (nreverse let-binds)))
+</pre>
+</div>
+
+<p>
+Overall, I am quite pleased with my implementation of <code>with-map!</code> (shown below).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">with-map!</span> (map <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> body)
+  <span style="font-style: italic;">"Let-bind bang symbols in BODY to corresponding keys in MAP."</span>
+  (<span style="font-weight: bold;">declare</span> (indent 1))
+  <span style="font-weight: bold;">`</span>(<span style="font-weight: bold;">let*</span> ,(oo--map-let-binds map body <span style="font-style: italic;">"!</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">(</span><span style="font-style: italic;">[</span><span style="font-style: italic;">^</span><span style="font-style: italic;">[:space:]]+</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">)</span><span style="font-style: italic;">"</span> nil)
+     ,@body))
+</pre>
+</div>
+</div>
+</body>
+</html>

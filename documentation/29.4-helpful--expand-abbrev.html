@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: expand-abbrev*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #ECEFF4;
+        background-color: #2E3440;
+      }
+      .button {
+        /* button */
+        color: #81A1C1;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #6f7787;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #81A1C1;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #78808f;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #88C0D0;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #add8e6;
+        background-color: #303030;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-size: 120%;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #81A1C1;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #D8DEE9;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+expand-abbrev is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function defined in
+<span class="button">abbrev.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(expand-abbrev)
+
+<span class="helpful-heading">Documentation
+</span>Expand the abbrev before point, if there is an abbrev there.
+
+Effective when explicitly called even when <span class="button">abbrev-mode</span> is nil.
+Calls the value of <span class="button">abbrev-expand-function</span> with no argument to do
+the work, and returns whatever it does.  (That return value should
+be the abbrev symbol if expansion occurred, else nil.)
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">abbrev-map</span> <span class="help-key-binding">'</span>
+<span class="variable-name">abbrev-map</span> <span class="help-key-binding">e</span>
+<span class="variable-name">ctl-x-map</span> <span class="help-key-binding">'</span>
+<span class="variable-name">ctl-x-map</span> <span class="help-key-binding">a '</span>
+<span class="variable-name">ctl-x-map</span> <span class="help-key-binding">a e</span>
+<span class="variable-name">global-map</span> <span class="help-key-binding">C-x '</span>
+<span class="variable-name">global-map</span> <span class="help-key-binding">C-x a '</span>
+<span class="variable-name">global-map</span> <span class="help-key-binding">C-x a e</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">abbrev.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">inverse-add-abbrev</span> ...)    <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">abbrev-prefix-mark</span> ...)    <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">expand-region-abbrevs</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by expand-abbrev</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/abbrev.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">expand-abbrev</span> ()
+  <span class="doc">"Expand the abbrev before point, if there is an abbrev there.
+Effective when explicitly called even when `</span><span class="doc"><span class="constant">abbrev-mode</span></span><span class="doc">' is nil.
+Calls the value of `</span><span class="doc"><span class="constant">abbrev-expand-function</span></span><span class="doc">' with no argument to do
+the work, and returns whatever it does.  (That return value should
+be the abbrev symbol if expansion occurred, else nil.)"</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">or</span> (funcall abbrev-expand-function)
+      (<span class="keyword">if</span> abbrev-suggest
+          (abbrev--suggest-maybe-suggest))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (expand-abbrev 0)
+<span class="constant">event-symbol-elements</span>
+  (expand-abbrev)
+<span class="constant">modifier-cache</span>
+  ((0 . expand-abbrev))</pre>
+  </body>
+</html>

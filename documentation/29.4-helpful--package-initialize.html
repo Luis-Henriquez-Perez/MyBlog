@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: package-initialize*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package-initialize is an <span class="button">autoloaded</span>, <span class="button">interactive</span> and <span class="button">byte-compiled</span>
+function defined in <span class="button">package.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(package-initialize <span class="type">&amp;optional</span> NO-ACTIVATE)
+
+<span class="helpful-heading">Documentation
+</span>Load Emacs Lisp packages, and activate them.
+
+The variable <span class="button">package-load-list</span> controls which packages to load.
+If optional arg NO-ACTIVATE is non-nil, don't activate packages.
+
+It is not necessary to adjust <span class="button">load-path</span> or <span class="button">require</span> the
+individual packages after calling <span class="button">package-initialize</span> -- this is
+taken care of by <span class="button">package-initialize</span>.
+
+If <span class="button">package-initialize</span> is called twice during Emacs startup,
+signal a warning, since this is a bad idea except in highly
+advanced use cases.  To suppress the warning, remove the
+superfluous call to <span class="button">package-initialize</span> from your init-file.  If
+you have code which must run before <span class="button">package-initialize</span>, put
+that code in the early init-file.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">package.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">package--archives-initialize</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">describe-package</span> ...)             <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">list-packages</span> ...)                <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-quickstart-refresh</span> ...)   <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-get-descriptor</span> ...)       <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by package-initialize</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/package.el.gz</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">package-initialize</span> (<span class="type">&amp;optional</span> no-activate)
+  <span class="doc">"Load Emacs Lisp packages, and activate them.
+The variable `</span><span class="doc"><span class="constant">package-load-list</span></span><span class="doc">' controls which packages to load.
+If optional arg NO-ACTIVATE is non-nil, don't activate packages.
+
+It is not necessary to adjust `</span><span class="doc"><span class="constant">load-path</span></span><span class="doc">' or `</span><span class="doc"><span class="constant">require</span></span><span class="doc">' the
+individual packages after calling `</span><span class="doc"><span class="constant">package-initialize</span></span><span class="doc">' -- this is
+taken care of by `</span><span class="doc"><span class="constant">package-initialize</span></span><span class="doc">'.
+
+If `</span><span class="doc"><span class="constant">package-initialize</span></span><span class="doc">' is called twice during Emacs startup,
+signal a warning, since this is a bad idea except in highly
+advanced use cases.  To suppress the warning, remove the
+superfluous call to `</span><span class="doc"><span class="constant">package-initialize</span></span><span class="doc">' from your init-file.  If
+you have code which must run before `</span><span class="doc"><span class="constant">package-initialize</span></span><span class="doc">', put
+that code in the early init-file."</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">when</span> (<span class="keyword">and</span> package--initialized (not after-init-time))
+    (lwarn '(package reinitialization) <span class="builtin">:warning</span>
+           <span class="string">"Unnecessary call to `</span><span class="string"><span class="constant">package-initialize</span></span><span class="string">' in init file"</span>))
+  (<span class="keyword">setq</span> package-alist nil)
+  (package-load-all-descriptors)
+  (package-read-all-archive-contents)
+  (<span class="keyword">setq</span> package--initialized t)
+  (<span class="keyword">unless</span> no-activate
+    (package-activate-all))
+  <span class="comment-delimiter">;; </span><span class="comment">This uses `</span><span class="comment"><span class="constant">package--mapc</span></span><span class="comment">' so it must be called after
+</span>  <span class="comment-delimiter">;; </span><span class="comment">`</span><span class="comment"><span class="constant">package--initialized</span></span><span class="comment">' is t.
+</span>  (package--build-compatibility-table))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (package-initialize 0)
+<span class="constant">event-symbol-elements</span>
+  (package-initialize)
+<span class="constant">function-history</span>
+  ("/usr/share/emacs/29.4/lisp/emacs-lisp/package.elc"
+   (autoload "package"
+     ("loaddefs.elc" . 901049)
+     t nil))
+<span class="constant">modifier-cache</span>
+  ((0 . package-initialize))</pre>
+  </body>
+</html>

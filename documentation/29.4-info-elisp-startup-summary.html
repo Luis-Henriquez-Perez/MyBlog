@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*"(elisp) Top"*&lt;3&gt;</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .info-header-node {
+        /* info-header-node */
+        color: #595959;
+        font-weight: bold;
+      }
+      .info-header-xref {
+        /* info-header-xref */
+        color: #3548cf;
+      }
+      .info-quoted {
+        /* Info-quoted */
+        color: #8f0075;
+      }
+      .info-title-3 {
+        /* info-title-3 */
+        color: #193668;
+        font-weight: bold;
+      }
+      .info-xref {
+        /* info-xref */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+(elisp)Top &gt; System Interface &gt; Starting Up &gt; Startup Summary
+
+<span class="info-title-3">42.1.1 Summary: Sequence of Actions at Startup</span>
+
+When Emacs is started up, it performs the following operations (see
+‘<span class="info-quoted">normal-top-level</span>’ in ‘<span class="info-quoted">startup.el</span>’):
+
+  1. It adds subdirectories to ‘<span class="info-quoted">load-path</span>’, by running the file named
+     ‘<span class="info-quoted">subdirs.el</span>’ in each directory in the list.  Normally, this file
+     adds the directory’s subdirectories to the list, and those are
+     scanned in their turn.  The files ‘<span class="info-quoted">subdirs.el</span>’ are normally
+     generated automatically when Emacs is installed.
+
+  2. It loads any ‘<span class="info-quoted">leim-list.el</span>’ that it finds in the ‘<span class="info-quoted">load-path</span>’
+     directories.  This file is intended for registering input methods.
+     The search is only for any personal ‘<span class="info-quoted">leim-list.el</span>’ files that you
+     may have created; it skips the directories containing the standard
+     Emacs libraries (these should contain only a single ‘<span class="info-quoted">leim-list.el</span>’
+     file, which is compiled into the Emacs executable).
+
+  3. It sets the variable ‘<span class="info-quoted">before-init-time</span>’ to the value of
+     ‘<span class="info-quoted">current-time</span>’ (see <span class="info-xref">Time of Day</span>).  It also sets
+     ‘<span class="info-quoted">after-init-time</span>’ to ‘<span class="info-quoted">nil</span>’, which signals to Lisp programs that
+     Emacs is being initialized.
+
+  4. It sets the language environment and the terminal coding system, if
+     requested by environment variables such as ‘<span class="info-quoted">LANG</span>’.
+
+  5. It does some basic parsing of the command-line arguments.
+
+  6. It loads your early init file (see <span class="info-xref">(emacs)Early Init File</span>).
+     This is not done if the options ‘<span class="info-quoted">-q</span>’, ‘<span class="info-quoted">-Q</span>’, or ‘<span class="info-quoted">--batch</span>’ were
+     specified.  If the ‘<span class="info-quoted">-u</span>’ option was specified, Emacs looks for the
+     init file in that user’s home directory instead.
+
+  7. It calls the function ‘<span class="info-quoted">package-activate-all</span>’ to activate any
+     optional Emacs Lisp package that has been installed.  See 
+     <span class="info-xref">Packaging Basics</span>.  However, Emacs doesn’t activate the packages
+     when ‘<span class="info-quoted">package-enable-at-startup</span>’ is ‘<span class="info-quoted">nil</span>’ or when it’s started with
+     one of the options ‘<span class="info-quoted">-q</span>’, ‘<span class="info-quoted">-Q</span>’, or ‘<span class="info-quoted">--batch</span>’.  To activate the
+     packages in the latter case, ‘<span class="info-quoted">package-activate-all</span>’ should be
+     called explicitly (e.g., via the ‘<span class="info-quoted">--funcall</span>’ option).
+
+  8. If not running in batch mode, it initializes the window system that
+     the variable ‘<span class="info-quoted">initial-window-system</span>’ specifies (see 
+     <span class="info-xref">initial-window-system</span>.).  The initialization
+     function, ‘<span class="info-quoted">window-system-initialization</span>’, is a “generic function”
+     (see <span class="info-xref">Generic Functions</span>) whose actual implementation is
+     different for each supported window system.  If the value of
+     ‘<span class="info-quoted">initial-window-system</span>’ is WINDOWSYSTEM, then the appropriate
+     implementation of the initialization function is defined in the
+     file ‘<span class="info-quoted">term/WINDOWSYSTEM-win.el</span>’.  This file should have been
+     compiled into the Emacs executable when it was built.
+
+  9. It runs the normal hook ‘<span class="info-quoted">before-init-hook</span>’.
+
+  10. If appropriate, it creates a graphical frame.  As part of creating
+     the graphical frame, it initializes the window system specified by
+     ‘<span class="info-quoted">initial-frame-alist</span>’ and ‘<span class="info-quoted">default-frame-alist</span>’ (see <span class="info-xref">Initial</span>
+     <span class="info-xref">Parameters</span>) for the graphical frame, by calling the
+     ‘<span class="info-quoted">window-system-initialization</span>’ function for that window system.
+     This is not done in batch (noninteractive) or daemon mode.
+
+  11. It initializes the initial frame’s faces, and sets up the menu bar
+     and tool bar if needed.  If graphical frames are supported, it sets
+     up the tool bar even if the current frame is not a graphical one,
+     since a graphical frame may be created later on.
+
+  12. It use ‘<span class="info-quoted">custom-reevaluate-setting</span>’ to re-initialize the members of
+     the list ‘<span class="info-quoted">custom-delayed-init-variables</span>’.  These are any pre-loaded
+     user options whose default value depends on the run-time, rather
+     than build-time, context.  See <span class="info-xref">custom-initialize-delay</span>.
+
+  13. It loads the library ‘<span class="info-quoted">site-start</span>’, if it exists.  This is not done
+     if the options ‘<span class="info-quoted">-Q</span>’ or ‘<span class="info-quoted">--no-site-file</span>’ were specified.
+
+  14. It loads your init file (see <span class="info-xref">Init File</span>).  This is not done if
+     the options ‘<span class="info-quoted">-q</span>’, ‘<span class="info-quoted">-Q</span>’, or ‘<span class="info-quoted">--batch</span>’ were specified.  If the ‘<span class="info-quoted">-u</span>’
+     option was specified, Emacs looks for the init file in that user’s
+     home directory instead.
+
+  15. It loads the library ‘<span class="info-quoted">default</span>’, if it exists.  This is not done if
+     ‘<span class="info-quoted">inhibit-default-init</span>’ is non-‘<span class="info-quoted">nil</span>’, nor if the options ‘<span class="info-quoted">-q</span>’, ‘<span class="info-quoted">-Q</span>’,
+     or ‘<span class="info-quoted">--batch</span>’ were specified.
+
+  16. It loads your abbrevs from the file specified by
+     ‘<span class="info-quoted">abbrev-file-name</span>’, if that file exists and can be read (see 
+     <span class="info-xref">abbrev-file-name</span>.).  This is not done if the option
+     ‘<span class="info-quoted">--batch</span>’ was specified.
+
+  17. It sets the variable ‘<span class="info-quoted">after-init-time</span>’ to the value of
+     ‘<span class="info-quoted">current-time</span>’.  This variable was set to ‘<span class="info-quoted">nil</span>’ earlier; setting it
+     to the current time signals that the initialization phase is over,
+     and, together with ‘<span class="info-quoted">before-init-time</span>’, provides the measurement of
+     how long it took.
+
+  18. It runs the normal hooks ‘<span class="info-quoted">after-init-hook</span>’ and
+     ‘<span class="info-quoted">delayed-warnings-hook</span>’.  The latter shows any warnings emitted
+     during previous stages of startup, which are automatically delayed.
+
+  19. If the buffer ‘<span class="info-quoted">*scratch*</span>’ exists and is still in Fundamental mode
+     (as it should be by default), it sets its major mode according to
+     ‘<span class="info-quoted">initial-major-mode</span>’.
+
+  20. If started on a text terminal, it loads the terminal-specific Lisp
+     library (see <span class="info-xref">Terminal-Specific</span>), and runs the hook
+     ‘<span class="info-quoted">tty-setup-hook</span>’.  This is not done in ‘<span class="info-quoted">--batch</span>’ mode, nor if
+     ‘<span class="info-quoted">term-file-prefix</span>’ is ‘<span class="info-quoted">nil</span>’.
+
+  21. It displays the initial echo area message, unless you have
+     suppressed that with ‘<span class="info-quoted">inhibit-startup-echo-area-message</span>’.
+
+  22. It processes any command-line options that were not handled
+     earlier.
+
+  23. It now exits if the option ‘<span class="info-quoted">--batch</span>’ was specified.
+
+  24. If the ‘<span class="info-quoted">*scratch*</span>’ buffer exists and is empty, it inserts
+     ‘<span class="info-quoted">(substitute-command-keys initial-scratch-message)</span>’ into that
+     buffer.
+
+  25. If ‘<span class="info-quoted">initial-buffer-choice</span>’ is a string, it visits the file (or
+     directory) with that name.  If it is a function, it calls the
+     function with no arguments and selects the buffer that it returns.
+     If one file is given as a command line argument, that file is
+     visited and its buffer displayed alongside ‘<span class="info-quoted">initial-buffer-choice</span>’.
+     If more than one file is given, all of the files are visited and
+     the ‘<span class="info-quoted">*Buffer List*</span>’ buffer is displayed alongside
+     ‘<span class="info-quoted">initial-buffer-choice</span>’.
+
+  26. It runs ‘<span class="info-quoted">emacs-startup-hook</span>’.
+
+  27. It calls ‘<span class="info-quoted">frame-notice-user-settings</span>’, which modifies the
+     parameters of the selected frame according to whatever the init
+     files specify.
+
+  28. It runs ‘<span class="info-quoted">window-setup-hook</span>’.  The only difference between this
+     hook and ‘<span class="info-quoted">emacs-startup-hook</span>’ is that this one runs after the
+     previously mentioned modifications to the frame parameters.
+
+  29. It displays the “startup screen”, which is a special buffer that
+     contains information about copyleft and basic Emacs usage.  This is
+     not done if ‘<span class="info-quoted">inhibit-startup-screen</span>’ or ‘<span class="info-quoted">initial-buffer-choice</span>’ are
+     non-‘<span class="info-quoted">nil</span>’, or if the ‘<span class="info-quoted">--no-splash</span>’ or ‘<span class="info-quoted">-Q</span>’ command-line options
+     were specified.
+
+  30. If a daemon was requested, it calls ‘<span class="info-quoted">server-start</span>’.  (On POSIX
+     systems, if a background daemon was requested, it then detaches
+     from the controlling terminal.)  see <span class="info-xref">(emacs)Emacs Server</span>.
+
+  31. If started by the X session manager, it calls
+     ‘<span class="info-quoted">emacs-session-restore</span>’ passing it as argument the ID of the
+     previous session.  See <span class="info-xref">Session Management</span>.
+
+The following options affect some aspects of the startup sequence.
+
+ -- User Option: inhibit-startup-screen
+     This variable, if non-‘<span class="info-quoted">nil</span>’, inhibits the startup screen.  In that
+     case, Emacs typically displays the ‘<span class="info-quoted">*scratch*</span>’ buffer; but see
+     ‘<span class="info-quoted">initial-buffer-choice</span>’, below.
+
+     Do not set this variable in the init file of a new user, or in a
+     way that affects more than one user, as that would prevent new
+     users from receiving information about copyleft and basic Emacs
+     usage.
+
+     ‘<span class="info-quoted">inhibit-startup-message</span>’ and ‘<span class="info-quoted">inhibit-splash-screen</span>’ are aliases
+     for this variable.
+
+ -- User Option: initial-buffer-choice
+     If non-‘<span class="info-quoted">nil</span>’, this variable is a string that specifies a file or
+     directory for Emacs to display after starting up, instead of the
+     startup screen.  If its value is a function, Emacs calls that
+     function which must return a buffer which is then displayed.  If
+     its value is ‘<span class="info-quoted">t</span>’, Emacs displays the ‘<span class="info-quoted">*scratch*</span>’ buffer.
+
+ -- User Option: inhibit-startup-echo-area-message
+     This variable controls the display of the startup echo area
+     message.  You can suppress the startup echo area message by adding
+     text with this form to your init file:
+
+          (setq inhibit-startup-echo-area-message
+                "YOUR-LOGIN-NAME")
+
+     Emacs explicitly checks for an expression as shown above in your
+     init file; your login name must appear in the expression as a Lisp
+     string constant.  You can also use the Customize interface.  Other
+     methods of setting ‘<span class="info-quoted">inhibit-startup-echo-area-message</span>’ to the same
+     value do not inhibit the startup message.  This way, you can easily
+     inhibit the message for yourself if you wish, but thoughtless
+     copying of your init file will not inhibit the message for someone
+     else.
+
+ -- User Option: initial-scratch-message
+     This variable, if non-‘<span class="info-quoted">nil</span>’, should be a string, which is treated
+     as documentation to be inserted into the ‘<span class="info-quoted">*scratch*</span>’ buffer when
+     Emacs starts up or when that buffer is recreated.  If it is ‘<span class="info-quoted">nil</span>’,
+     the ‘<span class="info-quoted">*scratch*</span>’ buffer is empty.
+
+The following command-line options affect some aspects of the startup
+sequence.  See <span class="info-xref">(emacs)Initial Options</span>.
+
+‘<span class="info-quoted">--no-splash</span>’
+     Do not display a splash screen.
+
+‘<span class="info-quoted">--batch</span>’
+     Run without an interactive terminal.  See <span class="info-xref">Batch Mode</span>.
+
+‘<span class="info-quoted">--daemon</span>’
+‘<span class="info-quoted">--bg-daemon</span>’
+‘<span class="info-quoted">--fg-daemon</span>’
+     Do not initialize any display; just start a server.  (A
+     “background” daemon automatically runs in the background.)
+
+‘<span class="info-quoted">--no-init-file</span>’
+‘<span class="info-quoted">-q</span>’
+     Do not load either the init file, or the ‘<span class="info-quoted">default</span>’ library.
+
+‘<span class="info-quoted">--no-site-file</span>’
+     Do not load the ‘<span class="info-quoted">site-start</span>’ library.
+
+‘<span class="info-quoted">--quick</span>’
+‘<span class="info-quoted">-Q</span>’
+     Equivalent to ‘<span class="info-quoted">-q --no-site-file --no-splash</span>’.
+
+‘<span class="info-quoted">--init-directory</span>’
+     Specify the directory to use when finding the Emacs init files.
+</pre>
+  </body>
+</html>

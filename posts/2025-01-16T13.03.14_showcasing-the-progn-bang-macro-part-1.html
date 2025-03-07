@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Showcasing the =progn!= macro (part 1)</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">Showcasing the <code>progn!</code> macro (part 1)</h1>
+</header><p>
+Manipulating symbol values is so common in emacs-lisp that you can almost always
+expect the bodies of functions and macros to be encased by <code>let</code> or <code>let*</code>, <a href="http://xahlee.info/emacs/emacs/elisp_special_form.html">special
+forms</a> that bind symbols to values.  In practice, this adds what is essentially
+a default level of additional indentation to virtually any reasonably sized
+block of lisp code you write.  And while this may not be such a big issue in
+isolation, in combination with the abundant body-enclosing macros in
+emacs-lisp--<a href="../documentation/helpful-special-form--save-excursion.html">save-excursion</a>, <a href="../documentation/helpful-special-form--save-restriction.html">save-restriction</a>, <a href="../documentation/helpful-macro--save-match-data.html">save-match-data</a>, <a href="../documentation/helpful-special-form--unwind-protect.html">unwind-protect</a>,
+<a href="../documentation/helpful-special-form--condition-case.html">condition-case</a> and <a href="../documentation/helpful-function--eval-after-load.html">eval-after-load</a> just to name a few&#x2013;it is that much easier
+for nesting to get out of hand.  Even worse is using <code>let</code> and <code>let*</code> in combination
+with closely related symbol-binding macros such as <code>cl-labels</code>, <code>cl-flet</code>, and
+<code>cl-letf</code>.  Each of these constructs adds its own boilerplate as well as
+additional level of nesting making the resulting form progressively more
+unwiedly and cumbersome to read.
+</p>
+
+<p>
+Consider the following form as an example.  It does two very typical things: it
+binds symbols--<code>a</code> <code>b</code> and <code>c</code>&#x2013;with <a href="../documentation/helpful-special-form--let.html">let</a> and it binds symbols--<code>plus</code> and <code>minus</code>&#x2013;to
+functions via <a href="../documentation/helpful-macro--cl-flet.html">cl-flet</a>.  And yet before we have even reached the main body we are
+already at two levels of nesting.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org8fc3b03">(<span style="font-weight: bold;">let</span> ((a 1)
+      (b 2)
+      (c 3))
+  (<span style="font-weight: bold;">cl-flet</span> ((plus (x y) (+ x y))
+            (minus (x y) (- x y)))
+    (minus (plus b c) (plus a b))))
+</pre>
+</div>
+
+<p>
+To be clear, I am not demonizing nesting itself.  Proper nesting actually makes
+code more readable by conveying information about what pertains to a specific
+form.  And, objectively speaking, the nesting here is logical and consistent
+with the nesting of any typical body-enclosing lisp form.  Nevertheless, the
+similar nature of the symbol-binding lisp constructs, the frequency of their
+use, as well as the verbosity that arises from using them in tandem presaged the
+need for an abstraction.  Accordingly, I devised <a href="../documentation/helpful-macro--progn-bang.html">progn!</a>.
+</p>
+
+<p>
+To see how it works consider the initial example below re-written using <code>progn!</code>.  Even
+with a cursory glance it is apparent how much cleaner and less cluttered the
+form is compared to <a href="#org8fc3b03">its counterpart</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(progn!
+  (<span style="font-weight: bold;">set!</span> a 1)
+  (<span style="font-weight: bold;">set!</span> b 2)
+  (<span style="font-weight: bold;">set!</span> c 3)
+  (<span style="font-weight: bold;">flet!</span> plus (x y) (+ x y))
+  (<span style="font-weight: bold;">flet!</span> minus (x y) (- x y))
+  (minus (plus b c) (plus a b)))
+</pre>
+</div>
+
+<p>
+Among the first things you will notice is the appearance new macros: <code>set!</code> and
+<code>flet!</code>.  The former is a wrapper around <code>setq</code> and the latter just ignores its
+arguments and expands to nil.  Primarily, these macros&#x2013;especially for <code>flet!</code>
+which otherwise does nothing&#x2013;is to indicate to <code>progn!</code> where in the body it
+should either record information or modify the body itself.  The idea of using
+certain lisp patterns to indicate some action is not a novel one: it was inspired
+by <a href="https://github.com/okamsn/loopy">loopy</a> an iteration macro that in turn was inspired by <a href="../documentation/helpful-macro--cl-loop.html">cl-loop</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">set!</span> (var value)
+  <span style="font-weight: bold;">`</span>(<span style="font-weight: bold;">setq</span> ,var ,value))
+
+(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">flet!</span> (name args <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> body)
+  <span style="font-style: italic;">"Define a local function definition with `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">cl-flet</span><span style="font-style: italic;">'.</span>
+<span style="font-style: italic;">NAME, ARGS and BODY are the same as in `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">defun</span><span style="font-style: italic;">'.</span>
+<span style="font-style: italic;">Must be used in `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">progn!</span><span style="font-style: italic;">'."</span>
+  (<span style="font-weight: bold;">declare</span> (indent defun))
+  (ignore name args body))
+</pre>
+</div>
+
+<p>
+During macro-expansion, <code>progn!</code> loops<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>through its body detecting forms that match the patterns
+<code>(set!  SYMBOL VALUE)</code> and <code>(flet!  NAME . ARGUMENTS)</code>.  When it finds the former it
+collects <code>SYMBOL</code> into a list of symbols to be implicitly let-bound.  When it
+finds the latter (shown below) it replaces it as well as subsequent forms, <code>REST</code>,
+with <code>(cl-flet ((NAME . ARGUMENTS)) REST)</code>.  After finishing going through the
+body <code>progn!</code> let-binds the symbols it collected from <code>set!</code> patterns around the
+resulting body.  The result is the following macro-expansion<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup> which is
+virtually equivalent to the initial example.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">let</span> ((a nil)
+      (b nil)
+      (c nil))
+  (<span style="font-weight: bold;">set!</span> a 1)
+  (<span style="font-weight: bold;">set!</span> b 2)
+  (<span style="font-weight: bold;">set!</span> c 3)
+  (<span style="font-weight: bold;">cl-flet</span> ((plus (x y) (+ x y)))
+    (<span style="font-weight: bold;">cl-flet</span> ((minus (x y) (- x y)))
+      (minus (plus b c) (plus a b)))))
+</pre>
+</div>
+
+<p>
+It should be noted that abstracting the code in this way does come with a
+drawback.  Namely, you lose out on some of the precision and flexibility you
+have to specify the scope of forms.  In the following example for instance, the
+form <code>(+ 1 1)</code> is in the scope of <code>let</code> but not <code>cl-flet</code> whereas <code>(minus (plus b c)
+(plus a b))</code> is in both.  With <code>progn!</code> this is impossible.  However, with over a
+year of using <code>progn!</code>, I have not found a case where I actually need this level
+of control.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">let</span> ((a 1)
+      (b 2)
+      (c 3))
+  (+ 1 1)
+  (<span style="font-weight: bold;">cl-flet</span> ((plus (x y) (+ x y))
+            (minus (x y) (- x y)))
+    (minus (plus b c) (plus a b))))
+</pre>
+</div>
+
+<p>
+By working in combination with these indicator macros <code>progn!</code> facilitates writing
+more direct and concise code.  Previously, I felt discouraged from using
+<code>cl-flet</code>, <code>cl-labels</code> and <code>cl-letf</code> despite their palpable usefulness due to their
+unruly verbosity; now I find myself using such constructs all the time.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">By "loops" I do not mean a normal
+<a href="../documentation/helpful-macro--dolist.html">dolist</a> kind of loop.  It walks the tree of forms using <a href="https://github.com/Luis-Henriquez-Perez/treepy.el">treepy</a>.  But I do not
+want to digress here.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Actually, this
+is a slightly simplified macro-expansion for didactic purposes.</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>

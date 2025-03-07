@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>revisiting stopping abbrev from expanding</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">revisiting stopping abbrev from expanding</h1>
+</header><p>
+In a <a href="2025-01-20T04.57.23_stopping-abbrev-from-expanding-on-newline.html">previous post</a> I had looked at unexpected behavior that allowed abbrevs to
+expand even if they were several lines before my cursor.  There I fixed it by
+changing the [[][:regexp property]] of the abbrev table to make sure that
+abbrevs only expanded with spaces.  But as I had been revising that post it
+occurred to me that maybe that was not the problem or atleast not the only
+problem.  I think it might be O.K. to have an abbrev expand if its in the
+previous line.  I mean this makes sense.  But at least I do not expect it to
+happen across multiple lines.
+</p>
+
+<p>
+Some context: that abbrev had an [[][:enable-property]] set to
+<a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html">oo-use-text-abbrev-p</a>.  This means that abbrev would only expand if the current
+major mode was derived from text mode or if the cursor was in a string or
+docstring.  The example is in emacs-lisp-mode so the first condition will always
+be false.  Although the symbol "args" was not in a docstring, the reason it was
+still expanded was because my cursor was in a docstring.  That is not what my
+intention was.  My intention is that only words in a docstring or comment should
+expand.  The reason I did not notice this before is that the majority of the
+time the cursor being in the docstring or comment usually means the previous
+abbrev.  The example I encountered was a rare edge case.  So the
+underlying problem here is that with these enable properties.  So I need to
+figure out how to code it so that if.  For this I need to review how abbrev
+expansion works again.
+</p>
+
+<p>
+I think the pertinent function is <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--abbrev--default-expand.html">abbrev&#x2013;default-expand</a>.  It collects
+information about the abbrev before point with the aptly named
+<a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--abbrev--before-point.html">abbrev&#x2013;before-point</a> and records the information before actually inserting the
+abbrev.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">abbrev--default-expand</span> ()
+  <span style="font-style: italic;">"Default function to use for `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">abbrev-expand-function</span><span style="font-style: italic;">'.</span>
+<span style="font-style: italic;">This also respects the obsolete wrapper hook `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">abbrev-expand-functions</span><span style="font-style: italic;">'.</span>
+<span style="font-style: italic;">\(See `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">with-wrapper-hook</span><span style="font-style: italic;">' for details about wrapper hooks.)</span>
+<span style="font-style: italic;">Calls `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">abbrev-insert</span><span style="font-style: italic;">' to insert any expansion, and returns what it does."</span>
+  (<span style="font-weight: bold;">subr--with-wrapper-hook-no-warnings</span> abbrev-expand-functions ()
+                                       (<span style="font-weight: bold;">pcase-let</span> ((<span style="font-weight: bold;">`</span>(,sym ,name ,wordstart ,wordend) (abbrev--before-point)))
+                                         (<span style="font-weight: bold;">when</span> sym
+                                           (<span style="font-weight: bold;">let</span> ((startpos (copy-marker (point) t))
+                                                 (endmark (copy-marker wordend t)))
+                                             (<span style="font-weight: bold;">unless</span> (<span style="font-weight: bold;">or</span> <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">executing-kbd-macro</span>
+                                                      noninteractive
+                                                      (window-minibuffer-p))
+                                               <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Add an undo boundary, in case we are doing this for</span>
+                                               <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">a self-inserting command which has avoided making one so far.</span>
+                                               (undo-boundary))
+                                             <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Now sym is the abbrev symbol.</span>
+                                             (<span style="font-weight: bold;">setq</span> last-abbrev-text name)
+                                             (<span style="font-weight: bold;">setq</span> last-abbrev sym)
+                                             (<span style="font-weight: bold;">setq</span> last-abbrev-location wordstart)
+                                             <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">If this abbrev has an expansion, delete the abbrev</span>
+                                             <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">and insert the expansion.</span>
+                                             (<span style="font-weight: bold;">prog1</span>
+                                                 (abbrev-insert sym name wordstart wordend)
+                                               <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Yuck!!  If expand-abbrev is called with point slightly</span>
+                                               <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">further than the end of the abbrev, move point back to</span>
+                                               <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">where it started.</span>
+                                               (<span style="font-weight: bold;">if</span> (<span style="font-weight: bold;">and</span> (&gt; startpos endmark)
+                                                        (= (point) endmark)) <span style="font-weight: bold; font-style: italic;">;</span><span style="font-weight: bold; font-style: italic;">Obey skeletons that move point.</span>
+                                                   (goto-char startpos))))))))
+</pre>
+</div>
+
+<p>
+So my thinking is I need to advise <code>abbrev-insert</code> so it does nothing if the
+abbrevs enable function does not return non-nil from <code>last-abbrev-location</code>.  My
+lingering doubt with this is that I will be polluting the.  In essence I am
+adding another check to determine if the abbrev will expand.
+</p>
+
+<p>
+On second thought I think I should just make <code>abbrev--before-point</code> return false
+in this case.  It finds the first table that satisfies enable function.  It
+already checks the enable property but I want it to also check the enable
+property after it finds a proper abbrev too, at it is start point.
+</p>
+
+<p>
+Unfortunately this is one of the cases where there is no great place to advise.
+I mean this could still be done with advice but it would be inefficient because
+I would have to implement certain code twice.
+</p>
+
+<p>
+The following block the part of the body of <code>abbrev--before-point</code> that actually
+checks each active abbrev table until a valid abbrev is found.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">while</span> (<span style="font-weight: bold;">and</span> tables (not (car res)))
+  (<span style="font-weight: bold;">let*</span> ((table (<span style="font-weight: bold;">pop</span> tables))
+         (enable-fun (abbrev-table-get table <span style="font-weight: bold;">:enable-function</span>)))
+    (<span style="font-weight: bold;">setq</span> tables (append (abbrev-table-get table <span style="font-weight: bold;">:parents</span>) tables))
+    (<span style="font-weight: bold;">setq</span> res
+          (<span style="font-weight: bold;">and</span>
+           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Check whether enable function works at point if there is one.</span>
+           (<span style="font-weight: bold;">or</span> (not enable-fun) (funcall enable-fun))
+           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Check whether the table regexp works at point, again if there is</span>
+           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">one.  Also if there is one record the word in question.</span>
+           (<span style="font-weight: bold;">let</span> ((re (abbrev-table-get table <span style="font-weight: bold;">:regexp</span>)))
+             (<span style="font-weight: bold;">if</span> (null re)
+                 <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">We used to default `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">re</span><span style="font-weight: bold; font-style: italic;">' to "\\&lt;\\(\\w+\\)\\W*"</span>
+                 <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">but when words-include-escapes is set, that</span>
+                 <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">is not right and fixing it is boring.</span>
+                 (<span style="font-weight: bold;">let</span> ((lim (point)))
+                   (backward-word 1)
+                   (<span style="font-weight: bold;">setq</span> start (point))
+                   (forward-word 1)
+                   (<span style="font-weight: bold;">setq</span> end (min (point) lim)))
+               (<span style="font-weight: bold;">when</span> (looking-back re (line-beginning-position))
+                 (<span style="font-weight: bold;">setq</span> start (match-beginning 1))
+                 (<span style="font-weight: bold;">setq</span> end   (match-end 1)))))
+           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">My extra check.  Check whether the enable function still works at</span>
+           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">the start of the abbrev.</span>
+           (<span style="font-weight: bold;">or</span> (not enable-fun) (<span style="font-weight: bold;">save-excursion</span> (goto-char start) (funcall enable-fun)))
+           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Then check to see if the word has an abbrev.  If it does record</span>
+           <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">the abbrev info.</span>
+           (<span style="font-weight: bold;">setq</span> name  (buffer-substring start end))
+           (<span style="font-weight: bold;">let</span> ((abbrev (abbrev--symbol name table)))
+             (<span style="font-weight: bold;">when</span> abbrev
+               (<span style="font-weight: bold;">setq</span> enable-fun (abbrev-get abbrev <span style="font-weight: bold;">:enable-function</span>))
+               (<span style="font-weight: bold;">and</span> (<span style="font-weight: bold;">or</span> (not enable-fun) (funcall enable-fun))
+                    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">This will also look it up in parent tables.</span>
+                    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">This is not on purpose, but it seems harmless.</span>
+                    (list abbrev name start end))))))
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Restore point.</span>
+    (goto-char pos)))
+</pre>
+</div>
+
+<p>
+After I added this check I started mulling over what I had done and whether it
+makes sense.  Do I need both checks?  Or should I take out the current check.
+</p>
+
+<p>
+After thinking it over I have come to the conclusion that both checks are
+necessary.  Checking the start of the abbrev to be expanded is, as mentioned,
+for ensuring that an abbrev is not expanded outside of where you intend to
+expand it.  But checking the current.  Consider the following hypothetical
+example where cursor is at <code>^</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">foo</span> ()
+  <span style="font-style: italic;">"Something args."</span>
+  ^)
+</pre>
+</div>
+</div>
+</body>
+</html>

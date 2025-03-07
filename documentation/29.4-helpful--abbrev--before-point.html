@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: abbrev--before-point*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #ECEFF4;
+        background-color: #2E3440;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #81A1C1;
+      }
+      .button {
+        /* button */
+        color: #81A1C1;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #6f7787;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #6f7787;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #81A1C1;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #78808f;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #88C0D0;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-size: 120%;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #81A1C1;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #A3BE8C;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+abbrev--before-point is a <span class="button">byte-compiled</span> function defined in
+<span class="button">abbrev.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(abbrev--before-point)
+
+<span class="helpful-heading">Documentation
+</span>Try and find an abbrev before point.  Return it if found, nil otherwise.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">abbrev.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">abbrev--default-expand</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by abbrev--before-point</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/abbrev.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">abbrev--before-point</span> ()
+  <span class="doc">"Try and find an abbrev before point.  Return it if found, nil otherwise."</span>
+  (<span class="keyword">unless</span> (eq abbrev-start-location-buffer (current-buffer))
+    (<span class="keyword">setq</span> abbrev-start-location nil))
+
+  (<span class="keyword">let</span> ((tables (abbrev--active-tables))
+        (pos (point))
+        start end name res)
+
+    (<span class="keyword">if</span> abbrev-start-location
+        (<span class="keyword">progn</span>
+          (<span class="keyword">setq</span> start abbrev-start-location)
+          (<span class="keyword">setq</span> abbrev-start-location nil)
+          <span class="comment-delimiter">;; </span><span class="comment">Remove the hyphen inserted by `</span><span class="comment"><span class="constant">abbrev-prefix-mark</span></span><span class="comment">'.
+</span>          (<span class="keyword">when</span> (<span class="keyword">and</span> (&lt; start (point-max))
+                     (eq (char-after start) ?-))
+            (delete-region start (1+ start))
+            (<span class="keyword">setq</span> pos (1- pos)))
+          (skip-syntax-backward <span class="string">" "</span>)
+          (<span class="keyword">setq</span> end (point))
+          (<span class="keyword">when</span> (&gt; end start)
+            (<span class="keyword">setq</span> name (buffer-substring start end))
+            (goto-char pos)               <span class="comment-delimiter">; </span><span class="comment">Restore point.
+</span>            (list (abbrev-symbol name tables) name start end)))
+
+      (<span class="keyword">while</span> (<span class="keyword">and</span> tables (not (car res)))
+        (<span class="keyword">let*</span> ((table (<span class="keyword">pop</span> tables))
+               (enable-fun (abbrev-table-get table <span class="builtin">:enable-function</span>)))
+          (<span class="keyword">setq</span> tables (append (abbrev-table-get table <span class="builtin">:parents</span>) tables))
+          (<span class="keyword">setq</span> res
+                (<span class="keyword">and</span> (<span class="keyword">or</span> (not enable-fun) (funcall enable-fun))
+                     (<span class="keyword">let</span> ((re (abbrev-table-get table <span class="builtin">:regexp</span>)))
+                       (<span class="keyword">if</span> (null re)
+                           <span class="comment-delimiter">;; </span><span class="comment">We used to default `</span><span class="comment"><span class="constant">re</span></span><span class="comment">' to "\\&lt;\\(\\w+\\)\\W*"
+</span>                           <span class="comment-delimiter">;; </span><span class="comment">but when words-include-escapes is set, that
+</span>                           <span class="comment-delimiter">;; </span><span class="comment">is not right and fixing it is boring.
+</span>                           (<span class="keyword">let</span> ((lim (point)))
+                             (backward-word 1)
+                             (<span class="keyword">setq</span> start (point))
+                             (forward-word 1)
+                             (<span class="keyword">setq</span> end (min (point) lim)))
+                         (<span class="keyword">when</span> (looking-back re (line-beginning-position))
+                           (<span class="keyword">setq</span> start (match-beginning 1))
+                           (<span class="keyword">setq</span> end   (match-end 1)))))
+                     (<span class="keyword">setq</span> name  (buffer-substring start end))
+                     (<span class="keyword">let</span> ((abbrev (abbrev--symbol name table)))
+                       (<span class="keyword">when</span> abbrev
+                         (<span class="keyword">setq</span> enable-fun (abbrev-get abbrev <span class="builtin">:enable-function</span>))
+                         (<span class="keyword">and</span> (<span class="keyword">or</span> (not enable-fun) (funcall enable-fun))
+                              <span class="comment-delimiter">;; </span><span class="comment">This will also look it up in parent tables.
+</span>                              <span class="comment-delimiter">;; </span><span class="comment">This is not on purpose, but it seems harmless.
+</span>                              (list abbrev name start end))))))
+          <span class="comment-delimiter">;; </span><span class="comment">Restore point.
+</span>          (goto-char pos)))
+      res)))
+
+</pre>
+  </body>
+</html>

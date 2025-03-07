@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful special form: let*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #F8F8F2;
+        background-color: #272822;
+      }
+      .button {
+        /* button */
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #75715E;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #AE81FF;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #F92672;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+let is a <span class="button">special form</span> defined in C source code.
+
+<span class="helpful-heading">Signature
+</span>(<span class="keyword">let</span> VARLIST BODY...)
+
+<span class="helpful-heading">Documentation
+</span>Bind variables according to VARLIST then eval BODY.
+
+The value of the last form in BODY is returned.
+Each element of VARLIST is a symbol (which is bound to nil)
+or a list (SYMBOL VALUEFORM) (which binds SYMBOL to the value of VALUEFORM).
+All the VALUEFORMs are evalled before any symbols are bound.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>C code is not yet loaded.
+
+<span class="button">Find all references</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable tracing</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">C code is not yet loaded.</span>
+
+<span class="button">Set C source directory</span>
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">byte-compile</span>
+  byte-compile-let
+<span class="constant">byte-optimizer</span>
+  byte-optimize-letX
+<span class="constant">edebug-form-spec</span>
+  ((&amp;rest &amp;or
+          (symbolp &amp;optional form)
+          symbolp)
+   body)
+<span class="constant">gv-expander</span>
+  #[642 "\300&#2;\301\302\303&#5;!&#6;&#7;\"!BB\207"
+        [let macroexp-unprogn gv-get macroexp-progn]
+        9 "\n\n(fn DO BINDINGS &amp;rest BODY)"]
+  <span class="button">Disassemble</span>
+<span class="constant">lisp-indent-function</span>
+  1
+<span class="constant">pcase-macroexpander</span>
+  let--pcase-macroexpander</pre>
+  </body>
+</html>

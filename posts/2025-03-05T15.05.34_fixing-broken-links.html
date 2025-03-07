@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>fixing broken links in my posts</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">fixing broken links in my posts</h1>
+</header><p>
+I was on the verge of publishing my blog when to my dismay I realized that many
+of the file links were broken in some older posts.  I had migrated from another
+blog directory and I think I forgot to include them.  This is something that it
+is good to be able to handle programmatically.  I want to find any broken links
+I have and fix them.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-fix-broken-help-links</span> ()
+  <span style="font-style: italic;">""</span>
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">search through my blog posts.</span>
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">If any file link is broken check to see if it points to the documentatoin</span>
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">directory, and if it does then check to see if it is a helpful link to a</span>
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">variable or function, if it is then create the file in the current format</span>
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">that I have and change the link so that it points to it.</span>
+  (<span style="font-weight: bold;">let</span> ((file-link-regexp (<span style="font-weight: bold;">rx</span> <span style="font-style: italic;">"[[file:][]]"</span>))
+        (file nil))
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Get all of my blog posts</span>
+    (directory-files blog-dir t)
+    (<span style="font-weight: bold;">while</span> (re-search-forward file-link-regexp nil t nil)
+      (<span style="font-weight: bold;">setq</span> file (match-string 1))
+      (<span style="font-weight: bold;">unless</span> (file-exists-p file)
+        <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Produce the helpful buffer and htmlize it.</span>
+        (htmlize-buffer helpful-buffer))))
+  )
+</pre>
+</div>
+</div>
+</body>
+</html>

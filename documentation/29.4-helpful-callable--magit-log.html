@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: magit-log*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #0000b0;
+        font-weight: bold;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+magit-log is an <span class="button">autoloaded</span>, <span class="button">interactive</span> and <span class="button">byte-compiled</span> function
+defined in <span class="button">magit-log.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(magit-log)
+
+<span class="helpful-heading">Documentation
+</span>Show a commit or reference log.
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">magit-mode-map</span> <span class="help-key-binding">l</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">magit-log.el</span>:
+(<span class="keyword">defun</span> <span class="function-name">magit-log-arguments</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by magit-log</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/packages/elpaca/builds/magit/magit-log.el</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Options
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Log Mode
+</span>
+(<span class="keyword">defgroup</span> <span class="type">magit-log</span> nil
+  <span class="doc">"Inspect and manipulate Git history."</span>
+  <span class="builtin">:link</span> '(info-link <span class="string">"(magit)Logging"</span>)
+  <span class="builtin">:group</span> 'magit-commands
+  <span class="builtin">:group</span> 'magit-modes)
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">custom-group</span>
+  ((magit-prefix-use-buffer-arguments custom-variable)
+   (magit-direct-use-buffer-arguments custom-variable)
+   (magit-margin custom-group)
+   (magit-revision-wash-message-hook custom-variable)
+   (magit-log-mode-hook custom-variable)
+   (magit-log-remove-graph-args custom-variable)
+   (magit-log-revision-headers-format custom-variable)
+   (magit-log-auto-more custom-variable)
+   (magit-log-margin custom-variable)
+   (magit-log-margin-show-committer-date custom-variable)
+   (magit-log-show-refname-after-summary custom-variable)
+   (magit-log-wash-summary-hook custom-variable)
+   (magit-log-header-line-function custom-variable)
+   (magit-log-trace-definition-function custom-variable)
+   (magit-log-color-graph-limit custom-variable)
+   (magit-log-show-signatures-limit custom-variable)
+   (magit-log-buffer-file-locked custom-variable)
+   (magit-log-select-show-usage custom-variable)
+   (magit-log-select-margin custom-variable)
+   (magit-cherry-sections-hook custom-variable)
+   (magit-cherry-margin custom-variable)
+   (magit-log-merged-commit-count custom-variable)
+   (magit-reflog-margin custom-variable))
+<span class="constant">custom-links</span>
+  ((info-link "(magit)Logging"))
+<span class="constant">event-symbol-element-mask</span>
+  (magit-log 0)
+<span class="constant">event-symbol-elements</span>
+  (magit-log)
+<span class="constant">function-documentation</span>
+  "Show a commit or reference log."
+<span class="constant">function-history</span>
+  ("/home/luis/.config/emacs/packages/elpaca/builds/magit/magit-log.elc"
+   (autoload "magit-log" nil t nil)
+   nil
+   (autoload "magit-log" nil t nil))
+<span class="constant">group-documentation</span>
+  "Inspect and manipulate Git history."
+<span class="constant">interactive-only</span>
+  t
+<span class="constant">modifier-cache</span>
+  ((0 . magit-log))
+<span class="constant">transient--layout</span>
+  ([nil transient-subgroups nil
+        ([nil transient-column
+              (:description "Commit limiting")
+              ((nil transient-suffix
+                    (:command magit-log:-n))
+               (nil transient-suffix
+                    (:command magit:--author))
+               (7 transient-suffix
+                  (:command magit-log:--since))
+               (7 transient-suffix
+                  (:command magit-log:--until))
+               (nil transient-suffix
+                    (:command magit-log:--grep))
+               (7 transient-switch
+                  (:key "-i" :description "Search case-insensitive" :shortarg "-i" :argument "--regexp-ignore-case" :command transient:magit-log:--regexp-ignore-case))
+               (7 transient-switch
+                  (:key "-I" :description "Invert search pattern" :argument "--invert-grep" :command transient:magit-log:--invert-grep))
+               (nil transient-suffix
+                    (:command magit-log:-G))
+               (nil transient-suffix
+                    (:command magit-log:-S))
+               (nil transient-suffix
+                    (:command magit-log:-L))
+               (7 transient-switch
+                  (:key "=m" :description "Omit merges" :argument "--no-merges" :command transient:magit-log:--no-merges))
+               (7 transient-switch
+                  (:key "=p" :description "First parent" :argument "--first-parent" :command transient:magit-log:--first-parent)))]
+         [nil transient-column
+              (:description "History simplification")
+              ((nil transient-switch
+                    (:key "-D" :description "Simplify by decoration" :argument "--simplify-by-decoration" :command transient:magit-log:--simplify-by-decoration))
+               (nil transient-suffix
+                    (:command magit:--))
+               (nil transient-switch
+                    (:key "-f" :description "Follow renames when showing single-file log" :argument "--follow" :command transient:magit-log:--follow))
+               (6 transient-switch
+                  (:key "/s" :description "Only commits changing given paths" :argument "--sparse" :command transient:magit-log:--sparse))
+               (7 transient-switch
+                  (:key "/d" :description "Only selected commits plus meaningful history" :argument "--dense" :command transient:magit-log:--dense))
+               (7 transient-switch
+                  (:key "/a" :description "Only commits existing directly on ancestry path" :argument "--ancestry-path" :command transient:magit-log:--ancestry-path))
+               (6 transient-switch
+                  (:key "/f" :description "Do not prune history" :argument "--full-history" :command transient:magit-log:--full-history))
+               (7 transient-switch
+                  (:key "/m" :description "Prune some history" :argument "--simplify-merges" :command transient:magit-log:--simplify-merges)))]
+         [nil transient-column
+              (:description "Commit ordering")
+              ((nil transient-suffix
+                    (:command magit-log:--*-order))
+               (nil transient-switch
+                    (:key "-r" :description "Reverse order" :argument "--reverse" :command transient:magit-log:--reverse)))]
+         [nil transient-column
+              (:description "Formatting")
+              ((nil transient-switch
+                    (:key "-g" :description "Show graph" :argument "--graph" :command transient:magit-log:--graph))
+               (nil transient-switch
+                    (:key "-c" :description "Show graph in color" :argument "--color" :command transient:magit-log:--color))
+               (nil transient-switch
+                    (:key "-d" :description "Show refnames" :argument "--decorate" :command transient:magit-log:--decorate))
+               (nil transient-switch
+                    (:key "=S" :description "Show signatures" :argument "--show-signature" :command transient:magit-log:--show-signature))
+               (nil transient-switch
+                    (:key "-h" :description "Show header" :argument "++header" :command transient:magit-log:++header))
+               (nil transient-switch
+                    (:key "-p" :description "Show diffs" :shortarg "-p" :argument "--patch" :command transient:magit-log:--patch))
+               (nil transient-switch
+                    (:key "-s" :description "Show diffstats" :argument "--stat" :command transient:magit-log:--stat)))])]
+   [nil transient-columns nil
+        ([nil transient-column
+              (:description "Log")
+              ((nil transient-suffix
+                    (:key "l" :description "current" :command magit-log-current))
+               (nil transient-suffix
+                    (:key "h" :description "HEAD" :command magit-log-head))
+               (nil transient-suffix
+                    (:key "u" :description "related" :command magit-log-related))
+               (nil transient-suffix
+                    (:key "o" :description "other" :command magit-log-other)))]
+         [nil transient-column
+              (:description "")
+              ((nil transient-suffix
+                    (:key "L" :description "local branches" :command magit-log-branches))
+               (nil transient-suffix
+                    (:key "b" :description "all branches" :command magit-log-all-branches))
+               (nil transient-suffix
+                    (:key "a" :description "all references" :command magit-log-all))
+               (7 transient-suffix
+                  (:key "B" :description "matching branches" :command magit-log-matching-branches))
+               (7 transient-suffix
+                  (:key "T" :description "matching tags" :command magit-log-matching-tags))
+               (7 transient-suffix
+                  (:key "m" :description "merged" :command magit-log-merged)))]
+         [nil transient-column
+              (:description "Reflog")
+              ((nil transient-suffix
+                    (:key "r" :description "current" :command magit-reflog-current))
+               (nil transient-suffix
+                    (:key "H" :description "HEAD" :command magit-reflog-head))
+               (nil transient-suffix
+                    (:key "O" :description "other" :command magit-reflog-other)))]
+         [nil transient-column
+              (:if
+               #[0 "\300\301!\205&#8;&#0;\301 \207"
+                   [fboundp magit--any-wip-mode-enabled-p]
+                   2]
+               :description "Wiplog")
+              ((nil transient-suffix
+                    (:key "i" :description "index" :command magit-wip-log-index))
+               (nil transient-suffix
+                    (:key "w" :description "worktree" :command magit-wip-log-worktree)))]
+         [nil transient-column
+              (:description "Other")
+              ((5 transient-suffix
+                  (:key "s" :description "shortlog" :command magit-shortlog)))])])
+<span class="constant">transient--prefix</span>
+  #s(magit-log-prefix eieio--unbound magit-log eieio--unbound eieio--unbound eieio--unbound eieio--unbound nil nil 0 magit-log nil nil "git-log" nil nil eieio--unbound nil nil nil eieio--unbound nil eieio--unbound nil nil nil magit-log-mode)</pre>
+  </body>
+</html>

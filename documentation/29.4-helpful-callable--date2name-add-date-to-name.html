@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: date2name-add-date-to-name*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+date2name-add-date-to-name is a <span class="button">byte-compiled</span> function defined in
+<span class="button">date2name.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(date2name-add-date-to-name ARG <span class="type">&amp;optional</span> WITHTIME)
+
+<span class="helpful-heading">Documentation
+</span>Add date to filenames.
+
+The filenames are all marked files in dired or the
+file under the point if no files are marked.
+If ARG is nil use the modification time of the file.
+With one prefix arg, prompt for a time individually for each file.
+With two prefix args prompt for one time for all files.
+If WITHTIME is not nil a timestamp in the format of
+the variable <span class="button">date2name-datetime-format</span> is used.
+Otherwise a datestamp in the format of the variable
+<span class="button">date2name-date-format</span> is used.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">date2name.el</span>:
+(<span class="keyword">defun</span> <span class="function-name">date2name-dired-add-date-to-name</span> ...)     <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">date2name-dired-add-datetime-to-name</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by date2name-add-date-to-name</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/tmp/date2name-2PHjmz/date2name-20190630.933/date2name.el</span>
+(<span class="keyword">defun</span> <span class="function-name">date2name-add-date-to-name</span> (arg <span class="type">&amp;optional</span> withtime)
+  <span class="doc">"Add date to filenames.
+The filenames are all marked files in dired or the
+file under the point if no files are marked.
+If ARG is nil use the modification time of the file.
+With one prefix arg, prompt for a time individually for each file.
+With two prefix args prompt for one time for all files.
+If WITHTIME is not nil a timestamp in the format of
+the variable `</span><span class="doc"><span class="constant">date2name-datetime-format</span></span><span class="doc">' is used.
+Otherwise a datestamp in the format of the variable
+`</span><span class="doc"><span class="constant">date2name-date-format</span></span><span class="doc">' is used."</span>
+  (<span class="keyword">let</span> ((filenames (<span class="keyword">if</span> (dired-get-marked-files)
+                       (dired-get-marked-files)
+                     '((dired-get-filename))))
+        (save-date (<span class="keyword">when</span> (equal (prefix-numeric-value arg) 16) (org-read-date withtime t))))
+    (<span class="keyword">dolist</span> (filename filenames)
+      (<span class="keyword">let</span> ((date (<span class="keyword">if</span> (not save-date)
+                      (<span class="keyword">if</span> (not arg) (date2name-file-attribute-modification-time (file-attributes filename)) (org-read-date withtime t))
+                    save-date)))
+        (date2name-prepend-date-write filename date
+                                      withtime)))))
+
+</pre>
+  </body>
+</html>

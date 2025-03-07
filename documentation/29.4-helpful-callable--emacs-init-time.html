@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: emacs-init-time*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+emacs-init-time is an <span class="button">autoloaded</span>, <span class="button">interactive</span> and <span class="button">byte-compiled</span>
+function defined in <span class="button">time.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(emacs-init-time <span class="type">&amp;optional</span> FORMAT)
+
+<span class="helpful-heading">Documentation
+</span>Return a string giving the duration of the Emacs initialization.
+
+FORMAT is a string to format the result, using <span class="button">format</span>.  If nil,
+the default format "%f seconds" is used.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>emacs-init-time is unused in <span class="button">time.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by emacs-init-time</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/time.el.gz</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">emacs-init-time</span> (<span class="type">&amp;optional</span> format)
+  <span class="doc">"Return a string giving the duration of the Emacs initialization.
+FORMAT is a string to format the result, using `</span><span class="doc"><span class="constant">format</span></span><span class="doc">'.  If nil,
+the default format \"%f seconds\" is used."</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">let</span> ((str (format (<span class="keyword">or</span> format <span class="string">"%f seconds"</span>)
+                     (float-time (time-subtract after-init-time
+                                                before-init-time)))))
+    (<span class="keyword">if</span> (called-interactively-p 'interactive)
+        (message <span class="string">"%s"</span> str)
+      str)))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (emacs-init-time 0)
+<span class="constant">event-symbol-elements</span>
+  (emacs-init-time)
+<span class="constant">function-history</span>
+  ("/usr/share/emacs/29.4/lisp/time.elc"
+   (autoload "time"
+     ("loaddefs.elc" . 1256334)
+     t nil))
+<span class="constant">modifier-cache</span>
+  ((0 . emacs-init-time))</pre>
+  </body>
+</html>

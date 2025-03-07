@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title> *temp*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+;;; 130-init-escr.el --- Initialize `escr` -*- lexical-binding: t; -*-
+;;
+;; Copyright (c) 2024 Free Software Foundation, Inc.
+;;
+;; Author: Luis Henriquez-Perez <a href="mailto:luis%40luishp.xyz">&lt;luis@luishp.xyz&gt;</a>
+;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles/
+;;
+;; This file is not part of GNU Emacs.
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation, either version 3 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program. If not, see <a href="http://www.gnu.org/licenses/">&lt;http://www.gnu.org/licenses/&gt;</a>.
+;;
+;;; Commentary:
+;;
+;; Initialize `escr`.
+;;
+;;; Code:
+(require '050-base)
+
+(opt! escr-screenshot-directory (expand-file-name "~/Pictures"))
+
+(declare-function escr-region-screenshot "escr")
+(declare-function escr-window-screenshot "escr")
+(declare-function escr-frame-screenshot "escr")
+
+(autoload #'escr-region-screenshot "escr" nil t 'function)
+(autoload #'escr-window-screenshot "escr" nil t 'function)
+(autoload #'escr-frame-screenshot "escr" nil t 'function)
+;;; provide
+(provide '130-init-escr)
+;;; 130-init-escr.el ends here
+</pre>
+  </body>
+</html>

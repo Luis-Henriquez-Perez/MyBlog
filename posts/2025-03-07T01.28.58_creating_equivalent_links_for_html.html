@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>creating equivalent links for html</title>
+    <link rel="stylesheet" href="../style.css" type="text/css"/>
+  </head>
+  <body>
+      <h1 class="title">creating equivalent links for html</h1>
+      <p>
+      In previous posts I wrote some useful functions for exanding links in org
+      mode.  I would like corresponding functions for html.  It should be easy
+      to port them; the main difference being they should insert a link in
+      anchro tag syntax.
+      </p>
+      <p>
+      </p>
+      <div class="org-src-container">
+        <pre>
+          <code class="elisp">
+(defun! oo-expand-variable-doc-link ()
+  "Insert an org link to a helpful callable snapshot.
+Find the appropriate documentation for the callable in the documentation
+directory.  If it does not exist create it and add it."
+  (set! doc-dir (expand-file-name "~/Documents/MyBlog/org/documentation/"))
+  (set! helpful-switch-buffer-function #'identity)
+  (set! symbol (helpful--read-symbol "Variable: " (helpful--variable-at-point) #'helpful--variable-p))
+  (setq html-file (expand-file-name (format "%s-helpful-variable--%s.html" emacs-version symbol) doc-dir))
+  (setq html-buffer nil)
+  (unless (file-exists-p html-file)
+    (setq help-buffer (helpful-variable symbol))
+    (unless help-buffer (error "No help buffer."))
+    (setq html-buffer (htmlize-buffer help-buffer))
+    (unless html-buffer (error "No html buffer."))
+    (with-current-buffer html-buffer
+      (write-region (point-min) (point-max) html-file)
+      (kill-buffer help-buffer)
+      (kill-buffer)))
+  (insert (format "<a href=\"%s\">%s</a>"  html-file symbol))))
+          </code>
+        </pre>
+      </div>
+  </body>
+</html>

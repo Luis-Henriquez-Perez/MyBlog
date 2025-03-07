@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: pcomplete-completions-at-point*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffffff;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #b0c4de;
+      }
+      .button {
+        /* button */
+        color: #00ffff;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #ff7f24;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #ffa07a;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+pcomplete-completions-at-point is a <span class="button">byte-compiled</span> function defined in
+<span class="button">pcomplete.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(pcomplete-completions-at-point)
+
+<span class="helpful-heading">Documentation
+</span>Provide standard completion using pcomplete's completion tables.
+
+Same as <span class="button">pcomplete</span> but using the standard completion UI.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">pcomplete.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">pcomplete-std-complete</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">pcomplete-comint-setup</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by pcomplete-completions-at-point</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/pcomplete.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">pcomplete-completions-at-point</span> ()
+  <span class="doc">"Provide standard completion using pcomplete's completion tables.
+Same as `</span><span class="doc"><span class="constant">pcomplete</span></span><span class="doc">' but using the standard completion UI."</span>
+  <span class="comment-delimiter">;; </span><span class="comment">FIXME: it only completes the text before point, whereas the
+</span>  <span class="comment-delimiter">;; </span><span class="comment">standard UI may also consider text after point.
+</span>  <span class="comment-delimiter">;; </span><span class="comment">FIXME: the `</span><span class="comment"><span class="constant">pcomplete</span></span><span class="comment">' UI may be used internally during
+</span>  <span class="comment-delimiter">;; </span><span class="comment">pcomplete-completions and then throw to `</span><span class="comment"><span class="constant">pcompleted</span></span><span class="comment">', thus
+</span>  <span class="comment-delimiter">;; </span><span class="comment">imposing the pcomplete UI over the standard UI.
+</span>  (<span class="keyword">catch</span> '<span class="constant">pcompleted</span>
+    (<span class="keyword">let*</span> ((pcomplete-stub)
+           (buffer-read-only
+            <span class="comment-delimiter">;; </span><span class="comment">Make sure the function obeys `</span><span class="comment"><span class="constant">pcomplete-allow-modifications</span></span><span class="comment">'.
+</span>            (<span class="keyword">if</span> pcomplete-allow-modifications buffer-read-only t))
+           pcomplete-seen pcomplete-norm-func
+           pcomplete-args pcomplete-last pcomplete-index
+           (pcomplete-autolist pcomplete-autolist)
+           (pcomplete-suffix-list pcomplete-suffix-list)
+           <span class="comment-delimiter">;; </span><span class="comment">Apparently the vars above are global vars modified by
+</span>           <span class="comment-delimiter">;; </span><span class="comment">side-effects, whereas pcomplete-completions is the core
+</span>           <span class="comment-delimiter">;; </span><span class="comment">function that finds the chunk of text to complete
+</span>           <span class="comment-delimiter">;; </span><span class="comment">(returned indirectly in pcomplete-stub) and the set of
+</span>           <span class="comment-delimiter">;; </span><span class="comment">possible completions.
+</span>           (completions (pcomplete-completions))
+           <span class="comment-delimiter">;; </span><span class="comment">Usually there's some close connection between pcomplete-stub
+</span>           <span class="comment-delimiter">;; </span><span class="comment">and the text before point.  But depending on what
+</span>           <span class="comment-delimiter">;; </span><span class="comment">pcomplete-parse-arguments-function does, that connection
+</span>           <span class="comment-delimiter">;; </span><span class="comment">might not be that close.  E.g. in eshell,
+</span>           <span class="comment-delimiter">;; </span><span class="comment">pcomplete-parse-arguments-function expands envvars.
+</span>           <span class="comment-delimiter">;;</span><span class="comment">
+</span>           <span class="comment-delimiter">;; </span><span class="comment">Since we use minibuffer-complete, which doesn't know
+</span>           <span class="comment-delimiter">;; </span><span class="comment">pcomplete-stub and works from the buffer's text instead,
+</span>           <span class="comment-delimiter">;; </span><span class="comment">we need to trick minibuffer-complete, into using
+</span>           <span class="comment-delimiter">;; </span><span class="comment">pcomplete-stub without its knowledge.  To that end, we
+</span>           <span class="comment-delimiter">;; </span><span class="comment">use completion-table-subvert to construct a completion
+</span>           <span class="comment-delimiter">;; </span><span class="comment">table which expects strings using a prefix from the
+</span>           <span class="comment-delimiter">;; </span><span class="comment">buffer's text but internally uses the corresponding
+</span>           <span class="comment-delimiter">;; </span><span class="comment">prefix from pcomplete-stub.
+</span>           <span class="comment-delimiter">;;</span><span class="comment">
+</span>           (argbeg (pcomplete-begin))
+           <span class="comment-delimiter">;; </span><span class="comment">When completing an envvar within an argument in Eshell
+</span>           <span class="comment-delimiter">;; </span><span class="comment">(e.g. "cd /home/$US TAB"), `</span><span class="comment"><span class="constant">pcomplete-stub</span></span><span class="comment">' will just be
+</span>           <span class="comment-delimiter">;; </span><span class="comment">"US" whereas `</span><span class="comment"><span class="constant">argbeg</span></span><span class="comment">' will point to the first "/".
+</span>           <span class="comment-delimiter">;; </span><span class="comment">We could rely on c-t-subvert to handle the difference,
+</span>           <span class="comment-delimiter">;; </span><span class="comment">but we try here to guess the "real" beginning so as to
+</span>           <span class="comment-delimiter">;; </span><span class="comment">rely less on c-t-subvert.
+</span>           (beg (max (- (point) (length pcomplete-stub))
+                     argbeg))
+           buftext)
+      <span class="comment-delimiter">;; </span><span class="comment">Try and improve our guess of `</span><span class="comment"><span class="constant">beg</span></span><span class="comment">' in case the difference
+</span>      <span class="comment-delimiter">;; </span><span class="comment">between pcomplete-stub and the buffer's text is simply due to
+</span>      <span class="comment-delimiter">;; </span><span class="comment">some chars removed by unquoting.  Again, this is not
+</span>      <span class="comment-delimiter">;; </span><span class="comment">indispensable but reduces the reliance on c-t-subvert and
+</span>      <span class="comment-delimiter">;; </span><span class="comment">improves corner case behaviors.
+</span>      (<span class="keyword">while</span> (<span class="keyword">progn</span> (<span class="keyword">setq</span> buftext (pcomplete-unquote-argument
+                                   (buffer-substring beg (point))))
+                    (<span class="keyword">and</span> (&gt; beg argbeg)
+                         (&gt; (length pcomplete-stub) (length buftext))))
+        (<span class="keyword">setq</span> beg (max argbeg (- beg (- (length pcomplete-stub)
+                                        (length buftext))))))
+      (<span class="keyword">when</span> completions
+        (<span class="keyword">let</span> ((table
+               (completion-table-with-quoting
+                (<span class="keyword">if</span> (equal pcomplete-stub buftext)
+                    completions
+                  <span class="comment-delimiter">;; </span><span class="comment">This may not always be strictly right, but given the lack
+</span>                  <span class="comment-delimiter">;; </span><span class="comment">of any other info, it's about as good as it gets, and in
+</span>                  <span class="comment-delimiter">;; </span><span class="comment">practice it should work just fine (fingers crossed).
+</span>                  (<span class="keyword">let</span> ((suf-len (pcomplete--common-suffix
+                                  pcomplete-stub buftext)))
+                    (completion-table-subvert
+                     completions
+                     (substring buftext 0 (- (length buftext) suf-len))
+                     (substring pcomplete-stub 0
+                                (- (length pcomplete-stub) suf-len)))))
+                pcomplete-unquote-argument-function
+                pcomplete-requote-argument-function))
+              (pred
+               <span class="comment-delimiter">;; </span><span class="comment">Pare it down, if applicable.
+</span>               (<span class="keyword">when</span> (<span class="keyword">and</span> pcomplete-use-paring pcomplete-seen)
+                 <span class="comment-delimiter">;; </span><span class="comment">Capture the dynbound values for later use.
+</span>                 (<span class="keyword">let</span> ((norm-func pcomplete-norm-func)
+                       (seen
+			(mapcar (<span class="keyword">lambda</span> (f)
+				  (funcall pcomplete-norm-func
+					   (directory-file-name f)))
+				pcomplete-seen)))
+                   (<span class="keyword">lambda</span> (f)
+                     (not (member
+                           (funcall norm-func (directory-file-name f))
+                           seen)))))))
+          (<span class="keyword">when</span> completion-ignore-case
+            (<span class="keyword">setq</span> table (completion-table-case-fold table)))
+          (list beg (point) table
+                <span class="builtin">:annotation-function</span>
+                (<span class="keyword">lambda</span> (cand)
+                  (<span class="keyword">when</span> (stringp cand)
+                    (get-text-property 0 'pcomplete-annotation cand)))
+                <span class="builtin">:company-docsig</span>
+                (<span class="keyword">lambda</span> (cand)
+                  (<span class="keyword">when</span> (stringp cand)
+                    (get-text-property 0 'pcomplete-help cand)))
+                <span class="builtin">:predicate</span> pred
+                <span class="builtin">:exit-function</span>
+		<span class="comment-delimiter">;; </span><span class="comment">If completion is finished, add a terminating space.
+</span>		<span class="comment-delimiter">;; </span><span class="comment">We used to also do this if STATUS is `</span><span class="comment"><span class="constant">sole</span></span><span class="comment">', but
+</span>		<span class="comment-delimiter">;; </span><span class="comment">that does not work right when completion cycling.
+</span>                (<span class="keyword">unless</span> (zerop (length pcomplete-termination-string))
+                  (<span class="keyword">lambda</span> (_s status)
+                    (<span class="keyword">when</span> (eq status 'finished)
+                      (<span class="keyword">if</span> (looking-at
+                           (regexp-quote pcomplete-termination-string))
+                          (goto-char (match-end 0))
+                        (insert pcomplete-termination-string)))))))))))
+
+</pre>
+  </body>
+</html>

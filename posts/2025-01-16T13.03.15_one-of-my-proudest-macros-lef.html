@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>lef!, One of My Best Macros</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">lef!, One of My Best Macros</h1>
+</header><p>
+While I was looking for any unneeded or outdated packages I could remove from my
+Emacs configuration I came across <a href="https://github.com/nicferrier/emacs-noflet">noflet</a>, an external package that implements
+"dynamic, local, advice for Emacs-Lisp code".  It is a small package consisting
+of just one macro: <code>noflet</code>.  It is similar in nature to <a href="../documentation/helpful-macro--cl-flet.html">cl-flet</a> with two main
+differences: it binds functions globally instead of locally and it allows you to
+refer to the original function with the symbol <code>this-fn</code>.
+</p>
+
+<p>
+Adapted from noflet's <a href="https://github.com/nicferrier/emacs-noflet">README</a>, the following example showcases the effect of
+using <code>noflet</code>.  Normally, <a href="../documentation/helpful-macro--expand-file-name.html">expand-file-name</a> would interpret <code>"#/thing"</code> as a path in
+the current directory as is seen from the return value of the raw call to
+<code>expand-file-name</code> below.  However, during the evaluation of its body <code>noflet</code>
+overrides <code>expand-file-name</code>, replacing it with a function that acts differently
+when a filename begins with a <code>#</code>.  Note, the binding for <a href="../documentation/helpful-function--find-file-no-select.html">find-file-no-select</a>
+actually has no effect because <code>expand-file-name</code> never calls <code>find-file-no-select</code>
+in its body<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>&#x2013;I think it was included
+for didactic purposes.  But if anything did call <code>find-file-no-select</code> it would
+use it would use the version specified by <code>noflet</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(expand-file-name <span style="font-style: italic;">"#/thing"</span>)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt;  "/home/luis/Documents/blog/org/posts/#/thing"</span>
+(noflet ((find-file-noselect (file-name)
+           (<span style="font-weight: bold;">if</span> (string-match-p <span style="font-style: italic;">"^#.*"</span> file-name)
+               (<span style="font-weight: bold; text-decoration: underline;">this-fn</span> <span style="font-style: italic;">"/tmp/mytest"</span>)
+               (<span style="font-weight: bold; text-decoration: underline;">this-fn</span> file-name)))
+         (expand-file-name (file-name <span style="font-weight: bold; text-decoration: underline;">&amp;optional</span> thing)
+           (<span style="font-weight: bold;">if</span> (string-match-p <span style="font-style: italic;">"^#.*"</span> file-name)
+               (concat <span style="font-style: italic;">"/tmp"</span> (file-name-as-directory 
+                               (substring file-name 1)))
+               (funcall <span style="font-weight: bold; text-decoration: underline;">this-fn</span> file-name thing))))
+  (expand-file-name <span style="font-style: italic;">"#/thing"</span>))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "/tmp/thing/"</span>
+</pre>
+</div>
+
+<p>
+Although undeniably useful, <code>noflet</code> had been causing me some inconveniences.  It
+had been triggering a <a href="https://emacs.stackexchange.com/questions/66758/package-cl-is-deprecated-is-there-any-easy-fix-for-it">cl depreciated</a> warning because it required <code>cl</code> instead of
+<code>cl-lib</code>.  Additionally, it uses <a href="https://github.com/magnars/dash.el">dash</a> but does not explicitly declare it as a
+dependency.  Not knowing this, I had faced an error when I tried to <a href="../documentation/helpful-function--require.html">require</a>
+<code>noflet</code> before I had required dash.  It was apparent From <a href="https://github.com/nicferrier/emacs-noflet/issues">noflet's issues page</a>
+that I had not been the only one to notice these things (see <a href="https://github.com/nicferrier/emacs-noflet/issues/26">#26</a> and <a href="https://github.com/nicferrier/emacs-noflet/issues/19">#19</a>).  From
+amount of time numerous easy to fix issues have been open it is equally apparent
+that <code>noflet</code> is unmaintained.  To fix these things I had a few options: I could
+use my own fork of <code>noflet</code> with these fixes applied or I could just create my own
+macro.  Considering how relatively easy it would be to write a replacement for
+this package&#x2013;it is just one short macro after-all&#x2013;I decided to just roll it
+out myself.
+</p>
+
+<p>
+The closest built-in alternative for <code>noflet</code> I could find is <a href="../documentation/helpful-macro--cl-letf.html">cl-letf</a><sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.  Like <code>noflet</code>, <code>cl-letf</code> can dynamically bind variables.
+However, the <code>(symbol-function #'FUNCTION)</code> syntax it uses to dynamically bind
+functions is too verbose for my taste.  Moreover, it lacks <code>noflet</code>'s ability to
+refer to the original function using the symbol <code>this-fn</code>.  If not vital, the
+latter ability to refer to the original function is at least.
+</p>
+
+<p>
+In the following example I use <code>lef!</code> to replace the built-in function <a href="../documentation/helpful-function--+.html">+</a>, which as
+its name implies returns the sum of two or more numbers, with a function that
+returns double the sum of exactly two numbers.  In the expression <code>(* 2 (funcall
+this-fn a b))</code>, <code>this-fn</code> refers the original <code>+</code> function.  The built-in <code>+</code> returns
+<code>3</code> when adding <code>1</code> and <code>2</code> whereas the new <code>+</code> returns <code>6</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(+ 1 2)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 3</span>
+
+(<span style="font-weight: bold;">lef!</span> ((+ (a b) (* 2 (funcall <span style="font-weight: bold; text-decoration: underline;">this-fn</span> a b))))
+  (+ 1 2))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; 6</span>
+</pre>
+</div>
+
+<p>
+Performing only one step of macroexpansion demonstrates the conversion.  The
+original function bound to <code>+</code> is stored in the generated symbol <code>orig-fn899</code> and
+let-bound to <code>this-fn</code> and <code>this-function</code> for the body of the function that
+replaces <code>+</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">cl-letf*</span> ((orig-fn899 (<span style="font-weight: bold;">when</span> (fboundp <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">+</span>) (symbol-function <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">+</span>)))
+           ((symbol-function <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">+</span>) (<span style="font-weight: bold;">lambda</span> (a b) (<span style="font-weight: bold;">let</span> ((<span style="font-weight: bold; text-decoration: underline;">this-fn</span> orig-fn899) (this-function orig-fn899)) (* 2 (funcall <span style="font-weight: bold; text-decoration: underline;">this-fn</span> a b))))))
+  (+ 1 2))
+</pre>
+</div>
+
+<p>
+This macro converts the concise and convenient place binding declarations we
+specify into what we want it to actually do via <code>cl-letf*</code>.  For each binding in
+<code>lef!</code> we create two <code>cl-letf*</code> bindings, one to store the original function (if
+there is one) and one to globally bind the specified function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">lef!</span> (bindings <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> body)
+  <span style="font-style: italic;">"Bind each symbol in BINDINGS to its corresponding function during BODY.</span>
+<span style="font-style: italic;">BINDINGS is a list of either (SYMBOL FUNCTION), where symbol is the symbol to be</span>
+<span style="font-style: italic;">bound and FUNCTION is the function to bind it to; or (SYMBOL ARGS BODY).  In</span>
+<span style="font-style: italic;">each of BINDINGS if the symbol is an existing function symbol let-bind the</span>
+<span style="font-style: italic;">original function to `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">this-fn</span><span style="font-style: italic;">', otherwise bind `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">this-fn</span><span style="font-style: italic;">' to nil."</span>
+  (<span style="font-weight: bold;">declare</span> (indent 1))
+  (<span style="font-weight: bold;">let</span> (binds orig-fn)
+    (<span style="font-weight: bold;">pcase-dolist</span> (<span style="font-weight: bold;">`</span>(,sym . ,rest) bindings)
+      (<span style="font-weight: bold;">setq</span> orig-fn (gensym <span style="font-style: italic;">"orig-fn"</span>))
+      (<span style="font-weight: bold;">push</span> <span style="font-weight: bold;">`</span>(,orig-fn (<span style="font-weight: bold;">when</span> (fboundp <span style="font-weight: bold;">'</span>,sym) (symbol-function <span style="font-weight: bold;">'</span>,sym))) binds)
+      (<span style="font-weight: bold;">push</span> (list <span style="font-weight: bold;">`</span>(symbol-function <span style="font-weight: bold;">'</span>,sym)
+                  (<span style="font-weight: bold;">pcase</span> rest
+                    (<span style="font-weight: bold;">`</span>(,fn . nil)
+                     <span style="font-weight: bold;">`</span>(<span style="font-weight: bold;">lambda</span> (<span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> args)
+                        (<span style="font-weight: bold;">let</span> ((<span style="font-weight: bold; text-decoration: underline;">this-fn</span> ,orig-fn)
+                              (this-function ,orig-fn))
+                          (apply ,fn args))))
+                    (<span style="font-weight: bold;">`</span>(,args . ,function-body)
+                     <span style="font-weight: bold;">`</span>(<span style="font-weight: bold;">lambda</span> ,args
+                        (<span style="font-weight: bold;">let</span> ((<span style="font-weight: bold; text-decoration: underline;">this-fn</span> ,orig-fn)
+                              (this-function ,orig-fn))
+                          ,@function-body)))))
+            binds))
+    <span style="font-weight: bold;">`</span>(<span style="font-weight: bold;">cl-letf*</span> ,(nreverse binds) ,@body)))
+</pre>
+</div>
+
+<p>
+Overall, I am pleased with <code>lef</code>.  I am happy I was able to reuse the built-in
+<code>cl-letf</code> instead of implementing dynamic binding myself.  Additionally, I am
+proud I was able to implement the <code>this-fn</code> functionality.  Yet I still have some
+lingering thoughts.  Perhaps one critique of <code>lef!</code> is that the symbols <code>this-fn</code>
+and <code>this-function</code> are bound regardless of whether you invoke the original
+function anaphrocally.  If you do not reference the original function, after
+all, you would be able to expect these symbols are unbound.  Although, I am hard-pressed
+to think of a realistic example of how this could cause problems I cannot help but
+think that to be "perfect" this excessive binding should be avoided&#x2013;good topic
+for another blog post.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Actually it is a function written in C.</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I am not
+counting <a href="../documentation/helpful-function--flet.html">flet</a> which is obsoleted.</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>

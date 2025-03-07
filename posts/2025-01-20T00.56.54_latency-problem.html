@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Diagnosing a Latency Problem</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">Diagnosing a Latency Problem</h1>
+</header><p>
+Recently I started experiencing latency in emacs.  I could tell the typing and
+the cursor movement felt slower.  And interestingly the problem seemed to worsen
+over time.  At first I thought it was my mode line but enabling and renabling it
+had no effect.  Then I considered whether it was some mode I had enabled.  But I
+did not have any strange modes.  I did not even have the usual suspect, text
+completion, enabled&#x2013;other than <code>abbrev-mode</code> that is.  Suddenly, it hit me: the
+log buffer.  A while back I started logging all sorts of events in my config
+with lgr.  Initially, I intended it to be only while <code>oo-debug-p</code> was active.  The
+plan had been to enable it all the time just until I was sure it worked and make
+it so it would only be when <code>oo-debug-p</code> was active.  Later I thought it was not
+really costing me anything to leave the log on and I just left it on all the
+time.  The way the logging was set up it wrote to a buffer named <code>*log*</code>.  It is
+only now that I realize that the log buffer unlike the <code>*Message*</code> buffer has no
+cap.  It would just grow larger and larger.  At some point it would get so large
+and be consuming so much of emacs's memory that it would slow everything down.
+For now, I am disabling logging when <code>oo-debug-p</code> is false.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">info!</span> (msg <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> meta)
+  (<span style="font-weight: bold;">when</span> oo-debug-p
+    <span style="font-weight: bold;">`</span>(lgr-info oo-logger ,msg ,@meta)))
+
+(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">error!</span> (msg <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> meta)
+  (<span style="font-weight: bold;">when</span> oo-debug-p
+    <span style="font-weight: bold;">`</span>(lgr-error oo-error-logger ,msg ,@meta)))
+
+(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">warn!</span> (msg <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> meta)
+  (<span style="font-weight: bold;">when</span> oo-debug-p
+    <span style="font-weight: bold;">`</span>(lgr-warn oo-logger ,msg ,@meta)))
+
+(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">fatal!</span> (msg <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> meta)
+  (<span style="font-weight: bold;">when</span> oo-debug-p
+    <span style="font-weight: bold;">`</span>(lgr-fatal oo-logger ,msg ,@meta)))
+
+(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">trace!</span> (msg <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> meta)
+  (<span style="font-weight: bold;">when</span> oo-debug-p
+    <span style="font-weight: bold;">`</span>(lgr-trace oo-logger ,msg ,@meta)))
+
+(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">debug!</span> (msg <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> meta)
+  (<span style="font-weight: bold;">when</span> oo-debug-p
+    <span style="font-weight: bold;">`</span>(lgr-debug oo-logger ,msg ,@meta)))
+</pre>
+</div>
+
+<p>
+Despite than this performance hiccup, logging has been so useful for me that I
+would like to make it toggleable.  Instead of this "band-aid" solution I would
+like store the logs internally list and with some cap.  With this list I can
+then write the logs to a buffer when I want to see it.
+</p>
+</div>
+</body>
+</html>

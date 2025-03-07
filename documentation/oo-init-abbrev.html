@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>oo-init-abbrev.el</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .custom {
+        /* (:inherit outline-3 :extend t :overline t) */
+        text-decoration: overline;
+      }
+      .custom-1 {
+        /* (:inherit outline-2 :extend t :overline t) */
+        text-decoration: overline;
+      }
+      .custom-2 {
+        /* (:inherit outline-1 :extend t :overline t) */
+        text-decoration: overline;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .highlight-quoted-quote {
+        /* highlight-quoted-quote */
+        color: #531ab6;
+      }
+      .highlight-quoted-symbol {
+        /* highlight-quoted-symbol */
+        color: #0000b0;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .outli-repeat-emacs-lisp-mode-1 {
+        /* outli-repeat-emacs-lisp-mode-1 */
+        color: #000000;
+        background-color: #bfffbfffbfff;
+        font-weight: bold;
+        text-decoration: overline;
+      }
+      .outli-repeat-emacs-lisp-mode-2 {
+        /* outli-repeat-emacs-lisp-mode-2 */
+        color: #624416;
+        background-color: #d897d110c584;
+        font-weight: bold;
+        text-decoration: overline;
+      }
+      .outli-repeat-emacs-lisp-mode-3 {
+        /* outli-repeat-emacs-lisp-mode-3 */
+        color: #193668;
+        background-color: #c645cd8cda19;
+        font-weight: bold;
+        text-decoration: overline;
+      }
+      .outli-stem-emacs-lisp-mode-1 {
+        /* outli-stem-emacs-lisp-mode-1 */
+        background-color: #bfffbfffbfff;
+        text-decoration: overline;
+      }
+      .outli-stem-emacs-lisp-mode-2 {
+        /* outli-stem-emacs-lisp-mode-2 */
+        background-color: #d897d110c584;
+        text-decoration: overline;
+      }
+      .outli-stem-emacs-lisp-mode-3 {
+        /* outli-stem-emacs-lisp-mode-3 */
+        background-color: #c645cd8cda19;
+        text-decoration: overline;
+      }
+      .rainbow-delimiters-depth-1 {
+        /* rainbow-delimiters-depth-1-face */
+        color: #000000;
+      }
+      .rainbow-delimiters-depth-2 {
+        /* rainbow-delimiters-depth-2-face */
+        color: #dd22dd;
+      }
+      .rainbow-delimiters-depth-3 {
+        /* rainbow-delimiters-depth-3-face */
+        color: #008899;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="outli-stem-emacs-lisp-mode-1"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-1">;</span><span class="custom-2"> Code:
+</span><span class="rainbow-delimiters-depth-1">(</span><span class="keyword">require</span> <span class="highlight-quoted-quote">'</span><span class="constant">abbrev</span><span class="rainbow-delimiters-depth-1">)</span>
+<span class="rainbow-delimiters-depth-1">(</span><span class="keyword">require</span> <span class="highlight-quoted-quote">'</span><span class="constant">oo-base</span><span class="rainbow-delimiters-depth-1">)</span>
+<span class="rainbow-delimiters-depth-1">(</span><span class="keyword">require</span> <span class="highlight-quoted-quote">'</span><span class="constant">oo-abbrev-table-main</span><span class="rainbow-delimiters-depth-1">)</span>
+<span class="rainbow-delimiters-depth-1">(</span><span class="keyword">require</span> <span class="highlight-quoted-quote">'</span><span class="constant">oo-abbrev-table-wikipedia-misspellings</span><span class="rainbow-delimiters-depth-1">)</span>
+<span class="outli-stem-emacs-lisp-mode-2"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-2">;;</span><span class="custom-1"> abbrevs
+</span><span class="outli-stem-emacs-lisp-mode-3"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-3">;;;</span><span class="custom"> set abbrevs my way
+</span><span class="rainbow-delimiters-depth-1">(</span><span class="keyword">defun</span> <span class="function-name">oo-enable-text-abbrev-p</span> <span class="rainbow-delimiters-depth-2">()</span>
+  <span class="doc">"Return non-nil when text abbrevs should be enabled.
+This is when the current major-mode is derived from text-mode or point is in a
+string or comment."</span>
+  <span class="rainbow-delimiters-depth-2">(</span><span class="keyword">or</span> <span class="rainbow-delimiters-depth-3">(</span>derived-mode-p <span class="highlight-quoted-quote">'</span><span class="highlight-quoted-symbol">text-mode</span><span class="rainbow-delimiters-depth-3">)</span>
+      <span class="rainbow-delimiters-depth-3">(</span>oo-in-string-or-comment-p<span class="rainbow-delimiters-depth-3">)</span><span class="rainbow-delimiters-depth-2">)</span><span class="rainbow-delimiters-depth-1">)</span>
+<span class="outli-stem-emacs-lisp-mode-3"><span class="comment-delimiter">;;</span></span><span class="outli-repeat-emacs-lisp-mode-3">;;;</span><span class="custom"> all abbrevs
+</span><span class="rainbow-delimiters-depth-1">(</span>abbrev-table-put oo-abbrev-table-main <span class="builtin">:enable-function</span> <span class="highlight-quoted-quote">#'</span><span class="highlight-quoted-symbol">oo-enable-text-abbrev-p</span><span class="rainbow-delimiters-depth-1">)</span>
+<span class="rainbow-delimiters-depth-1">(</span>abbrev-table-put oo-abbrev-table-wikipedia-misspellings <span class="builtin">:enable-function</span> <span class="highlight-quoted-quote">#'</span><span class="highlight-quoted-symbol">oo-enable-text-abbrev-p</span><span class="rainbow-delimiters-depth-1">)</span>
+
+<span class="rainbow-delimiters-depth-1">(</span><span class="keyword">alet</span> <span class="rainbow-delimiters-depth-2">(</span>-snoc <span class="rainbow-delimiters-depth-3">(</span>abbrev-table-get global-abbrev-table <span class="builtin">:parents</span><span class="rainbow-delimiters-depth-3">)</span> oo-abbrev-table-main oo-abbrev-table-wikipedia-misspellings<span class="rainbow-delimiters-depth-2">)</span>
+  <span class="rainbow-delimiters-depth-2">(</span>abbrev-table-put global-abbrev-table <span class="builtin">:parents</span> it<span class="rainbow-delimiters-depth-2">)</span><span class="rainbow-delimiters-depth-1">)</span>
+</pre>
+  </body>
+</html>

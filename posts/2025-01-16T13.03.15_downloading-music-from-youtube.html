@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>downloading music from youtube (part 1)</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">downloading music from youtube (part 1)</h1>
+</header><p>
+When I am gymming I use the youtube app on my phone to play videos of songs I
+like when and occasionally via youtube recommendations a song I have not heard
+before will play.  Sometimes it just so happens I like the recommendation and I
+will want to download the audio of the videos.  Thus far for youtube video
+perusing and playing I used <a href="https://thanosapollo.org/projects/yeetube/">yeetube</a>.  The very basic workflow I have is calling
+<a href="">yeetube-search</a>, entering my search term, finding the video I want to play in the
+<code>yeetube</code> buffer (shown below) and playing the video.  The thing is <code>yeetube</code> does
+not seem to have a built-in command for downloading just the audio of a video.
+And so my quest for writing such a command begins&#x2026;
+</p>
+
+
+<figure id="org8dc4d57">
+<img src="../images/yeetube-buffer.png" alt="yeetube-buffer.png" width="700px">
+
+<figcaption><span class="figure-number">Figure 1: </span>The <code>yeetube</code> buffer after searching for "nightcore shameless".</figcaption>
+</figure>
+
+<p>
+The first thing I needed to see how <code>yeetube</code> downloads audio so I looked at the
+body of <a href="../documentation/helpful-function--yeetube-play.html">yeetube-play</a> (shown below).  The main thing I needed to know from the
+command is the function <a href="../documentation/helpful-function--yeetube-get-url.html">yeetube-get-url</a><sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> which is what gets the url
+from an entry in the yeetube buffer.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">yeetube-play</span> ()
+  <span style="font-style: italic;">"Play video at point in *yeetube* buffer."</span>
+  (<span style="font-weight: bold;">interactive</span>)
+  (<span style="font-weight: bold;">let*</span> ((video-url (yeetube-get-url))
+	     (video-title (yeetube-get <span style="font-weight: bold;">:title</span>))
+         (proc (apply yeetube-play-function video-url
+                      (<span style="font-weight: bold;">when</span> yeetube-mpv-modeline-mode (list video-title)))))
+    (<span style="font-weight: bold;">when</span> (processp proc)
+      (process-put proc <span style="font-weight: bold;">:now-playing</span> video-title))
+    (<span style="font-weight: bold;">push</span> (list <span style="font-weight: bold;">:url</span> video-url <span style="font-weight: bold;">:title</span> video-title) yeetube-history)
+    (message <span style="font-style: italic;">"Playing: %s"</span> video-title)))
+</pre>
+</div>
+
+<p>
+For now, the following function, <code>oo-yeetube-download-audio</code> does the job albeit
+in a coarse way.  It sets the default directory to my music directory, <code>~/Music</code>,
+gets the url from the youtube entry and invokes the <code>ytl-dlp</code> shell command on it
+which downloads the audio.  Later, I want to make it download the audio
+asynchronously&#x2013;right now it synchronous and in practice that means my Emacs
+freezes, becoming completely unusable to me, while the audio is downloaded.  It
+usually taking less than 10 seconds for the songs I download so it is not
+catastrophic.  Also, I want to view youtube entries in the minibuffer as opposed
+to the <code>yeetube</code> buffer&#x2013;at least sometimes.
+</p>
+
+<p>
+For the details of what <a href="">defun!</a> does check out <a href="https://github.com/Luis-Henriquez-Perez/dotfiles/tree/develop/dot_config/emacs">my configuration</a> as well as my
+<a href="2024-04-24--06-28-56--00--showcasing-the-progn-bang-macro-part-1.html">article on progn!</a>.  But the TLDR is that it let-binds the variables <code>url</code>, <code>command</code>
+and <code>default-directory</code> by using <code>set!</code> as an indicator.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun!</span> <span style="font-weight: bold;">oo-yeetube-download-audio</span> ()
+  <span style="font-style: italic;">"Download audio of video at point to the ~/Music directory.</span>
+<span style="font-style: italic;">This also downloads the thumbnail."</span>
+  (<span style="font-weight: bold;">interactive</span>)
+  (<span style="font-weight: bold;">set!</span> default-directory (expand-file-name <span style="font-style: italic;">"~/Music"</span>))
+  (<span style="font-weight: bold;">set!</span> url (shell-quote-argument (yeetube-get-url)))
+  (<span style="font-weight: bold;">set!</span> command (format <span style="font-style: italic;">"yt-dlp -x --audio-format wav --embed-thumbnail %s"</span> url))
+  (call-process-shell-command command))
+</pre>
+</div>
+
+<p>
+Lastly, I did want to mention the function <code>oo-yeetube-video-link</code> which I wrote
+to help me copy youtube links for this article.  I did not end up using them
+above&#x2013;I removed the sentence with the links in them&#x2013;but two of the songs I
+downloaded were <a href="https://youtube.com/watch?v=-2WzbSq7uaQ">shameless</a> and <a href="https://youtube.com/watch?v=lVGyb-AlfGA">tattoo</a> which I plan to listen to while gyming.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun!</span> <span style="font-weight: bold;">oo-yeetube-video-link</span> ()
+  <span style="font-style: italic;">"Copy the video link at point into the `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">kill-ring</span><span style="font-style: italic;">'."</span>
+  (<span style="font-weight: bold;">interactive</span>)
+  (<span style="font-weight: bold;">set!</span> default-directory (expand-file-name <span style="font-style: italic;">"~/Music"</span>))
+  (<span style="font-weight: bold;">set!</span> url (yeetube-get-url))
+  (awhen (kill-new url)
+    (message <span style="font-style: italic;">"Copied %s!"</span> url)))
+</pre>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I might need to look at the process
+stuff later to make the command asynchronous too.</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful macro: dotimes*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+dotimes is a macro defined in <span class="button">subr.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(<span class="keyword">dotimes</span> (VAR COUNT [RESULT]) BODY...)
+
+<span class="helpful-heading">Documentation
+</span>Loop a certain number of times.
+
+Evaluate BODY with VAR bound to successive integers running from 0,
+inclusive, to COUNT, exclusive.
+
+Finally RESULT is evaluated to get the return value (nil if
+RESULT is omitted).  Using RESULT is deprecated, and may result
+in compilation warnings about unused variables.
+
+This macro has :around advice: <span class="button">cl--wrap-in-nil-block</span>.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">subr.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">read-password--hide-password</span> ...)      <span class="comment">1 reference</span>
+(<span class="keyword">defmacro</span> <span class="function-name">dotimes-with-progress-reporter</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by dotimes</span>
+
+<span class="helpful-heading">Advice
+</span>This macro is advised.
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.3/lisp/subr.el.gz</span>
+(<span class="keyword">defmacro</span> <span class="function-name">dotimes</span> (spec <span class="type">&amp;rest</span> body)
+  <span class="doc">"Loop a certain number of times.
+Evaluate BODY with VAR bound to successive integers running from 0,
+inclusive, to COUNT, exclusive.
+
+Finally RESULT is evaluated to get the return value (nil if
+RESULT is omitted).  Using RESULT is deprecated, and may result
+in compilation warnings about unused variables.
+
+\(fn (VAR COUNT [RESULT]) BODY...)"</span>
+  (<span class="keyword">declare</span> (indent 1) (debug dolist))
+  (<span class="keyword">let</span> ((var (nth 0 spec))
+        (end (nth 1 spec))
+        (upper-bound (make-symbol <span class="string">"upper-bound"</span>))
+        (counter (make-symbol <span class="string">"counter"</span>)))
+    `(<span class="keyword">let</span> ((,upper-bound ,end)
+           (,counter 0))
+       (<span class="keyword">while</span> (&lt; ,counter ,upper-bound)
+         (<span class="keyword">let</span> ((,var ,counter))
+           ,@body)
+         (<span class="keyword">setq</span> ,counter (1+ ,counter)))
+       ,@(<span class="keyword">if</span> (cddr spec)
+             <span class="comment-delimiter">;; </span><span class="comment">FIXME: This let often leads to "unused var" warnings.
+</span>             `((<span class="keyword">let</span> ((,var ,counter)) ,@(cddr spec)))))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">defalias-fset-function</span>
+  #[128 "\304\300\301&#3;#\207"
+        [advice--defalias-fset nil :around nil apply]
+        5 advice]
+  <span class="button">Disassemble</span>
+<span class="constant">edebug-form-spec</span>
+  dolist
+<span class="constant">function-documentation</span>
+  (advice--make-docstring 'dotimes)
+<span class="constant">lisp-indent-function</span>
+  1</pre>
+  </body>
+</html>

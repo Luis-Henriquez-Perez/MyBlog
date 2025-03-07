@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A Cool New Command: howmany</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">A Cool New Command: howmany</h1>
+</header><p>
+I wanted to know how many abbrevs I had defined in <a href="../documentation/29.4-999-abbrevs.html">the file</a> I use to store all
+my abbrevs.  The number of abbrevs correspond to the number of lines in the
+files that begin with <code>(define-abbrev</code>.  But it is not as simple as counting the
+number of lines in the file itself because there are more than just those kinds
+of lines.  I tried narrowing but there are some comments intermingled with
+define-abbrev lines.  Finally, I asked chatGPT how to do this from Emacs and it
+recommended a command I never knew existed: <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--how-many.html">how-many</a>.  It does exactly what I
+need: it prints the count of lines that match a given regular expression.  I
+simply invoked how many and gave it the regexp <code>^(define-abbrev</code> and voilà.  As of
+writing this, I have a whopping <code>1574</code> abbrevs.
+</p>
+</div>
+</body>
+</html>

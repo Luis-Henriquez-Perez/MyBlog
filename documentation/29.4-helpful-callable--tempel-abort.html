@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: tempel-abort*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffffff;
+        background-color: #000000;
+      }
+      .button {
+        /* button */
+        color: #00ffff;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #ff7f24;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #ffa07a;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #02cfff;
+        font-weight: bold;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+tempel-abort is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function defined in
+<span class="button">tempel.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(tempel-abort)
+
+<span class="helpful-heading">Documentation
+</span>Abort template insertion.
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">tempel-map</span> <span class="help-key-binding">&lt;insert-state&gt; C-l</span>
+<span class="variable-name">tempel-map</span> <span class="help-key-binding">M-ESC ESC</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">tempel.el</span>:
+(<span class="keyword">defvar-keymap</span> tempel-map ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by tempel-abort</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/elpa/tempel-20250101.927/tempel.el</span>
+(<span class="keyword">defun</span> <span class="function-name">tempel-abort</span> ()
+  <span class="doc">"Abort template insertion."</span>
+  (<span class="keyword">declare</span> (completion tempel--active-p))
+  (<span class="keyword">interactive</span>)
+  <span class="comment-delimiter">;; </span><span class="comment">TODO abort only the topmost template?
+</span>  (<span class="keyword">while-let</span> ((st (car tempel--active)))
+    (<span class="keyword">let</span> ((beg (overlay-start (caar st)))
+          (end (overlay-end (caar st))))
+      (tempel--disable)
+      (delete-region beg end))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">completion-predicate</span>
+  tempel--active-p
+<span class="constant">event-symbol-element-mask</span>
+  (tempel-abort 0)
+<span class="constant">event-symbol-elements</span>
+  (tempel-abort)
+<span class="constant">modifier-cache</span>
+  ((0 . tempel-abort))</pre>
+  </body>
+</html>

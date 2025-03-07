@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: require*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+require is a function defined in C source code.
+
+<span class="helpful-heading">Signature
+</span>(<span class="keyword">require</span> <span class="constant">FEATURE</span> <span class="type">&amp;optional</span> FILENAME NOERROR)
+
+<span class="helpful-heading">Documentation
+</span>If FEATURE is not already loaded, load it from FILENAME.
+
+If FEATURE is not a member of the list <span class="button">features</span>, then the feature was
+not yet loaded; so load it from file FILENAME.
+
+If FILENAME is omitted, the printname of FEATURE is used as the file
+name, and <span class="button">load</span> is called to try to load the file by that name, after
+appending the suffix <span class="constant">.elc</span>, <span class="constant">.el</span>, or the system-dependent suffix for
+dynamic module files, in that order; but the function will not try to
+load the file without any suffix.  See <span class="button">get-load-suffixes</span> for the
+complete list of suffixes.
+
+To find the file, this function searches the directories in <span class="button">load-path</span>.
+
+If the optional third argument NOERROR is non-nil, then, if
+the file is not found, the function returns nil instead of signaling
+an error.  Normally the return value is FEATURE.
+
+The normal messages issued by <span class="button">load</span> at start and end of loading
+FILENAME are suppressed.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">References
+</span>C code is not yet loaded.
+
+<span class="button">Find all references</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable tracing</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">C code is not yet loaded.</span>
+
+<span class="button">Set C source directory</span>
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">byte-hunk-handler</span>
+  byte-compile-file-form-require
+<span class="constant">slot-name</span>
+  t</pre>
+  </body>
+</html>

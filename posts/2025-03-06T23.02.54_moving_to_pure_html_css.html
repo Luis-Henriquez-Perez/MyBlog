@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="../style.css" type="text/css"/>
+    <title>Moving to pure html and css</title>
+  </head>
+  <body>
+    <h1 class="title">Moving to pure html and css</h1>
+    <p>
+      I have decided to move to pure html and css from an org blog.
+    </p>
+    <p>
+      There are good reasons to have an org blog and many conveniences.
+    First, org is much lighter in syntax than html meaning that it is much
+    less cluttered to read org files.  And org has a plethora of support in
+    Emacs with packages like <a href="">org-superstar</a> and <a href="">org
+    appear</a> just to name a few.  By far the biggest advtantage in my
+    opinion is the seamless interaction with source blocks.  Indeed it is hard to
+    appreciate how elegant and effortless source blocks make editing and addng
+    syntax highlighting to source code.
+    </p>
+    <p>
+      Why then is it that I still decided to make the switch?  Well, there
+      were several factors.  For example, I did not like
+      having to publish my org
+      files all the time.  In general anything that has an "in-between" steop
+      for getting the main result will always be introducing another point of
+      failure.  It is simply more work keeping something in sync than just
+      having one thing you work with.  With pure html and css there is no publishing step.
+      You just reload the page after saving your files and you see the result
+      immediately.  Having to publish, however, was not by any means a deal
+      breaker for me.
+      It certainly does make things more complicated but it alone was not
+      enough to deter me.  It is worth mentioning that publishing can be
+      automated, say publishing in a separate Emacs process on save or
+      something like that.  The main reason for my switch was added complexity
+      of org-publish.  To have an org blog you need to understnad both org
+      publish and html and css.  And whenever you want to do something you
+      need to think in terms of how can I get this done with org publish.  It
+      feels as if to do anything you need to solve this puzzle at every steop,
+      how do you do this with org publish?
+      There is always this layer between you and the raw html.  That is to
+      have emain reason for the switch.
+    </p>
+    <p>
+    Also another thing is you start noticing some weird things that org publish
+    does when it generates html code.  For some reason it surrounds translates
+    bold emphasis markers with the <b>code</b> tags.
+    </p>
+  </body>
+</html>

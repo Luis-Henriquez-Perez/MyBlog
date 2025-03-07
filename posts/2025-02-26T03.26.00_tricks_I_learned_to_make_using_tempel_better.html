@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>tricks I learned to make using tempel smoother</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">tricks I learned to make using tempel smoother</h1>
+</header><p>
+Having gotten to a more stable state with my Emacs configuration, I have been
+focused less on its structure and more on enhancing the features that I have
+neglected.  One of these is text completion or as Emacs calls it "auto-typing".
+This had lead me to revisit and enhance my configuration for <a href="https://github.com/minad/tempel">tempel</a>.  And in the
+process I collected several useful tricks which I share here.
+</p>
+
+<div id="outline-container-org85d1dc5" class="outline-2">
+<h2 id="org85d1dc5">make <code>tempel-map</code> an overriding map</h2>
+<div class="outline-text-2" id="text-org85d1dc5">
+<p>
+Frustratingly, when I first began using tempel the keybindings to <code>tempel-map</code> in
+<code>evil-insert-state</code> were not working.  It took me forever to fix this.  The
+problem was that despite binding insert state keys for tempel-map, default evil
+bindings still took precedence.  The solution is to tell evil to make those
+keybindings precedence make <code>tempel-map</code> an intercept map.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(eval-after-load <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">tempel</span>
+  <span style="font-weight: bold;">'</span>(eval-after-load <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">evil</span>
+     (evil-make-overriding-map tempel-map)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf5b1397" class="outline-2">
+<h2 id="orgf5b1397">ensure insert state after inserting a template</h2>
+<div class="outline-text-2" id="text-orgf5b1397">
+<p>
+You can be certain you will be typing text right after inserting a template
+because there will be fields you have to fill out.  That is why I recommend
+advising <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-insert.html">tempel-insert</a> to enter insert state after it is done.  In general,
+configuring functions to enter insert state is so common when using <a href="https://github.com/emacs-evil/evil">evil</a> that I
+recommend a dedicated function for this.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">setq-local</span> completion-at-point-functions <span style="font-weight: bold;">'</span>(cape-dabbrev t))
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo--enter-evil-insert-state-maybe</span> (<span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> _)
+  <span style="font-style: italic;">"Enter insert state if `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">evil-mode</span><span style="font-style: italic;">' is enabled."</span>
+  (<span style="font-weight: bold;">when</span> (<span style="font-weight: bold;">bound-and-true-p</span> evil-mode)
+    (evil-insert-state 1)))
+
+(advice-add <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">tempel-insert</span> <span style="font-weight: bold;">:after</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">oo--enter-evil-insert-state-maybe</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb72e876" class="outline-2">
+<h2 id="orgb72e876">properly use map an abbrev to a tempel expansion</h2>
+<div class="outline-text-2" id="text-orgb72e876">
+<p>
+First let me mention the solution that tempel provides: <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html">tempel-abbrev-mode</a>.
+That mode defines abbrevs for every named template, puts them in an abbrev
+table.  This solution is too crude and opinionated for my taste.  It assumes
+that you want the abbrevs to be the same name you defined for your tempel
+templates.  And it decides how to set up the abbrev table for you.  This is
+designed for someone who just wants something working fast.
+</p>
+
+<p>
+If you are not in a rush.  What I recommend is just doing it explicitly with good
+old <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-abbrev.html">define-abbrev</a>.  Specify the circumstances when an abbrev should be active in
+the <code>:enable-function</code> property.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-expand-elisp-defun</span> ()
+  (<span style="font-weight: bold;">interactive</span>)
+  (tempel-insert <span style="font-weight: bold;">'</span><span style="font-style: italic;">"(defun "</span> p <span style="font-style: italic;">" ("</span> p <span style="font-style: italic;">")"</span> n&gt; <span style="font-style: italic;">"\""</span> p <span style="font-style: italic;">"\""</span> n&gt; r <span style="font-style: italic;">")"</span>)
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">This is important, the will still be inserted despite having added the</span>
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">`</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">no-self-insert</span><span style="font-weight: bold; font-style: italic;">' property if this function does not return a non-nil value.</span>
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Note `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">tempel-insert</span><span style="font-weight: bold; font-style: italic;">' returns nil.  I learned this the hard-way.</span>
+  t)
+
+(put <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">oo-expand-elisp-defun</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">no-self-insert</span> t)
+
+(define-abbrev global-abbrev-table <span style="font-style: italic;">"dfn"</span> <span style="font-style: italic;">""</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">oo-expand-elisp-defun</span> <span style="font-weight: bold;">:enable-function</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">oo-in-elisp-mode-p</span>)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf6a15a8" class="outline-2">
+<h2 id="orgf6a15a8">simplify creating templates with a macro</h2>
+<div class="outline-text-2" id="text-orgf6a15a8">
+<p>
+I recommend making a macro similar to <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-skeleton.html">define-skeleton</a>.  When I dabbled with
+[[][skeletons]] I became quite endeard to the <code>define-skeleton</code> macro.  It was
+simple but made things much more convenient.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defmacro</span> <span style="font-weight: bold;">deftempel!</span> (name <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> body)
+  <span style="font-style: italic;">"Define a tempel template."</span>
+  (<span style="font-weight: bold;">declare</span> (doc-string 2) (indent defun))
+  (<span style="font-weight: bold;">setq</span> documentation (<span style="font-weight: bold;">when</span> (stringp (car body)) (list (<span style="font-weight: bold;">pop</span> body))))
+  <span style="font-weight: bold;">`</span>(<span style="font-weight: bold;">progn</span> (<span style="font-weight: bold;">defun</span> ,name ()
+            ,@documentation
+            (<span style="font-weight: bold;">interactive</span>)
+            (tempel-insert <span style="font-weight: bold;">'</span>,body)
+            t)
+          (put <span style="font-weight: bold;">'</span>,name <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">no-self-insert</span> t)
+          <span style="font-weight: bold;">'</span>,name))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7625e84" class="outline-2">
+<h2 id="org7625e84">remember to use the region</h2>
+<div class="outline-text-2" id="text-org7625e84">
+<p>
+Remember to use the <code>r</code> element.  This makes it so that when a region is active
+when you invoke the command it will wrap the snippet around the region.  Only
+bad thing is that the snippet assumes your done writing the snippet.  As in afte
+the region but I would prefer the cursor still in the snippet.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(deftempel! oo-expand-to-defun
+  <span style="font-style: italic;">"Expand to defun."</span>
+  <span style="font-style: italic;">"(defun "</span> p <span style="font-style: italic;">" ("</span> p <span style="font-style: italic;">")"</span> n&gt; <span style="font-style: italic;">"\""</span> p <span style="font-style: italic;">"\""</span> n&gt; r <span style="font-style: italic;">")"</span>)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

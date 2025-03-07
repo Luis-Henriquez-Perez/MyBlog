@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>automate blog post creation</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">automate blog post creation</h1>
+</header><p>
+I have always created blog posts manually.  This means calling <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--find-file.html">find-file</a>,
+entering the filename (this excludes the timestamp but includes the separating
+underscores), and then calling prepend the timestamp (via <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--date2name-prepend-date.html">date2name-prepend-date</a>
+) onto the file from the dired buffer.  This is something that can and should be
+automated.  I have been experimenting with this function I wrote for generating
+a new blog post.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun!</span> <span style="font-weight: bold;">oo-new-blog-post</span> ()
+  <span style="font-style: italic;">"Create a new blog post, prompting for the name."</span>
+  (<span style="font-weight: bold;">interactive</span>)
+  (<span style="font-weight: bold;">set!</span> blog-dir <span style="font-style: italic;">"~/Documents/MyBlog/org/posts/"</span>)
+  (<span style="font-weight: bold;">set!</span> name (read-string <span style="font-style: italic;">"Post: "</span>))
+  (<span style="font-weight: bold;">set!</span> name (replace-regexp-in-string (<span style="font-weight: bold;">rx</span> (1+ <span style="color: #000000; background-color: #ffffff;">white</span>)) <span style="font-style: italic;">"_"</span> name))
+  (<span style="font-weight: bold;">set!</span> name (date2name-prepend-date name (current-time) <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">with-time</span>))
+  (<span style="font-weight: bold;">set!</span> name (concat <span style="font-style: italic;">"draft_"</span> name))
+  (<span style="font-weight: bold;">set!</span> name (<span style="font-weight: bold;">if</span> (string-match-p <span style="font-style: italic;">"</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-style: italic;">.org$"</span> name) name (concat name <span style="font-style: italic;">".org"</span>)))
+  (find-file (expand-file-name name blog-directory)))
+</pre>
+</div>
+
+<p>
+I do not know if this is the end all be all solution.  I am also considering
+advising <code>find-file</code> to act differently if the file I am creating is in the blog
+directory.  For another post.
+</p>
+</div>
+</body>
+</html>

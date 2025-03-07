@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>troubleshooting keybinding</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">troubleshooting keybinding</h1>
+</header><p>
+I have a particular keybinding that is not working.  I tell you Emacs
+keybindings are already complex but when you add evil on top of it, its on a
+whole different level.  One of the most compelling reasons not to use evil is
+because the how much more complex evil keybindings are from normal Emacs
+keybindings.
+</p>
+
+<p>
+This does not work.  This uses <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--bind!.html">bind!</a> a macro I write to try to generalize
+keybindings in <a href="../documentation/29.4-155-base-bind-macros.html">155-base-bind-macros.el</a>.  The expansin of this macro is akin to
+<code>(evil-define-key '(normal visual) global-map "g r" #'+evil-eval-replace-operator)</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">bind!</span> (n v) <span style="font-style: italic;">"g r"</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">+evil-eval-replace-operator</span>)
+</pre>
+</div>
+
+<p>
+Also neither does this.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">I do not know why but I have to specifically define this for emacs-lisp-mode.</span>
+(<span style="font-weight: bold;">bind!</span> emacs-lisp-mode-map (n v) <span style="font-style: italic;">"g r"</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">+evil-eval-replace-operator</span>)
+</pre>
+</div>
+
+<p>
+Honestly with these two bindings not working I am a bit stumped.
+</p>
+
+<p>
+First debugging step is to find where this binding to xref is set and to study
+how it is set.  And upon some looking I found it is defined in <a href="https://github.com/emacs-evil/evil-collection">evil-collection</a>,
+specifically in it is elisp keybindings folder.  And looking into emacs-lisp.  I
+still do not understand but a workaround is simply to set.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">
+</pre>
+</div>
+</div>
+</body>
+</html>

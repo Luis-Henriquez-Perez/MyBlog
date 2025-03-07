@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful macro: with-map!*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #202020;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3740cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #a65f6a;
+        font-style: italic;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #065fff;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #506fa0;
+        font-style: italic;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #cf25aa;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #6052cf;
+        font-weight: bold;
+      }
+      .negation-char {
+        /* font-lock-negation-char-face */
+        font-weight: bold;
+      }
+      .regexp-grouping-backslash {
+        /* font-lock-regexp-grouping-backslash */
+        color: #008858;
+      }
+      .regexp-grouping-construct {
+        /* font-lock-regexp-grouping-construct */
+        color: #ba35af;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #4250ef;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #008858;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+with-map! is a macro defined in <span class="button">oo-base-macros-with-map-bang.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(<span class="keyword">with-map!</span> MAP <span class="type">&amp;rest</span> BODY)
+
+<span class="helpful-heading">Documentation
+</span>Let-bind bang symbols in BODY to corresponding keys in MAP.
+
+<span class="helpful-heading">References
+</span>with-map! is unused in <span class="button">oo-base-macros-with-map-bang.el</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by with-map!</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/lisp/oo-base-macros-with-map-bang.el</span>
+(<span class="keyword">defmacro</span> <span class="function-name">with-map!</span> (map <span class="type">&amp;rest</span> body)
+  <span class="doc">"Let-bind bang symbols in BODY to corresponding keys in MAP."</span>
+  (<span class="keyword">declare</span> (indent 1))
+  `(<span class="keyword">let*</span> ,(oo--map-let-binds map body <span class="string">"!</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">[:space:]]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span> nil)
+     ,@body))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">lisp-indent-function</span>
+  1</pre>
+  </body>
+</html>

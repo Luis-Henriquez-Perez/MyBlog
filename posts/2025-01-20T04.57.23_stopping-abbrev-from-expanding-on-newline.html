@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stop abbrev from expanding on newline</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">Stop abbrev from expanding on newline</h1>
+</header><p>
+I have always I wanted to fix a particular behavior with abbrev expansion: by
+default <code>abbrev</code> will skip newlines when looking for a word to expand.  Let me
+illustrate with what happened when I found out.  I had an abbrev, "args", that
+expanded into "arguments".  If I typed in the docstring below where the carrot
+is, the symbol "args" in the previous line would expand into "arguments".
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">The cursor would be on the ^ symbol would cause args to expand to</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">`</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">arguments</span><span style="font-weight: bold; font-style: italic;">'.</span>
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">foo</span> (a b <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> args)
+  <span style="font-style: italic;">"^"</span>)
+</pre>
+</div>
+
+<p>
+Curiously, this would even get around <code>oo-use-text-abbrev-p</code> which I use as the
+abbrevs enable property because point is still in even though the symbol <code>args</code> is outside of . I used <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html">oo-use-text-abbrev-p</a>, the value of [[][the
+:enable-functioin property]]. so abbrevs would only expand in but it would
+actually meet that condition because I am in the string.  I do not know.  I need
+something that stops expanding the abbrev if its.
+</p>
+
+<p>
+In practice this means that there could be 10 newlines between your cursor and
+the previous word.  This is not what you would usually want.  I first noticed
+this when typing in.  This can causes me unexpected and more often than not
+undesired abbrev expansions.
+</p>
+
+<p>
+Even with several newlines, <code>args</code> would still be expanded.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">The cursor would be on the ^ symbol would cause args to expand to</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">`</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">arguments</span><span style="font-weight: bold; font-style: italic;">'.</span>
+(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">foo</span> (a b <span style="font-weight: bold; text-decoration: underline;">&amp;rest</span> args)
+
+
+
+  <span style="font-style: italic;">"^"</span>)
+</pre>
+</div>
+
+
+<p>
+To find the root of the problem I looked inside <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful--expand-abbrev.html">expand-abbrev</a> and then the
+<a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev-expand-function.html">abbrev-expand-function</a>, which was set to <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev--default-expand.html">abbrev&#x2013;default-expand</a>, until finally I
+found the culprit, <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful--abbrev--before-point.html">abbrev&#x2013;before-point</a>.  The body of <code>abbrev--before-point</code> is
+long but the only part that concerns this problem is the following chunk.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">let</span> ((re (abbrev-table-get table <span style="font-weight: bold;">:regexp</span>)))
+  (<span style="font-weight: bold;">if</span> (null re)
+      <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">We used to default `</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">re</span><span style="font-weight: bold; font-style: italic;">' to "\\&lt;\\(\\w+\\)\\W*"</span>
+      <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">but when words-include-escapes is set, that</span>
+      <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">is not right and fixing it is boring.</span>
+      (<span style="font-weight: bold;">let</span> ((lim (point)))
+        (backward-word 1)
+        (<span style="font-weight: bold;">setq</span> start (point))
+        (forward-word 1)
+        (<span style="font-weight: bold;">setq</span> end (min (point) lim)))
+    (<span style="font-weight: bold;">when</span> (looking-back re (line-beginning-position))
+      (<span style="font-weight: bold;">setq</span> start (match-beginning 1))
+      (<span style="font-weight: bold;">setq</span> end   (match-end 1)))))
+</pre>
+</div>
+
+<p>
+If the abbrev table has no <code>:regexp</code> property (the default) it uses <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful--backward-word.html">backward-word</a>
+to find the previous expansion.  Therein lies the problem.  The function
+<code>backward-word</code> finds the last word regardless of how many lines it is behind
+point.  It has no boundaries.  However, as is apparent from the call to
+<a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful--looking-back.html">looking-back</a> in <code>(looking-back re (line-beginning-position))</code>, using any regexp
+will automatically bound the search to the beginning of the current line<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>
+</p>
+
+<p>
+In any case, this suggests that what I need to do is provide a regexp and it
+will automatically be bounded.  Conveniently the comment in the code provides a
+good regexp to go by<sup><a id="fnr.2" class="footref" href="#fn.2" role="doc-backlink">2</a></sup>.
+</p>
+
+<p>
+And voilà.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(abbrev-table-put global-abbrev-table <span style="font-weight: bold;">:regexp</span> <span style="font-style: italic;">"</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-style: italic;">&lt;</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">(</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-style: italic;">sw+</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-weight: bold; font-style: italic;">)</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-style: italic;">Sw*"</span>)
+</pre>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I do
+not know if this was intentional.  If you bound <code>looking-back</code> why not bound
+<code>backward-word</code>?</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2" role="doc-backlink">2</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">Sure, I know it mentions <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful--words-include-escapes.html">words-include-escapes</a> but to be
+honest I do not really care about that.  I have <code>words-include-escapes</code> set to nil
+have do not plan on enabling it any time soon.</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>

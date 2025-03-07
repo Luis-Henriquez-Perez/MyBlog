@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: eww-list-histories*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #0000b0;
+        font-weight: bold;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+eww-list-histories is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function
+defined in <span class="button">eww.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(eww-list-histories)
+
+<span class="helpful-heading">Documentation
+</span>List the eww-histories.
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">eww-mode-map</span> <span class="help-key-binding">&lt;normal-state&gt; g h</span>
+<span class="variable-name">eww-mode-map</span> <span class="help-key-binding">H</span>
+
+<span class="helpful-heading">References
+</span>References in <span class="button">eww.el.gz</span>:
+(<span class="keyword">defvar-keymap</span> eww-mode-map ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by eww-list-histories</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/net/eww.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">eww-list-histories</span> ()
+  <span class="doc">"List the eww-histories."</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">when</span> (null eww-history)
+    (<span class="warning">error</span> <span class="string">"No eww-histories are defined"</span>))
+  (<span class="keyword">let</span> ((eww-history-trans eww-history)
+	(buffer (current-buffer)))
+    (set-buffer (get-buffer-create <span class="string">"*eww history*"</span>))
+    (eww-history-mode)
+    (<span class="keyword">setq-local</span> eww-current-buffer buffer)
+    (<span class="keyword">let</span> ((inhibit-read-only t)
+	  (domain-length 0)
+	  (title-length 0)
+	  url title format start)
+      (erase-buffer)
+      (<span class="keyword">dolist</span> (history eww-history-trans)
+	(<span class="keyword">setq</span> start (point))
+	(<span class="keyword">setq</span> domain-length (max domain-length (length (plist-get history <span class="builtin">:url</span>))))
+	(<span class="keyword">setq</span> title-length (max title-length (length (plist-get history <span class="builtin">:title</span>)))))
+      (<span class="keyword">setq</span> format (format <span class="string">"%%-%ds %%-%ds"</span> title-length domain-length)
+	    header-line-format
+	    (concat <span class="string">" "</span> (format format <span class="string">"Title"</span> <span class="string">"URL"</span>)))
+      (<span class="keyword">dolist</span> (history eww-history-trans)
+	(<span class="keyword">setq</span> start (point))
+	(<span class="keyword">setq</span> url (plist-get history <span class="builtin">:url</span>))
+	(<span class="keyword">setq</span> title (plist-get history <span class="builtin">:title</span>))
+	(insert (format format title url))
+	(insert <span class="string">"\n"</span>)
+	(put-text-property start (1+ start) 'eww-history history))
+      (goto-char (point-min)))
+    (pop-to-buffer <span class="string">"*eww history*"</span>)))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (eww-list-histories 0)
+<span class="constant">event-symbol-elements</span>
+  (eww-list-histories)
+<span class="constant">modifier-cache</span>
+  ((0 . eww-list-histories))</pre>
+  </body>
+</html>

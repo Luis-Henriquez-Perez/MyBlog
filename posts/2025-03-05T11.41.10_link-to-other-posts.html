@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>link to other posts</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">link to other posts</h1>
+</header><p>
+Similar in spirit to a <a href="2025-03-05T06.32.51_inserting_links_painlessly_with_abbrevs_1.html">previous post</a>, I want to showcase creating an abbrev
+which would expand into a link to another blog post.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-expand-blog-post-link</span> ()
+  <span style="font-style: italic;">"Prompt for another blog post and insert link to that post."</span>
+  (<span style="font-weight: bold;">let</span> (post-dir current-post posts chosen description)
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Ensure we are in the blog directory.</span>
+    (<span style="font-weight: bold;">setq</span> post-dir <span style="font-style: italic;">"~/Documents/MyBlog/org/posts/"</span>)
+    (<span style="font-weight: bold;">setq</span> current-post (expand-file-name (buffer-file-name)))
+    (<span style="font-weight: bold;">cl-assert</span> (equal (expand-file-name post-dir) (file-name-directory current-post)) nil)
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Find the other posts, do not include drafts and of course do not include</span>
+    (<span style="font-weight: bold;">setq</span> posts (remove (file-name-nondirectory current-post)
+                        (directory-files post-dir nil date2name-datetime-regexp)))
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Select one of these posts.</span>
+    (<span style="font-weight: bold;">unwind-protect</span> (<span style="font-weight: bold;">setq</span> chosen (completing-read <span style="font-style: italic;">"Post: "</span> posts))
+      <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">If no blog post is chosen just abort and try to put things back where</span>
+      <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">we found them.  This is a work in progress, right now I am trying to</span>
+      <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">work out how this should work.</span>
+      (<span style="font-weight: bold;">unless</span> chosen
+        (unexpand-abbrev)
+        (forward-word)))
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Enter the text of what you want the link to say.  By default it should be</span>
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">the title of the post.</span>
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Get tittle of the post</span>
+    (<span style="font-weight: bold;">setq</span> description (read-string <span style="font-style: italic;">"link description: "</span> nil nil <span style="font-style: italic;">"foo"</span>))
+    <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Make a link to it relative to the current-post directory.</span>
+    (insert (format <span style="font-style: italic;">"[[file:%s][%s]]"</span> chosen description)))
+  <span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Make sure to return non-nil so that no space insertion works.</span>
+  t
+  )
+</pre>
+</div>
+
+<p>
+Now to make the abbrev.  I do not set it to <code>plk</code> because that is what I am using
+for a link idea in another post.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-abbrev global-abbrev-table <span style="font-style: italic;">"polk"</span> <span style="font-style: italic;">""</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">oo-expand-blog-post-link</span> <span style="font-weight: bold;">:enable-function</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">oo-in-blog-post-p</span>)
+</pre>
+</div>
+
+<p>
+And voilà, now whenever I type "plk" I seamlessly insert a link to another blog post.
+</p>
+</div>
+</body>
+</html>

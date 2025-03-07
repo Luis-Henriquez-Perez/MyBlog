@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>sanitize file name</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">sanitize file name</h1>
+</header><p>
+While working on a <a href="2025-03-05T23.55.26_link_to_any_buffer.html">previous post</a> I had the need to produce a proper file name
+from a buffer name.  I remember I have needed to do it before and I wrote a
+function for it but I do not think I saved the function.
+</p>
+
+<p>
+I asked chatGPT and it recommend this function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-sanitize-filename</span> (filename)
+  <span style="font-style: italic;">"Replace bad characters in FILENAME with underscores."</span>
+  (<span style="font-weight: bold;">let</span> ((bad-chars <span style="font-style: italic;">"[ \t\n*/?</span><span style="font-weight: bold; font-style: italic;">\\</span><span style="font-style: italic;">[</span><span style="font-weight: bold; font-style: italic; text-decoration: underline;">\\</span><span style="font-style: italic;">]()&lt;&gt;|&amp;;!\"'`$=:%,@]"</span>))
+    (replace-regexp-in-string bad-chars <span style="font-style: italic;">"_"</span> filename)))
+</pre>
+</div>
+
+<p>
+I think the regexp is wrong because it keeps the brackets when I test it below.
+I am glad that this result does not work because it acts as a good example.
+The lesson is to always test stuff that is recommended by chatGPT or any A.I.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(buffer-name)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "*Org Src 2025-03-06T09.18.40_sanitize_file_name.org[ emacs-lisp ]*"</span>
+(oo-sanitize-filename (buffer-name))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "*Org Src 2025-03-06T09.18.40_sanitize_file_name.org[ emacs-lisp ]*"</span>
+</pre>
+</div>
+
+<p>
+Looking at the function chatGPT wrote, I think it is easier to just specify this
+in the positive rather than the negative; to say letters, numbers, and a few
+certain symbols are legal instead of specifying every illegal character.
+</p>
+
+<p>
+Here is the regular expression.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">rx</span> (not (any <span style="font-style: italic;">"-"</span> <span style="font-style: italic;">"_"</span> <span style="font-style: italic;">"."</span> alnum)))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-sanitize-filename</span> (filename)
+  <span style="font-style: italic;">"Replace bad characters in FILENAME with underscores."</span>
+  (replace-regexp-in-string <span style="font-style: italic;">"[</span><span style="font-style: italic;">^</span><span style="font-style: italic;">._[:alnum:]-]"</span> <span style="font-style: italic;">"_"</span> filename))
+</pre>
+</div>
+
+<p>
+O.K., the results look better.  This function comes up.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(buffer-name)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "*Org Src 2025-03-06T09.18.40_sanitize_file_name.org[ emacs-lisp ]*"</span>
+(oo-sanitize-filename (buffer-name))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "_Org_Src_2025-03-06T09_18_40_sanitize_file_name_org__emacs-lisp___"</span>
+</pre>
+</div>
+</div>
+</body>
+</html>

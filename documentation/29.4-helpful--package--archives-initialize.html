@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: package--archives-initialize*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package--archives-initialize is a <span class="button">byte-compiled</span> function defined in
+<span class="button">package.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(package--archives-initialize)
+
+<span class="helpful-heading">Documentation
+</span>Make sure the list of installed and remote packages are initialized.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">package.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">package-install</span> ...)                   <span class="comment">2 references</span>
+(<span class="keyword">defun</span> <span class="function-name">package--upgradeable-packages</span> ...)     <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-install-selected-packages</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-reinstall</span> ...)                 <span class="comment">2 references</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by package--archives-initialize</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/package.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">package--archives-initialize</span> ()
+  <span class="doc">"Make sure the list of installed and remote packages are initialized."</span>
+  (<span class="keyword">unless</span> package--initialized
+    (package-initialize t))
+  (<span class="keyword">unless</span> package-archive-contents
+    (package-refresh-contents)))
+
+</pre>
+  </body>
+</html>

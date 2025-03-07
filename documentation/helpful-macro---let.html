@@ -1,0 +1,439 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful macro: -let*</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #afbcbf;
+        background-color: #000e17;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #00a972;
+        font-weight: bold;
+      }
+      .button {
+        /* button */
+        color: #6fafff;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #cf9f7f;
+        font-style: italic;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #af8aff;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #92b4df;
+        font-style: italic;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #3dc0b0;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #6a88ff;
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #029fff;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #af8aff;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+-let is a macro defined in <span class="button">dash.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(<span class="keyword">-let</span> VARLIST <span class="type">&amp;rest</span> BODY)
+
+<span class="helpful-heading">Documentation
+</span>Bind variables according to VARLIST then eval BODY.
+
+VARLIST is a list of lists of the form (PATTERN SOURCE).  Each
+PATTERN is matched against the SOURCE "structurally".  SOURCE
+is only evaluated once for each PATTERN.  Each PATTERN is matched
+recursively, and can therefore contain sub-patterns which are
+matched against corresponding sub-expressions of SOURCE.
+
+All the SOURCEs are evalled before any symbols are
+bound (i.e. "in parallel").
+
+If VARLIST only contains one (PATTERN SOURCE) element, you can
+optionally specify it using a vector and discarding the
+outer-most parens.  Thus
+
+  (-let ((PATTERN SOURCE)) ...)
+
+becomes
+
+  (-let [PATTERN SOURCE] ...).
+
+<span class="button">-let</span> uses a convention of not binding places (symbols) starting
+with _ whenever it's possible.  You can use this to skip over
+entries you don't care about.  However, this is not *always*
+possible (as a result of implementation) and these symbols might
+get bound to undefined values.
+
+Following is the overview of supported patterns.  Remember that
+patterns can be matched recursively, so every a, b, aK in the
+following can be a matching construct and not necessarily a
+symbol/variable.
+
+Symbol:
+
+  a - bind the SOURCE to A.  This is just like regular <span class="button">let</span>.
+
+Conses and lists:
+
+  (a) - bind <span class="button">car</span> of cons/list to A
+
+  (a . b) - bind car of cons to A and <span class="button">cdr</span> to B
+
+  (a b) - bind car of list to A and <span class="button">cadr</span> to B
+
+  (a1 a2 a3 ...) - bind 0th car of list to A1, 1st to A2, 2nd to A3...
+
+  (a1 a2 a3 ... aN . rest) - as above, but bind the Nth cdr to REST.
+
+Vectors:
+
+  [a] - bind 0th element of a non-list sequence to A (works with
+        vectors, strings, bit arrays...)
+
+  [a1 a2 a3 ...] - bind 0th element of non-list sequence to A0, 1st to
+                   A1, 2nd to A2, ...
+                   If the PATTERN is shorter than SOURCE, the values at
+                   places not in PATTERN are ignored.
+                   If the PATTERN is longer than SOURCE, an <span class="button">error</span> is
+                   thrown.
+
+  [a1 a2 a3 ... &amp;rest rest] - as above, but bind the rest of
+                              the sequence to REST.  This is
+                              conceptually the same as improper list
+                              matching (a1 a2 ... aN . rest)
+
+Key/value stores:
+
+  (&amp;plist key0 a0 ... keyN aN) - bind value mapped by keyK in the
+                                 SOURCE plist to aK.  If the
+                                 value is not found, aK is nil.
+                                 Uses <span class="button">plist-get</span> to fetch values.
+
+  (&amp;alist key0 a0 ... keyN aN) - bind value mapped by keyK in the
+                                 SOURCE alist to aK.  If the
+                                 value is not found, aK is nil.
+                                 Uses <span class="button">assoc</span> to fetch values.
+
+  (&amp;hash key0 a0 ... keyN aN) - bind value mapped by keyK in the
+                                SOURCE hash table to aK.  If the
+                                value is not found, aK is nil.
+                                Uses <span class="button">gethash</span> to fetch values.
+
+Further, special keyword &amp;keys supports "inline" matching of
+plist-like key-value pairs, similarly to &amp;keys keyword of
+<span class="button">cl-defun</span>.
+
+  (a1 a2 ... aN &amp;keys key1 b1 ... keyN bK)
+
+This binds N values from the list to a1 ... aN, then interprets
+the cdr as a plist (see key/value matching above).
+
+A shorthand notation for kv-destructuring exists which allows the
+patterns be optionally left out and derived from the key name in
+the following fashion:
+
+- a key :foo is converted into <span class="constant">foo</span> pattern,
+- a key 'bar is converted into <span class="constant">bar</span> pattern,
+- a key "baz" is converted into <span class="constant">baz</span> pattern.
+
+That is, the entire value under the key is bound to the derived
+variable without any further destructuring.
+
+This is possible only when the form following the key is not a
+valid pattern (i.e. not a symbol, a cons cell or a vector).
+Otherwise the matching proceeds as usual and in case of an
+invalid spec fails with an error.
+
+Thus the patterns are normalized as follows:
+
+   ;; derive all the missing patterns
+   (&amp;plist :foo 'bar "baz") =&gt; (&amp;plist :foo foo 'bar bar "baz" baz)
+
+   ;; we can specify some but not others
+   (&amp;plist :foo 'bar explicit-bar) =&gt; (&amp;plist :foo foo 'bar explicit-bar)
+
+   ;; nothing happens, we store :foo in x
+   (&amp;plist :foo x) =&gt; (&amp;plist :foo x)
+
+   ;; nothing happens, we match recursively
+   (&amp;plist :foo (a b c)) =&gt; (&amp;plist :foo (a b c))
+
+You can name the source using the syntax SYMBOL &amp;as PATTERN.
+This syntax works with lists (proper or improper), vectors and
+all types of maps.
+
+  (list &amp;as a b c) (list 1 2 3)
+
+binds A to 1, B to 2, C to 3 and LIST to (1 2 3).
+
+Similarly:
+
+  (bounds &amp;as beg . end) (cons 1 2)
+
+binds BEG to 1, END to 2 and BOUNDS to (1 . 2).
+
+  (items &amp;as first . rest) (list 1 2 3)
+
+binds FIRST to 1, REST to (2 3) and ITEMS to (1 2 3)
+
+  [vect &amp;as _ b c] [1 2 3]
+
+binds B to 2, C to 3 and VECT to [1 2 3] (_ avoids binding as usual).
+
+  (plist &amp;as &amp;plist :b b) (list :a 1 :b 2 :c 3)
+
+binds B to 2 and PLIST to (:a 1 :b 2 :c 3).  Same for &amp;alist and &amp;hash.
+
+This is especially useful when we want to capture the result of a
+computation and destructure at the same time.  Consider the
+form (function-returning-complex-structure) returning a list of
+two vectors with two items each.  We want to capture this entire
+result and pass it to another computation, but at the same time
+we want to get the second item from each vector.  We can achieve
+it with pattern
+
+  (result &amp;as [_ a] [_ b]) (function-returning-complex-structure)
+
+Note: Clojure programmers may know this feature as the ":as
+binding".  The difference is that we put the &amp;as at the front
+because we need to support improper list binding.
+
+<span class="helpful-heading">References
+</span>-let is unused in <span class="button">dash.el</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by -let</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/elpaca-test/builds/dash/dash.el</span>
+(<span class="keyword">defmacro</span> <span class="function-name">-let</span> (varlist <span class="type">&amp;rest</span> body)
+  <span class="doc">"Bind variables according to VARLIST then eval BODY.
+
+VARLIST is a list of lists of the form (PATTERN SOURCE).  Each
+PATTERN is matched against the SOURCE \"structurally\".  SOURCE
+is only evaluated once for each PATTERN.  Each PATTERN is matched
+recursively, and can therefore contain sub-patterns which are
+matched against corresponding sub-expressions of SOURCE.
+
+All the SOURCEs are evalled before any symbols are
+bound (i.e. \"in parallel\").
+
+If VARLIST only contains one (PATTERN SOURCE) element, you can
+optionally specify it using a vector and discarding the
+outer-most parens.  Thus
+
+  (-let ((PATTERN SOURCE)) ...)
+
+becomes
+
+  (-let [PATTERN SOURCE] ...).
+
+`</span><span class="doc"><span class="constant">-let</span></span><span class="doc">' uses a convention of not binding places (symbols) starting
+with _ whenever it's possible.  You can use this to skip over
+entries you don't care about.  However, this is not *always*
+possible (as a result of implementation) and these symbols might
+get bound to undefined values.
+
+Following is the overview of supported patterns.  Remember that
+patterns can be matched recursively, so every a, b, aK in the
+following can be a matching construct and not necessarily a
+symbol/variable.
+
+Symbol:
+
+  a - bind the SOURCE to A.  This is just like regular `</span><span class="doc"><span class="constant">let</span></span><span class="doc">'.
+
+Conses and lists:
+
+  (a) - bind `</span><span class="doc"><span class="constant">car</span></span><span class="doc">' of cons/list to A
+
+  (a . b) - bind car of cons to A and `</span><span class="doc"><span class="constant">cdr</span></span><span class="doc">' to B
+
+  (a b) - bind car of list to A and `</span><span class="doc"><span class="constant">cadr</span></span><span class="doc">' to B
+
+  (a1 a2 a3 ...) - bind 0th car of list to A1, 1st to A2, 2nd to A3...
+
+  (a1 a2 a3 ... aN . rest) - as above, but bind the Nth cdr to REST.
+
+Vectors:
+
+  [a] - bind 0th element of a non-list sequence to A (works with
+        vectors, strings, bit arrays...)
+
+  [a1 a2 a3 ...] - bind 0th element of non-list sequence to A0, 1st to
+                   A1, 2nd to A2, ...
+                   If the PATTERN is shorter than SOURCE, the values at
+                   places not in PATTERN are ignored.
+                   If the PATTERN is longer than SOURCE, an `</span><span class="doc"><span class="constant">error</span></span><span class="doc">' is
+                   thrown.
+
+  [a1 a2 a3 ... &amp;rest rest] - as above, but bind the rest of
+                              the sequence to REST.  This is
+                              conceptually the same as improper list
+                              matching (a1 a2 ... aN . rest)
+
+Key/value stores:
+
+  (&amp;plist key0 a0 ... keyN aN) - bind value mapped by keyK in the
+                                 SOURCE plist to aK.  If the
+                                 value is not found, aK is nil.
+                                 Uses `</span><span class="doc"><span class="constant">plist-get</span></span><span class="doc">' to fetch values.
+
+  (&amp;alist key0 a0 ... keyN aN) - bind value mapped by keyK in the
+                                 SOURCE alist to aK.  If the
+                                 value is not found, aK is nil.
+                                 Uses `</span><span class="doc"><span class="constant">assoc</span></span><span class="doc">' to fetch values.
+
+  (&amp;hash key0 a0 ... keyN aN) - bind value mapped by keyK in the
+                                SOURCE hash table to aK.  If the
+                                value is not found, aK is nil.
+                                Uses `</span><span class="doc"><span class="constant">gethash</span></span><span class="doc">' to fetch values.
+
+Further, special keyword &amp;keys supports \"inline\" matching of
+plist-like key-value pairs, similarly to &amp;keys keyword of
+`</span><span class="doc"><span class="constant">cl-defun</span></span><span class="doc">'.
+
+  (a1 a2 ... aN &amp;keys key1 b1 ... keyN bK)
+
+This binds N values from the list to a1 ... aN, then interprets
+the cdr as a plist (see key/value matching above).
+
+A shorthand notation for kv-destructuring exists which allows the
+patterns be optionally left out and derived from the key name in
+the following fashion:
+
+- a key :foo is converted into `</span><span class="doc"><span class="constant">foo</span></span><span class="doc">' pattern,
+- a key </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'bar is converted into `</span><span class="doc"><span class="constant">bar</span></span><span class="doc">' pattern,
+- a key \"baz\" is converted into `</span><span class="doc"><span class="constant">baz</span></span><span class="doc">' pattern.
+
+That is, the entire value under the key is bound to the derived
+variable without any further destructuring.
+
+This is possible only when the form following the key is not a
+valid pattern (i.e. not a symbol, a cons cell or a vector).
+Otherwise the matching proceeds as usual and in case of an
+invalid spec fails with an error.
+
+Thus the patterns are normalized as follows:
+
+   ;; derive all the missing patterns
+   (&amp;plist :foo </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'bar \"baz\") =&gt; (&amp;plist :foo foo </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'bar bar \"baz\" baz)
+
+   ;; we can specify some but not others
+   (&amp;plist :foo </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'bar explicit-bar) =&gt; (&amp;plist :foo foo </span><span class="doc"><span class="builtin">\\=</span></span><span class="doc">'bar explicit-bar)
+
+   ;; nothing happens, we store :foo in x
+   (&amp;plist :foo x) =&gt; (&amp;plist :foo x)
+
+   ;; nothing happens, we match recursively
+   (&amp;plist :foo (a b c)) =&gt; (&amp;plist :foo (a b c))
+
+You can name the source using the syntax SYMBOL &amp;as PATTERN.
+This syntax works with lists (proper or improper), vectors and
+all types of maps.
+
+  (list &amp;as a b c) (list 1 2 3)
+
+binds A to 1, B to 2, C to 3 and LIST to (1 2 3).
+
+Similarly:
+
+  (bounds &amp;as beg . end) (cons 1 2)
+
+binds BEG to 1, END to 2 and BOUNDS to (1 . 2).
+
+  (items &amp;as first . rest) (list 1 2 3)
+
+binds FIRST to 1, REST to (2 3) and ITEMS to (1 2 3)
+
+  [vect &amp;as _ b c] [1 2 3]
+
+binds B to 2, C to 3 and VECT to [1 2 3] (_ avoids binding as usual).
+
+  (plist &amp;as &amp;plist :b b) (list :a 1 :b 2 :c 3)
+
+binds B to 2 and PLIST to (:a 1 :b 2 :c 3).  Same for &amp;alist and &amp;hash.
+
+This is especially useful when we want to capture the result of a
+computation and destructure at the same time.  Consider the
+form (function-returning-complex-structure) returning a list of
+two vectors with two items each.  We want to capture this entire
+result and pass it to another computation, but at the same time
+we want to get the second item from each vector.  We can achieve
+it with pattern
+
+  (result &amp;as [_ a] [_ b]) (function-returning-complex-structure)
+
+Note: Clojure programmers may know this feature as the \":as
+binding\".  The difference is that we put the &amp;as at the front
+because we need to support improper list binding."</span>
+  (<span class="keyword">declare</span> (debug ([<span class="type">&amp;or</span> (<span class="type">&amp;rest</span> [<span class="type">&amp;or</span> (sexp form) sexp])
+                        (vector [<span class="type">&amp;rest</span> [sexp form]])]
+                   body))
+           (indent 1))
+  (<span class="keyword">if</span> (vectorp varlist)
+      `(<span class="keyword">let*</span> ,(dash--match (aref varlist 0) (aref varlist 1))
+         ,@body)
+    (<span class="keyword">let*</span> ((varlist (dash--normalize-let-varlist varlist))
+           (inputs (<span class="keyword">--map-indexed</span> (list (make-symbol (format <span class="string">"input%d"</span> it-index)) (cadr it)) varlist))
+           (new-varlist (<span class="keyword">--zip-with</span> (list (car it) (car other))
+                                    varlist inputs)))
+      `(<span class="keyword">let</span> ,inputs
+         (<span class="keyword">-let*</span> ,new-varlist ,@body)))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">edebug-form-spec</span>
+  ([&amp;or
+    (&amp;rest
+     [&amp;or
+      (sexp form)
+      sexp])
+    (vector
+     [&amp;rest
+      [sexp form]])]
+   body)
+<span class="constant">lisp-indent-function</span>
+  1</pre>
+  </body>
+</html>

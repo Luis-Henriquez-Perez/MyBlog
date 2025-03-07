@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>inserting links painlessly with abbrevs (part 1)</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">inserting links painlessly with abbrevs (part 1)</h1>
+</header><p>
+Whenever I mention an emacs variable or function for the first time I link it to
+an html page containing its documentation.  The html page is generated from the
+actual documentation buffer I see in Emacs.  That is so instead of just
+inferring what variables or functions I mention do based on how I use them or
+what I say about them, readers can actually see the official documentation for
+these functions in the exact way I can.  The only problem is that the
+process of actually setting the link up on my end for me requires several steps.
+I need to look the symbol up with <a href="file:///home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-variable.html">helpful-variable</a> or, if it is a function or
+macro, <a href="file:///home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-function.html">helpful-function</a>; then I need to convert the buffer to html using
+<a href="https://github.com/hniksic/emacs-htmlize">htmlize</a>; and I need to save that htmlized buffer to a file in my documentation
+folder; and then I need to actually link my post to the documentation.  That is
+quite the bit of work and something I am not too keen on doing for every
+variable or function I happen to reference.  In this post I showcase how I
+leverage [[][Emacs's abbrevs]] to automate this.
+</p>
+
+<p>
+The idea is to write a function that jumps to a particular link, determines if
+it refer to a variable or function, takes an html "buffer snapshot" of its
+documentation, and saves it to a file in the appropriate place.  In practice,
+this is what the workflow will look like: I type <code>vlk</code> (which stands for "variable
+link") followed by a space, Emacs prompts me for a variable to get the
+documentation from, then when I select the symbol, the abbrev will expand into a
+link pointing to the documentation of the symbol.  Under the hood the function
+will check the <a href="../documentation/">documentation folder</a> for documentation for the variable and make
+the link to that file.  And if the documentation is not found it will open the
+documentation buffer for that variable, htmlize with <a href="file:///home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--htmlize-buffer.html">htmlize-buffer</a>, and write
+it to a file first.  The result of all this is what I believe to be the most
+efficient documentation link possible.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-expand-variable-doc-link</span> ()
+  <span style="font-style: italic;">"Insert an org link to a helpful callable snapshot.</span>
+<span style="font-style: italic;">Find the appropriate documentation for the callable in the documentation</span>
+<span style="font-style: italic;">directory.  If it does not exist create it and add it."</span>
+  (<span style="font-weight: bold;">let*</span> ((doc-dir (expand-file-name <span style="font-style: italic;">"~/Documents/MyBlog/org/documentation/"</span>))
+         (helpful-switch-buffer-function <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">identity</span>)
+         (symbol (helpful--read-symbol <span style="font-style: italic;">"Variable: "</span> (helpful--variable-at-point) <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">helpful--variable-p</span>))
+         (html-file (expand-file-name (format <span style="font-style: italic;">"%s-helpful-variable--%s.html"</span> emacs-version symbol) doc-dir))
+         (html-buffer nil))
+    (<span style="font-weight: bold;">unless</span> (file-exists-p html-file)
+      (<span style="font-weight: bold;">setq</span> help-buffer (helpful-variable symbol))
+      (<span style="font-weight: bold;">unless</span> help-buffer (<span style="font-weight: bold;">error</span> <span style="font-style: italic;">"No help buffer."</span>))
+      (<span style="font-weight: bold;">setq</span> html-buffer (htmlize-buffer help-buffer))
+      (<span style="font-weight: bold;">unless</span> html-buffer (<span style="font-weight: bold;">error</span> <span style="font-style: italic;">"No html buffer."</span>))
+      (<span style="font-weight: bold;">with-current-buffer</span> html-buffer
+        (write-region (point-min) (point-max) html-file)
+        (kill-buffer help-buffer)
+        (kill-buffer)))
+    (insert (format <span style="font-style: italic;">"[[file:%s][%s]]"</span>  html-file symbol))))
+</pre>
+</div>
+
+<p>
+For some added flair I name the file according to the Emacs version I am using
+so that if I upgrade my current Emacs version (29.4) to say Emacs 30, then.
+</p>
+
+<p>
+To define the abbrev we specify the function as a hook.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-abbrev global-abbrev-table <span style="font-style: italic;">"vlk"</span> <span style="font-style: italic;">""</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">oo-expand-variable-doc-link</span> <span style="font-weight: bold;">:enable-function</span> <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">oo-in-blog-post-p</span>)
+</pre>
+</div>
+
+<p>
+This abbrev is specific to my blog posts.  I do not want it expanding anywhere
+but blog posts.  Giving the abbrev <code>vlk</code> the <code>:enable-property</code> ensures the abbrev
+will only expand in blog posts.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-in-blog-post-p</span> ()
+  <span style="font-style: italic;">"Return non-nil if the current buffer is for one of my blog posts."</span>
+  (<span style="font-weight: bold;">declare</span> (pure t) (side-effect-free error-free))
+  (<span style="font-weight: bold;">and</span> (derived-mode-p <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">org-mode</span>)
+       (stringp default-directory)
+       (string= (expand-file-name default-directory)
+                (expand-file-name <span style="font-style: italic;">"~/Documents/MyBlog/org/posts/"</span>))))
+</pre>
+</div>
+
+<p>
+The process is similar to a function.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun!</span> <span style="font-weight: bold;">oo-expand-callable-doc-link</span> ()
+  <span style="font-style: italic;">"Insert an org link to a helpful callable snapshot.</span>
+<span style="font-style: italic;">Find the appropriate documentation for the callable in the documentation</span>
+<span style="font-style: italic;">directory.  If it does not exist create it and add it."</span>
+  (<span style="font-weight: bold;">set!</span> doc-dir (expand-file-name <span style="font-style: italic;">"~/Documents/MyBlog/org/documentation/"</span>))
+  (<span style="font-weight: bold;">set!</span> helpful-switch-buffer-function <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">identity</span>)
+  (<span style="font-weight: bold;">set!</span> symbol (helpful--read-symbol <span style="font-style: italic;">"Callable: "</span> (helpful--callable-at-point) <span style="font-weight: bold;">#'</span><span style="font-weight: bold; text-decoration: underline;">fboundp</span>))
+  (<span style="font-weight: bold;">set!</span> html-file (expand-file-name (format <span style="font-style: italic;">"%s-helpful-callable--%s.html"</span> emacs-version symbol) doc-dir))
+  (<span style="font-weight: bold;">unless</span> (file-exists-p html-file)
+    (<span style="font-weight: bold;">set!</span> help-buffer (<span style="font-weight: bold;">quiet!</span> (helpful-callable symbol)))
+    (<span style="font-weight: bold;">quitif!</span> (not help-buffer) <span style="font-style: italic;">"No help buffer."</span>)
+    (<span style="font-weight: bold;">set!</span> html-buffer (<span style="font-weight: bold;">quiet!</span> (htmlize-buffer help-buffer)))
+    (<span style="font-weight: bold;">quitif!</span> (not html-buffer) <span style="font-style: italic;">"No html buffer."</span>)
+    (<span style="font-weight: bold;">with-current-buffer</span> html-buffer
+      (<span style="font-weight: bold;">quiet!</span> (write-region (point-min) (point-max) html-file))
+      (kill-buffer help-buffer)
+      (kill-buffer)))
+  (insert (format <span style="font-style: italic;">"[[file:%s][%s]]"</span>  html-file symbol)))
+</pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Using Timestamped Posts</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">Using Timestamped Posts</h1>
+</header><p>
+The more blog posts I write the harder its getting to find the one I am looking
+for at a glance.  Since the filenames are sorted in lexicographical order and I
+name files solely by topic with no consideration of their resulting order,
+adding a new filename to me is tantamount to tossing a needle in a haystack.  I
+create the post and when I save the file I think: "Where did it go?".  A post I
+created today and one I created five minutes ago might be miles apart.
+Conversely, a post created five years ago and one created five minutes ago might
+be right next to each other.  The experience is disorienting and costly as I end
+up spending more time searching for posts.  Of course, I can always use
+<a href="../../helpful-function--consult-line.html">consult-line</a> from <a href="https://github.com/minad/consult">consult</a> but I do not want to do this every time.  Ultimately,
+I want posts for my blog to be in the order that they where created.  To that
+end, I decided to prefix a timestamp at the beginning of the filename of each
+post.
+</p>
+<div id="outline-container-org759687e" class="outline-2">
+<h2 id="org759687e">deciding on a timestamp format</h2>
+<div class="outline-text-2" id="text-org759687e">
+<p>
+I did not know how timestamps were normally written.  Should there be some
+separator between certain time components?  If so what is it and where should it
+go?  I suspect the answer largely depends on use-case and preference.
+</p>
+
+<p>
+In a <a href="https://emacs.stackexchange.com/questions/14673/emacs-function-to-make-a-file-with-date-time-as-filename-and-a-shortcut-for-it">question similar to my own</a> the following timestamp format was generated
+using <a href="../../helpful-function--format-time-string.html">format-time-string</a>.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(format-time-string <span style="font-style: italic;">"%Y-%m-%d--%H-%M-%S"</span>)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "2024-04-24--14-31-16"</span>
+</pre>
+</div>
+
+<p>
+In contrast the timestamp used for org IDs which is much more conservative about
+separators.  It only uses "T" to separate the year and a "." to separate
+anything smaller than a second.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">require</span> <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">org-id</span>)
+(org-id-new)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "20240424T141308.453178"</span>
+</pre>
+</div>
+
+<p>
+Not wanting excessively long filenames, I was inclined to avoid using
+separators.  It was when I actually tried using timestamps with no separators
+that I realized how difficult it is to distinguish time components without them.
+Compare with this.  I think the year is easy to see but suppose I wanted the
+hour and minute instead.  I for one would have to sit there a few seconds trying
+to figure it out.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(format-time-string <span style="font-style: italic;">"%Y%m%d%H%M%S%N"</span>)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "20240504145659269408809"</span>
+</pre>
+</div>
+
+<p>
+It is apparent that the question of whether to have separators or not is a trade
+off between readability and brevity.  Then again the question.  After all, if I
+never need to read the timestamp myself and can manipulate them programmatically
+then.
+</p>
+
+<p>
+Ultimately, I opted for readability by separating individual time components
+with either a "-" or "&#x2013;".  Although the minor seconds are not pretty I still
+leave them so I can be sure that filenames are different even if they are
+created in a short time span from each other.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(format-time-string <span style="font-style: italic;">"%Y-%m-%d--%H-%M-%S--%N"</span>)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "2024-05-01--05-04-45--204039545"</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd9dd19a" class="outline-2">
+<h2 id="orgd9dd19a">automating the creation of new blog posts</h2>
+<div class="outline-text-2" id="text-orgd9dd19a">
+<p>
+Typing out the timestamp is too error prone and tedious.  Instead, I wrote the
+following function that prompts me for a blog post title and then creates a blog
+post from the given name, opening the file in Emacs<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup> and inserting the
+title and author information.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-blog-new-post</span> (title)
+  <span style="font-style: italic;">"Create a new blog post."</span>
+  (<span style="font-weight: bold;">interactive</span> <span style="font-style: italic;">"sBlog post title: "</span>)
+  (find-file (oo--blog-post-filename title))
+  (insert (format <span style="font-style: italic;">"#+TITLE: %s\n"</span> (capitalize title)))
+  (insert (format <span style="font-style: italic;">"#+AUTHOR: Luis Henriquez-Perez\n"</span> (capitalize title))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb45ba72" class="outline-2">
+<h2 id="orgb45ba72">generating the path of a blog post from a title</h2>
+<div class="outline-text-2" id="text-orgb45ba72">
+<p>
+For testing it is often much easier to segregate side-effects (the creation of
+the file) from computations (the generation of the path).  That is why even
+though the body of this function is small enough to fit in <code>oo-blog-new-post</code>
+without making it excessively long, I place it into its own function.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo--blog-post-filename</span> (title)
+  <span style="font-style: italic;">"Return a valid blog post name from TITLE.</span>
+<span style="font-style: italic;">TITLE is a string describing the topic of a post."</span>
+  (<span style="font-weight: bold;">let</span> ((timestamp (format-time-string <span style="font-style: italic;">"%Y-%m-%d--%H-%M-%S--%N"</span>))
+        (name (downcase (string-replace <span style="font-style: italic;">"\s"</span> <span style="font-style: italic;">"-"</span> title)))
+        (post-dir <span style="font-style: italic;">"~/Documents/blog/org/posts/"</span>))
+    (expand-file-name (format <span style="font-style: italic;">"%s--%s.org"</span> timestamp name) post-dir)))
+</pre>
+</div>
+<p>
+This way I can test whether the correct filename is generated without worrying
+about whether inadvertently creating a file in the wrong directory in case of
+I get the code wrong.
+</p>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(abbreviate-file-name (oo--blog-post-filename <span style="font-style: italic;">"writing a post while upside down"</span>))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "~/Documents/blog/org/posts/2024-05-02--12-11-11--127335202--writing-a-post-while-upside-down.org"</span>
+
+(abbreviate-file-name (oo--blog-post-filename <span style="font-style: italic;">"writing a post underwater"</span>))
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">=&gt; "~/Documents/blog/org/posts/2024-05-02--12-11-23--036941798--writing-a-post-underwater.org"</span>
+</pre>
+</div>
+<p>
+I could generalize this function maybe for just generating a timestamp filename.
+I could definitely see myself wanting more such files in the future.  But since
+I have no concrete need as of yet I will leave it as is.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5afc6ae" class="outline-2">
+<h2 id="org5afc6ae">conclusion</h2>
+<div class="outline-text-2" id="text-org5afc6ae">
+<p>
+After adding timestamps I have achieved what I wanted.  Now blog posts are
+displayed in a predictable order when viewed via <a href="https://www.man7.org/linux/man-pages/man1/ls.1.html">ls</a> or any file viewer.
+</p>
+
+
+<figure id="org2659dc7">
+<img src="../images/timestaped-blog-posts.png" alt="timestaped-blog-posts.png">
+
+<figcaption><span class="figure-number">Figure 1: </span>The dired buffer of the directory containing my blog posts.</figcaption>
+</figure>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">To be more precise, it
+creates a <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Buffers.html">buffer</a> that visits the post file using <a href="../../helpful-function--find-file.html">find-file</a>.</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>

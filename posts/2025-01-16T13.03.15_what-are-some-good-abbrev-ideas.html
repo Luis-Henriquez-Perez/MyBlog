@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Good abbrev ideas</title>
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" href="../style.css" type="text/css"/>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">Good abbrev ideas</h1>
+</header><p>
+The more I started using <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Abbrevs.html">abbrev</a> the more uses I found for it.  Here I showcase
+some of my nicest abbrev candidates as well as corresponding examples from <a href="https://github.com/Luis-Henriquez-Perez/dotfiles/blob/develop/dot_config/emacs/lisp/99-after-load-abbrev.el">my
+personal abbrev file</a>.
+</p>
+
+<ul class="org-ul">
+<li><p>
+<b>capitalized words</b>
+</p>
+
+<p>
+Typing an uppercase letter, <code>LETTER</code>, requires the key-chord <code>SHIFT LETTER</code>.  A
+key-chord is a set of keys pressed simultaneously.  Assuming you use a <a href="https://en.wikipedia.org/wiki/QWERTY">QWERTY</a>
+keyboard, a key-chord is in general harder, slower, and more strenuous to type
+than a series of individual letters.  Abbrevs allows us produce the results of
+harder keystrokes with a short series of easier ones.
+</p></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"i"</span> <span style="font-style: italic;">"I"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"luis"</span> <span style="font-style: italic;">"Luis"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"Emacs"</span> <span style="font-style: italic;">"Emacs"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"english"</span> <span style="font-style: italic;">"English"</span>)
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">Not the be confused with the actual word "shift" I add a "k" to the end of</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">the abbrev to represent "shift key".  And this way I avoid having to</span>
+<span style="font-weight: bold; font-style: italic;">;; </span><span style="font-weight: bold; font-style: italic;">capitalize the entire word myself.</span>
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"shiftk"</span> <span style="font-style: italic;">"SHIFT"</span>)
+</pre>
+</div>
+<ul class="org-ul">
+<li><p>
+<b><a href="https://www.grammarly.com/blog/contractions/">contractions</a></b>
+</p>
+
+<p>
+Contractions are just abbreviations of certain english words like not&#x2013;and in
+terms of typing it is doubtful whether they are even easier to type than their
+expansions.  In any case, you can get the benefit of saving text when typing
+the contraction, but.  Almost all punctuation is produced via a key-chords.
+Use abbrevs to avoid ever having to type <code>'</code> and other forms of punctuation
+found in english.
+</p></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"youre"</span> <span style="font-style: italic;">"you are"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"dnt"</span> <span style="font-style: italic;">"do not"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"wdnt"</span> <span style="font-style: italic;">"would not"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"wouldnt"</span> <span style="font-style: italic;">"would not"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"cdnt"</span> <span style="font-style: italic;">"could not"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"couldnt"</span> <span style="font-style: italic;">"could not"</span>)
+</pre>
+</div>
+<ul class="org-ul">
+<li><p>
+<b>common spelling mistakes</b>
+</p>
+
+<p>
+You can register your typos as abbrevs and their
+corrections as the corresponding expansions, essentially creating a sort of
+auto-correct.
+</p>
+
+<p>
+If you are familiar with Emacs you might be thinking, why not just use
+<a href="https://www.emacswiki.org/emacs/FlySpell">flyspell</a>?  It has an can identify typos guess what word you meant when you
+misspell a word.
+</p>
+
+<p>
+Admittedly, <code>flyspell</code> is pretty good at guessing which word you meant but it is
+not perfect and it is not catered specifically for your typing.  Everyone has
+words they tend to type incorrectly more than others&#x2013;a sort of "typo
+tendency" if you will&#x2013;and this tendency varies among individuals.  This
+tendency is simply not accounted for be <code>flyspell</code>.
+</p>
+
+<p>
+For example, for me <code>th</code> is a common misspelling for <code>the</code>.  Flyspell did
+correctly identifies it as a typo but auto-correcting it yields <code>ht</code><sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup>, a word
+I never use.
+</p></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"htat"</span> <span style="font-style: italic;">"that"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"hte"</span> <span style="font-style: italic;">"the"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"th"</span> <span style="font-style: italic;">"the"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"ot"</span> <span style="font-style: italic;">"to"</span>)
+</pre>
+</div>
+<ul class="org-ul">
+<li><p>
+<b><a href="https://writing.wisc.edu/handbook/transitions/">transitional words and phrases</a></b>
+</p>
+
+<p>
+Transitional words and phrases are good candidates for abbrevs because of how
+frequently used they are in sentences.
+</p></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"altho"</span> <span style="font-style: italic;">"although"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"hw"</span> <span style="font-style: italic;">"however"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"moro"</span> <span style="font-style: italic;">"moreover"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"iow"</span> <span style="font-style: italic;">"in other words"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"otoh"</span> <span style="font-style: italic;">"on the one hand"</span>)
+</pre>
+</div>
+<ul class="org-ul">
+<li><p>
+<b>phrases</b>
+</p>
+
+<p>
+The English language is rife with multi-word phrases such as "more often than
+not" or "once upon a time".  Abbreviating these phrases is particularly
+satisfying due to the sheer number of words saved.
+</p></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"ivs"</span> <span style="font-style: italic;">"I have seen"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"idlk"</span> <span style="font-style: italic;">"I do not like"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"idk"</span> <span style="font-style: italic;">"I do not know"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"damw"</span> <span style="font-style: italic;">"do not ask me why"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"iff"</span> <span style="font-style: italic;">"if and only if"</span>)
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><p>
+<b>words that just go together</b>
+</p>
+
+<p>
+Words are just commonly used in tandem like "version control" or "regular
+expression".
+</p></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"vc"</span> <span style="font-style: italic;">"version control"</span>)
+(define-abbrev text-mode-abbrev-table <span style="font-style: italic;">"rx"</span> <span style="font-style: italic;">"regular expression"</span>)
+</pre>
+</div>
+
+<p>
+Of course this list is not exhaustive and It cannot be because there are so many
+ways to use abbrevs, but it is a great point to get started.  Also, check out <a href="https://github.com/Luis-Henriquez-Perez/dotfiles/blob/develop/dot_config/emacs/lisp/99-after-load-abbrev.el">my
+abbrev file</a> for more inspiration.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">I did
+not even know this but apparently "ht" is a contraction of "height".</p></div></div>
+
+
+</div>
+</div></div>
+</body>
+</html>

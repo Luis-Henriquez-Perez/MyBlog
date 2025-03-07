@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: org-self-insert-command*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .help-key-binding {
+        /* help-key-binding */
+        color: #0000b0;
+        font-weight: bold;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .negation-char {
+        /* font-lock-negation-char-face */
+        color: #a60000;
+        font-weight: bold;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+org-self-insert-command is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function
+defined in <span class="button">org.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(org-self-insert-command N)
+
+<span class="helpful-heading">Documentation
+</span>Like <span class="button">self-insert-command</span>, use overwrite-mode for whitespace in tables.
+
+If the cursor is in a table looking at whitespace, the whitespace is
+overwritten, and the table is not marked as requiring realignment.
+
+<span class="helpful-heading">Key Bindings
+</span><span class="variable-name">org-mode-map</span> <span class="help-key-binding">SPC..~</span>
+<span class="variable-name">org-mode-map</span> <span class="help-key-binding">..\377</span>
+
+<span class="helpful-heading">References
+</span>org-self-insert-command is unused in <span class="button">org.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by org-self-insert-command</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/org/org.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">org-self-insert-command</span> (N)
+  <span class="doc">"Like `</span><span class="doc"><span class="constant">self-insert-command</span></span><span class="doc">', use overwrite-mode for whitespace in tables.
+If the cursor is in a table looking at whitespace, the whitespace is
+overwritten, and the table is not marked as requiring realignment."</span>
+  (<span class="keyword">interactive</span> <span class="string">"p"</span>)
+  (org-fold-check-before-invisible-edit 'insert)
+  (<span class="keyword">cond</span>
+   ((<span class="keyword">and</span> org-use-speed-commands
+	 (<span class="keyword">let</span> ((kv (this-command-keys-vector)))
+	   (<span class="keyword">setq</span> org-speed-command
+		 (run-hook-with-args-until-success
+		  'org-speed-command-hook
+		  (make-string 1 (aref kv (1- (length kv))))))))
+    (<span class="keyword">cond</span>
+     ((commandp org-speed-command)
+      (<span class="keyword">setq</span> this-command org-speed-command)
+      (call-interactively org-speed-command))
+     ((functionp org-speed-command)
+      (funcall org-speed-command))
+     ((consp org-speed-command)
+      (eval org-speed-command t))
+     (t (<span class="keyword">let</span> (org-use-speed-commands)
+	  (call-interactively 'org-self-insert-command)))))
+   ((<span class="keyword">and</span>
+     (= N 1)
+     (not (org-region-active-p))
+     (org-at-table-p)
+     (<span class="keyword">progn</span>
+       <span class="comment-delimiter">;; </span><span class="comment">Check if we blank the field, and if that triggers align.
+</span>       (<span class="keyword">and</span> (<span class="keyword">featurep</span> '<span class="constant">org-table</span>)
+	    org-table-auto-blank-field
+	    (memq last-command
+		  '(org-cycle org-return org-shifttab org-ctrl-c-ctrl-c))
+	    (<span class="keyword">if</span> (<span class="keyword">or</span> (eq (char-after) ?\s) (looking-at <span class="string">"[</span><span class="string"><span class="negation-char">^</span></span><span class="string">|\n]*  |"</span>))
+		<span class="comment-delimiter">;; </span><span class="comment">Got extra space, this field does not determine
+</span>		<span class="comment-delimiter">;; </span><span class="comment">column width.
+</span>		(<span class="keyword">let</span> (org-table-may-need-update) (org-table-blank-field))
+	      <span class="comment-delimiter">;; </span><span class="comment">No extra space, this field may determine column
+</span>	      <span class="comment-delimiter">;; </span><span class="comment">width.
+</span>	      (org-table-blank-field)))
+       t)
+     (looking-at <span class="string">"[</span><span class="string"><span class="negation-char">^</span></span><span class="string">|\n]*  |"</span>))
+    <span class="comment-delimiter">;; </span><span class="comment">There is room for insertion without re-aligning the table.
+</span>    (self-insert-command N)
+    (<span class="keyword">org-table-with-shrunk-field</span>
+     (<span class="keyword">save-excursion</span>
+       (skip-chars-forward <span class="string">"^|"</span>)
+       <span class="comment-delimiter">;; </span><span class="comment">Do not delete last space, which is
+</span>       <span class="comment-delimiter">;; </span><span class="comment">`</span><span class="comment"><span class="constant">org-table-separator-space</span></span><span class="comment">', but the regular space before
+</span>       <span class="comment-delimiter">;; </span><span class="comment">it.
+</span>       (delete-region (- (point) 2) (1- (point))))))
+   (t
+    (<span class="keyword">setq</span> org-table-may-need-update t)
+    (self-insert-command N)
+    (org-fix-tags-on-the-fly)
+    (<span class="keyword">when</span> org-self-insert-cluster-for-undo
+      (<span class="keyword">if</span> (not (eq last-command 'org-self-insert-command))
+	  (<span class="keyword">setq</span> org-self-insert-command-undo-counter 1)
+	(<span class="keyword">if</span> (&gt;= org-self-insert-command-undo-counter 20)
+	    (<span class="keyword">setq</span> org-self-insert-command-undo-counter 1)
+	  (<span class="keyword">and</span> (&gt; org-self-insert-command-undo-counter 0)
+	       buffer-undo-list (listp buffer-undo-list)
+	       (not (cadr buffer-undo-list)) <span class="comment-delimiter">; </span><span class="comment">remove nil entry
+</span>	       (setcdr buffer-undo-list (cddr buffer-undo-list)))
+	  (<span class="keyword">setq</span> org-self-insert-command-undo-counter
+		(1+ org-self-insert-command-undo-counter))))))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">delete-selection</span>
+  #[0 "\300\301!?\207"
+      [run-hook-with-args-until-success self-insert-uses-region-functions]
+      2]
+  <span class="button">Disassemble</span>
+<span class="constant">event-symbol-element-mask</span>
+  (org-self-insert-command 0)
+<span class="constant">event-symbol-elements</span>
+  (org-self-insert-command)
+<span class="constant">flyspell-delayed</span>
+  t
+<span class="constant">modifier-cache</span>
+  ((0 . org-self-insert-command))
+<span class="constant">pabbrev-expand-after-command</span>
+  t</pre>
+  </body>
+</html>
