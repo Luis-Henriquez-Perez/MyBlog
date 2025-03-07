@@ -43,7 +43,7 @@
          :include ("index.org")
          :publishing-function org-html-publish-to-html
          :publishing-directory "html/"
-         :with-title t
+         :with-title nil
          :with-creator nil
          :with-date nil
          :with-author nil
@@ -51,7 +51,7 @@
          :section-numbers nil
          :html-validation-link nil
          :time-stamp-file nil
-         :html-head "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>")
+         :html-head "<link rel=\"stylesheet\" href=\"index-style.css\" type=\"text/css\"/>")
         ("posts"
          :base-directory "org/"
          :base-extension "org"
