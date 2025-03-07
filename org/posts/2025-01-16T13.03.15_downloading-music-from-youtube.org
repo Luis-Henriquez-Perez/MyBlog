@@ -6,7 +6,7 @@ like when and occasionally via youtube recommendations a song I have not heard
 before will play.  Sometimes it just so happens I like the recommendation and I
 will want to download the audio of the videos.  Thus far for youtube video
 perusing and playing I used [[https://thanosapollo.org/projects/yeetube/][yeetube]].  The very basic workflow I have is calling
-[[file:][yeetube-search]], entering my search term, finding the video I want to play in the
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--yeetube-search.html][yeetube-search]], entering my search term, finding the video I want to play in the
 =yeetube= buffer (shown below) and playing the video.  The thing is =yeetube= does
 not seem to have a built-in command for downloading just the audio of a video.
 And so my quest for writing such a command begins...

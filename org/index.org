@@ -1,11 +1,11 @@
 #+TITLE:Luis Henriquez-Perez
 #+author:Luis Henriquez-Perez
 
-#+begin_nav
-- [[file:contact.org][Contact]]
-#+end_nav
+# #+begin_nav
+# - [[file:about.org][Contact]]
+# #+end_nav
 
-Hi and welcome to my blog.  At least right now this log is mostly on Emacs.
+Hi and welcome to my blog.
 
 * Projects
 #+begin_projects

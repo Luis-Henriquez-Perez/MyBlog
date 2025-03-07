@@ -8,7 +8,7 @@ because the how much more complex evil keybindings are from normal Emacs
 keybindings.
 
 This does not work.  This uses [[file:../documentation/29.4-helpful-callable--bind!.html][bind!]] a macro I write to try to generalize
-keybindings in [[file:../documentation/29.4-155-base-bind-macros.html][155-base-bind-macros.el]].  The expansin of this macro is akin to
+keybindings in [[file:../documentation/29.4-155-base-bind-macros.html][155-base-bind-macros.el]].  The expansion of this macro is akin to
 ~(evil-define-key '(normal visual) global-map "g r" #'+evil-eval-replace-operator)~.
 
 #+begin_src emacs-lisp
