@@ -1,8 +1,0 @@
-#+title: finding difficult to find behavior
-#+author:Luis Henriquez-Perez
-
-This is going to sound crazy but for some reason org is inserting a property
-drawer on top of my files.  I have no idea why.  I have grepped my config files
-and have found no hook or advyce or anything that I can see would be responsible
-for this.  Which is rare.  I might not know how to fix something but I will
-always know what code produces it. 

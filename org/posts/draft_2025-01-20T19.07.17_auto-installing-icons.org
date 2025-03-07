@@ -1,6 +1,0 @@
-When using the [[][Pnerd-fonts]] package, if you do not have the nerd fonts
-installed its recommended to use [[][Fnerd-icons-install-fonts]].  It is easy
-enough but it is just one more step I have to do if I am setting up my system on
-a new machine.  So what this boils down to is checking whether the nerd font is
-installed and if it is not installing it.  One idea is this could be done during
-byte-compilation so that it is only done once.

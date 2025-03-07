@@ -1,6 +1,0 @@
-I have written my configuration to log the init time of variables.  Here is the
-table.  I was looking for some emacs pakage that displays the stuff in a table.
-I could not find one.  I saw [[][SES]], a spreadsheet taking package.  I
-recalled [[][cell-mode]].  I considered org-tables, but I do not want the table
-to require org as a dependency.  What I wanted is something that would convert
-lisp data to a nice table.

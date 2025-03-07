@@ -1,8 +1,0 @@
-I have succeeded in making my emacs pretty near to as fast as possible--the init
-time is about 1.4 seconds, most of it being due to [[][Fpackage-initialize]] and
-setting the font.  My whole process convinced me that it is crazy hard to make
-emacs that fast.  Well to be honest, I had (and still have) a lot of junk that
-have had to refactor and clean up to get my emacs configuration to such a low
-time.  Also I had not compiled my config and because the macros I use in my
-configuration are so prevalent in my code, my configuration is one of the few
-that benefits significantly from byte-compilation.

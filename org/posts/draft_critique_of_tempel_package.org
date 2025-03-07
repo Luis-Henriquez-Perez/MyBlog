@@ -1,4 +1,0 @@
-#+TITLE: critique of tempel package
-#+AUTHOR: Luis Henriquez-Perez
-
-Iha idea.

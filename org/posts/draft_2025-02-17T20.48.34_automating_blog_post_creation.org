@@ -1,4 +1,0 @@
-#+title: automating blog creation
-#+author: Luis Henriquez-Perez
-
-I want to automate all areas of creating a blog.

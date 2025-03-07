@@ -1,2 +1,0 @@
-#+title:get rid create dir prompt
-#+author:Luis Henriquez-Perez

@@ -1,9 +1,0 @@
-#+title:draft creating gifs on linux
-#+author:Luis Henriquez-Perez
-
-As the saying goes a picture is worth one thousand words.  That is precisely why
-I want to include gifs in my blog.  Actually seeing what I am talking about will
-help others understand exactly what I am talking about.  There are several
-websites that talk about.  I wanted to use =ffmpeg= and keep it minimal but I also
-just need to get it done.  That is why for now I have chosen [[][peek]] for
-making simple gifs.

@@ -1,2 +1,0 @@
-#+title:sharing some of my tempel snippets
-#+author:Luis Henriquez-Perez

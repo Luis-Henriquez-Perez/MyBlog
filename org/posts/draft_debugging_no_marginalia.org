@@ -1,4 +1,0 @@
-#+title:debugging no marginalia
-#+author:Luis Henriquez-Perez
-
-For commands I am seeing no documentation description.

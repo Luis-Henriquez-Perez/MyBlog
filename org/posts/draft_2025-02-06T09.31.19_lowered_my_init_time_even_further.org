@@ -1,4 +1,0 @@
-I have made yet another break through with my init-time, getting it down from
-=1.4= about =1.04= seconds.  Right now, the main time consumer of my configuration
-is [[][Fpackage-initialize]].  Ultimately I want to look into caching the
-[[][Vload-path]].  If I cache the load-path and load the.

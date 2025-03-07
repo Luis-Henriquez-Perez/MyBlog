@@ -1,9 +1,0 @@
-#+title: Different Publishing Methods
-#+author:Luis Henriquez-Perez
-
-Thus far I have been evaluating [[][publish.el]] like a caveman.  I have been doing it synchronously and it takes a while and if I change my theme it uses the current theme.  Overall it is been a pain.  Instead I have looked into.
-
-I think bash actually does not load a graphical frame so there is no theme enabled.
-
-#+begin_src emacs-lisp
-#+end_src

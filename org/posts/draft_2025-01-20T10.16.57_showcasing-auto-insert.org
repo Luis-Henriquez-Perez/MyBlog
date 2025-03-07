@@ -1,7 +1,0 @@
-#+TITLE: Using auto-insert
-#+AUTHOR: Luis Henriquez-Perez
-
-Perhaps one of the most untalked about built-in packages in emacs is
-[[][auto-insert]].  It inserts certain text into a file based on its path.  I
-use it to add boilerplate code that I want into a range of files.  In this case
-I want all blog posts to have a title and author.
