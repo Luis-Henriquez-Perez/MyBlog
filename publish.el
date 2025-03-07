@@ -43,7 +43,7 @@
          :include ("index.org")
          :publishing-function org-html-publish-to-html
          :publishing-directory "html/"
-         :with-title t
+         ;; :with-title t
          :with-creator nil
          :with-date nil
          :with-author nil

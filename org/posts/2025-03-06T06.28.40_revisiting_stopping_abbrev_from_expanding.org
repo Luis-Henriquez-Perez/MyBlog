@@ -5,7 +5,7 @@ In a [[file:2025-01-20T04.57.23_stopping-abbrev-from-expanding-on-newline.org][p
 expand even if they were several lines before my cursor.  There I fixed it by
 changing the [[][:regexp property]] of the abbrev table to make sure that
 abbrevs only expanded with spaces.  But as I had been revising that post it
-occurred to me that maybe that was not the problem or atleast not the only
+occurred to me that maybe that was not the problem or at least not the only
 problem.  I think it might be O.K. to have an abbrev expand if its in the
 previous line.  I mean this makes sense.  But at least I do not expect it to
 happen across multiple lines.
