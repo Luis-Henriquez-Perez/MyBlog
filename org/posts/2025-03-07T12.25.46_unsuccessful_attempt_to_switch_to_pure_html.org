@@ -1,0 +1,32 @@
+#+title:unsuccessful attempt to switch to pure html
+#+author:Luis Henriquez-Perez
+
+I attempted to switch to a pure HTML and CSS blog and I encountered a few
+difficulties.
+
+* from org to html
+
+** source blocks
+
+I expected to have difficulties with the source blocks.  It is so
+elegant how org publish andles it.  In contrast I had to make the decision to
+either use something like [[][prism.js]] which would make my page rely on
+javascript and would not even provide as good syntax highlighting as Emacs or
+take an approach like xah did.
+
+** indentation
+
+It was impossible for me to get indentation exactly the way I wanted it.  There
+always seemed to be something wrong.
+
+** multiple modes
+
+Obvious it is really useful to be able to edit source blocks in the appropriate
+major mode.  Org honestly is like a mini multiple mode package in that it allows
+you to.  What I used is the package.  
+
+At the end of the day I paused the move.  It would just take too much time.  And
+there were too many things I needed to figure out.
+
+I still have things to figure out here too.  For example, I the veratim org
+emphasis marker translates to a =code= tag.

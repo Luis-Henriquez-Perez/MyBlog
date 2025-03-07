@@ -93,7 +93,7 @@
          :publishing-directory "html/"
          :publishing-function org-publish-attachment
          :recursive t)
-        ("all" :components ("posts" "static"))
+        ;; ("all" :components ("posts" "static"))
         ;; ("static"
         ;;  :base-directory ,base-dir
         ;;  :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|mov\\|html\\|txt\\|"
