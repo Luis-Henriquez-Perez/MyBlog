@@ -43,6 +43,10 @@ a:link {
     color: dimgray;
 }
 
+a:hover {
+    color: green;
+}
+
 /* nav li { */
 /* 	padding: 0.5ex 0; */
 /* } */
