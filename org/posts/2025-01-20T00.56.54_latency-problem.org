@@ -16,9 +16,9 @@ identify bugs.  Therefore, I decided to just leave it on all the time.  The way
 the logging worked was very simple: any message logged would simply write to a
 buffer named =*log*=.  It is only now when considering my current performance
 issue that I realize that the log buffer unlike the =*Message*= buffer has no cap.
-It would just grow larger and larger.  And, I suspect, that at some point it
-would get so large that it would slow everything down.  For now, I am disabling
-logging when =oo-debug-p= is false.
+The more logging, the larger and larger the buffer grows.  And, I suspect, that
+at some point it would get so large that it would slow everything down.  For
+now, I am disabling logging when =oo-debug-p= is false.
 
 #+begin_src emacs-lisp
 (defmacro info! (msg &rest meta)
@@ -46,7 +46,6 @@ logging when =oo-debug-p= is false.
     `(lgr-debug oo-logger ,msg ,@meta)))
 #+end_src
 
-In spite than this performance hiccup, logging has been so useful for me that I
-would like to make it toggleable.  Instead of this "band-aid" solution I would
-like store the logs internally list and with some cap.  With this list I can
-then write the logs to a buffer when I want to see it.
+This is more of a band-aid until I can think of something better than a
+full-blown solution.  Logging has proved so useful I would like to see it all
+the time.

@@ -16,7 +16,7 @@ previous line would expand into "arguments".
 
 Curiously, this would even get around =oo-use-text-abbrev-p= which I use as the
 abbrevs enable property because point is still in a string even though the symbol =args= is outside of . I used [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html][oo-use-text-abbrev-p]], the value of [[][the
-:enable-functioin property]]. so abbrevs would only expand in but it would
+:enable-function property]]. so abbrevs would only expand in but it would
 actually meet that condition because I am in the string.  I do not know.  I need
 something that stops expanding the abbrev if its.
 
