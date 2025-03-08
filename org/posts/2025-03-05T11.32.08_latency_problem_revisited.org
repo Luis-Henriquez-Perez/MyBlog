@@ -1,0 +1,5 @@
+#+title:latency-problem
+#+author:Luis Henriquez-Perez
+
+I wanted to post an update to a [[]].  I removed the external package [[][lgr]]
+and manage it myself.

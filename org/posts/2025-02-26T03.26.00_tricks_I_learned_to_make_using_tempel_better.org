@@ -89,9 +89,9 @@ simple it made things more convenient.
 * remember to use the region
 
 Remember to use the =r= element.  This makes it so that when a region is active
-when you invoke the command it will wrap the snippet around the region.  Only
-bad thing is that the snippet assumes your done writing the snippet.  As in afte
-the region but I would prefer the cursor still in the snippet.
+when you invoke the command it will wrap the snippet around the region.  Also
+noteworthy is.  As in afte the region but I would prefer the cursor still in the
+snippet.
 
 #+begin_src emacs-lisp
 (deftempel! oo-expand-to-defun

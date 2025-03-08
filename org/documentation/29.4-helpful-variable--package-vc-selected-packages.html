@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful variable: package-vc-selected-packages*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+package-vc-selected-packages is a <span class="button">customizable</span> variable defined in
+<span class="button">package-vc.el.gz</span>.
+
+<span class="helpful-heading">Value
+</span>((completion-preview :url "https://git.sr.ht/~eshel/completion-preview")
+ (emacs-wallpaper :url "https://github.com/Luis-Henriquez-Perez/emacs-wallpaper" :branch "mine")
+ (escr :url "https://github.com/Luis-Henriquez-Perez/escr")
+ (evil-easymotion :url "https://github.com/Luis-Henriquez-Perez/evil-easymotion" :branch "master")
+ (on :url "https://github.com/ajgrf/on.el")
+ (outli :url "https://github.com/jdtsmith/outli")
+ (zone-matrix :url "https://github.com/ober/zone-matrix" :branch "master"))
+
+<span class="helpful-heading">Original Value
+</span>nil
+
+<span class="button">Set</span> <span class="button">Customize</span>
+
+<span class="helpful-heading">Documentation
+</span>List of packages that must be installed.
+
+Each member of the list is of the form (NAME . SPEC), where NAME
+is a symbol designating the package and SPEC is one of:
+
+- nil, if any package version can be installed;
+- a version string, if that specific revision is to be installed;
+- a property list, describing a package specification.  For more
+  details, please consult the subsection "Specifying Package
+  Sources" in the Info node <span class="button">(emacs)Fetching Package Sources</span>.
+
+This user option will be automatically updated to store package
+specifications for packages that are not specified in any
+archive.
+
+This variable was added, or its default value changed, in Emacs 29.1.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">package-vc.el.gz</span>:
+(<span class="keyword">defvar</span> <span class="variable-name">package-vc-selected-packages</span> ...)        <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-vc-install-selected-packages</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defcustom</span> <span class="variable-name">package-vc-selected-packages</span> ...)     <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">package-vc--desc-&gt;spec</span> ...)               <span class="comment">2 references</span>
+(<span class="keyword">defun</span> <span class="function-name">package-vc--unpack</span> ...)                   <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/emacs-lisp/package-vc.el.gz</span>
+(<span class="keyword">defcustom</span> <span class="variable-name">package-vc-selected-packages</span> '()
+  <span class="doc">"List of packages that must be installed.
+Each member of the list is of the form (NAME . SPEC), where NAME
+is a symbol designating the package and SPEC is one of:
+
+- nil, if any package version can be installed;
+- a version string, if that specific revision is to be installed;
+- a property list, describing a package specification.  For more
+  details, please consult the subsection \"Specifying Package
+  Sources\" in the Info node `(emacs)Fetching Package Sources'.
+
+This user option will be automatically updated to store package
+specifications for packages that are not specified in any
+archive."</span>
+  <span class="builtin">:type</span> '(alist <span class="builtin">:tag</span> <span class="string">"List of packages you want to be installed"</span>
+                <span class="builtin">:key-type</span> (symbol <span class="builtin">:tag</span> <span class="string">"Package"</span>)
+                <span class="builtin">:value-type</span>
+                (choice (const <span class="builtin">:tag</span> <span class="string">"Any revision"</span> nil)
+                        (string <span class="builtin">:tag</span> <span class="string">"Specific revision"</span>)
+                        (plist <span class="builtin">:options</span> ((<span class="builtin">:url</span> string)
+                                         (<span class="builtin">:branch</span> string)
+                                         (<span class="builtin">:lisp-dir</span> string)
+                                         (<span class="builtin">:main-file</span> string)
+                                         (<span class="builtin">:doc</span> string)
+                                         (<span class="builtin">:vc-backend</span> symbol)))))
+  <span class="builtin">:version</span> <span class="string">"29.1"</span>)
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">custom-requests</span>
+  nil
+<span class="constant">custom-type</span>
+  (alist :tag "List of packages you want to be installed" :key-type
+         (symbol :tag "Package")
+         :value-type
+         (choice
+          (const :tag "Any revision" nil)
+          (string :tag "Specific revision")
+          (plist :options
+                 ((:url string)
+                  (:branch string)
+                  (:lisp-dir string)
+                  (:main-file string)
+                  (:doc string)
+                  (:vc-backend symbol)))))
+<span class="constant">custom-version</span>
+  "29.1"
+<span class="constant">standard-value</span>
+  ((funcall
+    #'#[0 "\300\207"
+          [nil]
+          1 ""]))
+<span class="constant">variable-documentation</span>
+  "List of packages that must be installed.\nEach member of the list is of the form (NAME . SPEC), where NAME\nis a symbol designating the package and SPEC is one of:\n\n- nil, if any package version can be installed;\n- a version string, if that specific revision is to be installed;\n- a property list, describing a package specification.  For more\n  details, please consult the subsection \"Specifying Package\n  Sources\" in the Info node `(emacs)Fetching Package Sources'.\n\nThis user option will be automatically updated to store package\nspecifications for packages that are not specified in any\narchive."</pre>
+  </body>
+</html>

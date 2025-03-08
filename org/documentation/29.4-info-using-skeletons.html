@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*"(autotype) Top"*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .info-header-node {
+        /* info-header-node */
+        color: #595959;
+        font-weight: bold;
+      }
+      .info-header-xref {
+        /* info-header-xref */
+        color: #3548cf;
+      }
+      .info-quoted {
+        /* Info-quoted */
+        color: #8f0075;
+      }
+      .info-title-1 {
+        /* info-title-1 */
+        color: #000000;
+        font-weight: bold;
+      }
+      .info-xref {
+        /* info-xref */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+(autotype)Top &gt; Using Skeletons
+
+<span class="info-title-1">1 Using Skeletons</span>
+
+When you want Emacs to insert a form letter or a typical construct of
+the programming language you are using, skeletons are a means of
+accomplishing this.  Normally skeletons each have a command of their
+own, that, when called, will insert the skeleton.  These commands can be
+issued in the usual ways (see <span class="info-xref">(emacs)Commands</span>).  Modes that offer
+various skeletons will often bind these to key-sequences on the ‘<span class="info-quoted">C-c</span>’
+prefix, as well as having an ‘<span class="info-quoted">Insert</span>’ menu and maybe even predefined
+abbrevs for them (see <span class="info-xref">Skeletons as Abbrevs</span>).
+
+   The simplest kind of skeleton will simply insert some text indented
+according to the major mode and leave the cursor at a likely place in
+the middle.  Interactive skeletons may prompt you for a string that will
+be part of the inserted text.
+
+   Skeletons may ask for input several times.  They even have a looping
+mechanism in which you will be asked for input as long as you are
+willing to furnish it.  An example would be multiple “else if”
+conditions.  You can recognize this situation by a prompt ending in
+&lt;RET&gt;, ‘<span class="info-quoted">C-g</span>’ or ‘<span class="info-quoted">C-h</span>’.  This means that entering an empty string will
+simply assume that you are finished.  Typing quit on the other hand
+terminates the loop but also the rest of the skeleton, e.g., an “else”
+clause is skipped.  Only a syntactically necessary termination still
+gets inserted.
+</pre>
+  </body>
+</html>

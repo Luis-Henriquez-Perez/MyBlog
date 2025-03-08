@@ -1,4 +1,0 @@
-#+title:latency-problem
-#+author:Luis Henriquez-Perez
-
-I wanted to post an update to a [[]].

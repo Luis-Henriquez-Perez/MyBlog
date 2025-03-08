@@ -76,9 +76,8 @@ To define the abbrev we specify the function as a hook.
 (define-abbrev global-abbrev-table "vlk" "" #'oo-expand-variable-doc-link :enable-function #'oo-in-blog-post-p)
 #+end_src
 
-This abbrev is specific to my blog posts.  I do not want it expanding anywhere
-but blog posts.  Giving the abbrev =vlk= the =:enable-property= ensures the abbrev
-will only expand in blog posts.
+This abbrev is specific to my blog posts.  And I do not want it expanding anywhere
+but blog posts.  Giving the abbrev =vlk= the =:enable-property= guarantees this.
 
 #+begin_src emacs-lisp
 (defun oo-in-blog-post-p ()
