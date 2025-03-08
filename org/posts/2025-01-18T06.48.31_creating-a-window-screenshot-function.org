@@ -2,18 +2,32 @@
 #+author: Luis Henriquez-Perez
 
 I have always had the goal of being able to document something at the speed of
-thought. I want something to take a screenshot.  Specifically, I want functions
-for window, region and full screen screenshots.  It is something that is
-particularly important for things like this blog but also just generally
-important for documenting information that is better described with a picture.
-I have written a function to do this but I could not find it.  I decided to
-compromise and use an external package I have known about called [[https://github.com/Luis-Henriquez-Perez/escr][escr]].  It is
-the only package I could find that could do window, region and frame
-screenshots for Emacs.
+thought.  For me part of this means being able to easily take screenshots from
+within Emacs.  Specifically, I want functions for window, region and full screen
+screenshots.  It is something that is particularly important for things like
+this blog but also just generally important for documenting information that is
+better described with a picture.  I had written a functions for this but I could
+not find them.  Instead I decided to compromise and use an external package I
+have known about called [[https://github.com/Luis-Henriquez-Perez/escr][escr]].  It is the only package I could find that could do
+window, region and frame screenshots for Emacs.
 
-I install it via =package.el= in [[../documentation/29.4-110-init-package.html][110-init-package.el]].
+I install it via =package.el= in [[../documentation/29.4-110-init-package.html][110-init-package.el]] by adding it to
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--package-vc-selected-packages.html][package-vc-selected-packages]] and relying on
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-vc-install-selected-packages.html][package-vc-install-selected-packages]].
 
-This is my configuration for it, its [[../documentation/29.4-130-init-escr.html][130-init-escr.el]].  I do not do much.  I
+#+begin_src emacs-lisp
+(setq package-vc-selected-packages '((completion-preview :url "https://git.sr.ht/~eshel/completion-preview")
+                                     (emacs-wallpaper :url "https://github.com/Luis-Henriquez-Perez/emacs-wallpaper" :branch "mine")
+                                     (escr :url "https://github.com/Luis-Henriquez-Perez/escr")
+                                     (evil-easymotion :url "https://github.com/Luis-Henriquez-Perez/evil-easymotion" :branch "master")
+                                     (on :url "https://github.com/ajgrf/on.el")
+                                     (outli :url "https://github.com/jdtsmith/outli")
+                                     (zone-matrix :url "https://github.com/ober/zone-matrix" :branch "master")))
+
+(package-vc-install-selected-packages)
+#+end_src
+
+This is my configuration for it in [[../documentation/29.4-130-init-escr.html][130-init-escr.el]].  I do not do much.  I
 just declare and autoload the main =escr= commands and set the directory where
 screenshots will go.
 
@@ -31,7 +45,7 @@ screenshots will go.
 (autoload #'escr-frame-screenshot "escr" nil t 'function)
 #+end_src
 
-Of course, I also added keybindings for these function.
+Of course, I also added keybindings for the commands it uses.
 
 #+begin_src emacs-lisp
 (bind! oo-app-map "s r" #'escr-region-screenshot)

@@ -3,9 +3,9 @@
 
 I have always I wanted to fix a particular behavior with abbrev expansion: by
 default =abbrev= will skip newlines when looking for a word to expand.  Let me
-illustrate with what happened when I found out.  I had an abbrev, "args", that
-expanded into "arguments".  If I typed in the docstring below where the carrot
-is, the symbol "args" in the previous line would expand into "arguments".
+illustrate.  I had an abbrev, "args", that expanded into "arguments".  If I
+typed in the docstring below where the carrot is, the symbol "args" in the
+previous line would expand into "arguments".
 
 #+begin_src emacs-lisp
 ;; The cursor would be on the ^ symbol would cause args to expand to
@@ -15,7 +15,7 @@ is, the symbol "args" in the previous line would expand into "arguments".
 #+end_src
 
 Curiously, this would even get around =oo-use-text-abbrev-p= which I use as the
-abbrevs enable property because point is still in even though the symbol =args= is outside of . I used [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html][oo-use-text-abbrev-p]], the value of [[][the
+abbrevs enable property because point is still in a string even though the symbol =args= is outside of . I used [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--oo-use-text-abbrev-p.html][oo-use-text-abbrev-p]], the value of [[][the
 :enable-functioin property]]. so abbrevs would only expand in but it would
 actually meet that condition because I am in the string.  I do not know.  I need
 something that stops expanding the abbrev if its.
