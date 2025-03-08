@@ -29,6 +29,20 @@ body {
     color: #222;
 }
 
+/* Text in code tags was different font than not. */
+code {
+    font-weight: bold;
+    /* font-style: italic; */
+    font-family: 'Fira Sans', sans-serif;
+    line-height: 1.5;
+    font-size: 20px;
+    /* color: dimgray; */
+}
+
+a:link {
+    color: dimgray;
+}
+
 /* nav li { */
 /* 	padding: 0.5ex 0; */
 /* } */
