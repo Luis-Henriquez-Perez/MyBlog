@@ -8,11 +8,11 @@ difficulties.
 
 ** source blocks
 
-To be fair I expected the road to HTML and CSS source blocks to be rocky.  It is
-so elegant how org publish handles it.  In contrast I had to make the decision
-to either use something like [[][prism.js]] which would make my page rely on
-javascript and would not even provide as good syntax highlighting as Emacs or
-take an approach like xah did.
+To be fair I expected the road to HTML and CSS source blocks to be rocky--at
+least compared to how smooth and elegantly =org-publish= does it.  Instinctively,
+I resist.  In contrast I had to make the decision to either use something like
+[[][prism.js]] which would make my page rely on javascript and would not even
+provide as good syntax highlighting as Emacs or take an approach like xah did.
 
 ** indentation
 
