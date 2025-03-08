@@ -1,0 +1,4 @@
+#+title:getting rid of compilation errors
+#+author:Luis Henriquez-Perez
+
+Here I document the compilation errors I got and how I started to fix them.

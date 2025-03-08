@@ -1,0 +1,47 @@
+#+title:link to any buffer
+#+author:Luis Henriquez-Perez
+
+This is yet another continuation of creating abbrev hooks that expand into links
+for my blog.  There are some odd buffers I have wanted to make documentation for
+like info buffers for example.  In that case I want an abbrev hook to expand
+into a link for an html snapshot of that buffer.  To be precise, the hook
+should prompt me for a buffer, create an html file of that buffer in my
+documentation directory (assuming I selected one), and insert a link to that
+file.
+
+Perhaps my biggest question was what should I decide to do if I forget I have a
+link to a certain buffer and try to link it again.  Should I make a new.  This
+would be appropriate for info buffers whose names are the same in Emacs.  For
+now I will keep it simple and just reuse the documentation if a buffer already
+exists for that.
+
+chatGPT recommended I do not use the following characters.  For the conversion
+to a buffer name to a filename I need to "sanitize" the buffer name, removing
+any illegal characters for that I use a function I defined for this very
+purpose.
+
+Before writing this function I had actually forgotten about how to make
+filenames unique in Emacs but a quick google search lead me to this info node.
+And from the documentation of [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--with-temp-file.html][with-temp-file]] it looks like it handles writing
+the file for me.
+
+#+begin_src emacs-lisp
+(defun! oo-expand-blog-buffer-link ()
+  "Prompt for buffer and insert link to that buffer."
+  (set! docs-dir "~/Documents/MyBlog/org/documentation/")
+  (set! buffer (completing-read "Select buffer: " (buffer-list)))
+  (with-current-buffer (htmlize-buffer buffer)
+    (setq buffer-contents (buffer-string))
+    (kill-buffer))
+  (set! name (oo-sanitize-filename (buffer-name buffer)))
+  (with-temp-file (expand-file-name name docs-dir)
+    (insert-file-contents buffer-contents))
+  (set! description (read-string "link description: "))
+  (insert (format "[[file:%s][%s]]" file description)))
+#+end_src
+
+And finally, I need an abbrev to this function.
+
+#+begin_src emacs-lisp
+#+end_src
+

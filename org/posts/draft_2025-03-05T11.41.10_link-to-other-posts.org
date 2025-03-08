@@ -1,0 +1,44 @@
+#+title:link to other posts
+#+author:Luis Henriquez-Perez
+
+Similar in spirit to a [[file:2025-03-05T06.32.51_inserting_links_painlessly_with_abbrevs_1.org][previous post]], I want to showcase creating an abbrev
+which would expand into a link to another blog post.
+
+#+begin_src emacs-lisp
+(defun oo-expand-blog-post-link ()
+  "Prompt for another blog post and insert link to that post."
+  (let (post-dir current-post posts chosen description)
+    ;; Ensure we are in the blog directory.
+    (setq post-dir "~/Documents/MyBlog/org/posts/")
+    (setq current-post (expand-file-name (buffer-file-name)))
+    (cl-assert (equal (expand-file-name post-dir) (file-name-directory current-post)) nil)
+    ;; Find the other posts, do not include drafts and of course do not include
+    (setq posts (remove (file-name-nondirectory current-post)
+                        (directory-files post-dir nil date2name-datetime-regexp)))
+    ;; Select one of these posts.
+    (unwind-protect (setq chosen (completing-read "Post: " posts))
+      ;; If no blog post is chosen just abort and try to put things back where
+      ;; we found them.  This is a work in progress, right now I am trying to
+      ;; work out how this should work.
+      (unless chosen
+        (unexpand-abbrev)
+        (forward-word)))
+    ;; Enter the text of what you want the link to say.  By default it should be
+    ;; the title of the post.
+    ;; Get tittle of the post
+    (setq description (read-string "link description: " nil nil "foo"))
+    ;; Make a link to it relative to the current-post directory.
+    (insert (format "[[file:%s][%s]]" chosen description)))
+  ;; Make sure to return non-nil so that no space insertion works.
+  t
+  )
+#+end_src
+
+Now to make the abbrev.  I do not set it to =plk= because that is what I am using
+for a link idea in another post.
+
+#+begin_src emacs-lisp
+(define-abbrev global-abbrev-table "polk" "" 'oo-expand-blog-post-link :enable-function #'oo-in-blog-post-p)
+#+end_src
+
+And voilà, now whenever I type "plk" I seamlessly insert a link to another blog post.
