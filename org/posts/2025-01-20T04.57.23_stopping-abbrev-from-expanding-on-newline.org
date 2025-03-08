@@ -21,8 +21,6 @@ newlines between your cursor and the previous abbrev and it would still be
 expanded.  This is not what I want.  Such expansions cause me unexpected
 and more often than not undesired abbrev expansions.
 
-Even with several newlines, =args= would still be expanded.
-
 #+begin_src emacs-lisp
 ;; The cursor would be on the ^ symbol would cause args to expand to
 ;; `arguments'.

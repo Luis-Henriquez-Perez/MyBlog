@@ -69,8 +69,8 @@ the =:enable-function= property.
 * simplify creating templates with a macro
 
 I recommend making a macro similar to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-skeleton.html][define-skeleton]].  When I dabbled with
-[[][skeletons]] I became quite endeard to the =define-skeleton= macro.  It was
-simple but made things much more convenient.
+[[file:../documentation/29.4-info-using-skeletons.html][skeletons]] I became quite endeared to the =define-skeleton= macro.  Despite being
+simple it made things more convenient.
 
 #+begin_src emacs-lisp
 (defmacro deftempel! (name &rest body)
