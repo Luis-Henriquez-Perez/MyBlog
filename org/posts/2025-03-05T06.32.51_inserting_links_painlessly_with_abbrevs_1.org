@@ -6,15 +6,15 @@ an html page containing its documentation.  The html page is generated from the
 actual documentation buffer I see in Emacs.  That is so instead of just
 inferring what variables or functions I mention do based on how I use them or
 what I say about them, readers can actually see the official documentation for
-these functions in the exact way I can.  The only problem is that the
-process of actually setting the link up on my end for me requires several steps.
-I need to look the symbol up with [[/home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-variable.html][helpful-variable]] or, if it is a function or
-macro, [[/home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-function.html][helpful-function]]; then I need to convert the buffer to html using
-[[https://github.com/hniksic/emacs-htmlize][htmlize]]; and I need to save that htmlized buffer to a file in my documentation
-folder; and then I need to actually link my post to the documentation.  That is
-quite the bit of work and something I am not too keen on doing for every
-variable or function I happen to reference.  In this post I showcase how I
-leverage [[][Emacs's abbrevs]] to automate this.
+these functions in the exact way I can.  The only problem is that the process of
+actually setting the link up on my end for me requires several steps.  I need to
+look the symbol up with [[/home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-variable.html][helpful-variable]] or, if it is a function or macro,
+[[/home/luis/Documents/blog/org/documentation/29.4-helpful--helpful-function.html][helpful-function]]; then I need to convert the buffer to html using [[https://github.com/hniksic/emacs-htmlize][htmlize]]; and I
+need to save that htmlized buffer to a file in my documentation folder; and then
+I need to actually link my post to the documentation.  That is quite the bit of
+work and something I am not too keen on doing for every variable or function I
+happen to reference.  In this post I showcase how I leverage [[file:../documentation/29.4-info-abbrevs-and-abbrev-expansion][Emacs's abbrevs]] to
+automate this.
 
 The idea is to write a function that jumps to a particular link, determines if
 it refer to a variable or function, takes an html "buffer snapshot" of its
