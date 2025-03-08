@@ -1,5 +1,0 @@
-#+title:fixing link colors
-#+author:Luis Henriquez-Perez
-
-I am updating the CSS for some link colors.
-

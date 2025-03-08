@@ -53,7 +53,7 @@
          :time-stamp-file nil
          :html-head "<link rel=\"stylesheet\" href=\"index-style.css\" type=\"text/css\"/>")
         ("posts"
-         :base-directory "org/"
+         :base-directory "org/posts/"
          :base-extension "org"
          :publishing-directory "html/"
          ;; Ignore files that start with `draft_'.

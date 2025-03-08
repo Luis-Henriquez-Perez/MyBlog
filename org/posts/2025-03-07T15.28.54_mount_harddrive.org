@@ -1,7 +1,0 @@
-#+title:mount harddrive
-#+author:Luis Henriquez-Perez
-
-I forgot again how to mount a hardrive with linux.
-
-
-

@@ -1,7 +1,0 @@
-#+title:an abbrev hook for linux commands
-#+author:Luis Henriquez-Perez
-
-When I was writing the polk I wanted to link my mentioning of the rsync command
-to its documentation.  Similar to how I explained in a previous post, this is
-way too long of a process to do manually.  And so here we are again making a new
-abbrev hook for this.
