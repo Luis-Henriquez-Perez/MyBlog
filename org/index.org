@@ -6,11 +6,9 @@
 Welcome to my blog.
 
 * Projects
-#+begin_projects
 - [[https://github.com/Luis-Henriquez-Perez/dotfiles/tree/develop][My Dotfiles]]
 - [[https://github.com/Luis-Henriquez-Perez/.emacs.d][My Emacs Configuration]]
 - [[https://github.com/Luis-Henriquez-Perez/MyBlog][This Blog]]
-#+end_projects
 
 * Posts
 - [[file:2025-03-05T15.13.02_automatic_post_creation.org][03-05 ~ automate blog post creation]]

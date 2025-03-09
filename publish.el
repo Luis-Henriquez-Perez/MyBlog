@@ -59,7 +59,7 @@
          ;; Ignore files that start with `draft_'.
          :exclude "index\\.org$\\|sitemap\\.org$\\|draft_.+\\.org$"
          :publishing-function org-html-publish-to-html
-         :recursive t
+         :recursive nil
          ;; :auto-sitemap t
          ;; :sitemap-title "Blog Index"
          ;; :sitemap-filename "sitemap.org"
