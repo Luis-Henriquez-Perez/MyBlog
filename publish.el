@@ -75,7 +75,7 @@
          :html-html5-fancy t
          :html-head-include-scripts nil
          :html-head-include-default-style nil
-         :html-head "<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\"/>"
+         :html-head "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>"
          ;; -----------------------------------
          :with-emphasize t
          :with-footnotes t

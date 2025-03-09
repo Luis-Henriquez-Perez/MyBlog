@@ -30,3 +30,6 @@ there were too many things I needed to figure out.
 
 I still have things to figure out here too.  For example, I the veratim org
 emphasis marker translates to a =code= tag.
+
+Essentially the problem with converting htmll with source blocks is that on the
+one hand I want source blocks to be readable for me.
