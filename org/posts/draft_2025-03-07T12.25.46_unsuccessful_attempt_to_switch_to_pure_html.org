@@ -1,5 +1,27 @@
-#+title:unsuccessful attempt to switch to pure html
+#+title:comparing and contrasting org blog with pure html and css
 #+author:Luis Henriquez-Perez
+
+I have struggled back and forth between continuing to write this blog in org
+versus switching to a pure html and CSS blog.  I will be honest it is a tough
+choice.
+
+Embedding source code in a post is where org-mode shines.  With it is ability to
+Org naturally is like a sort of "multi-mode" package akin to [[][mmm-mode]] and
+[[][polymode]].  However, to understand how amazing org is for this we first
+have to understand how this is handled by HTML and CSS.  To show code with
+proper syntax highlighting you can use an external syntax highlighting with a
+script like.  This seems to be what most
+people do.  The downside is that this syntax highlighting is.
+
+#+begin_src html
+<div>
+  <pre>
+    <code class="language-elisp">
+      (+ 1 1)
+    </code>
+  </pre>
+</div>
+#+end_src
 
 I attempted to switch to a pure HTML and CSS blog and I encountered several
 difficulties.
@@ -33,3 +55,7 @@ emphasis marker translates to a =code= tag.
 
 Essentially the problem with converting htmll with source blocks is that on the
 one hand I want source blocks to be readable for me.
+
+What I will say is that there is definitely more justification to use org for a blog
+than org for an Emacs configuration.  There are clear advantages to having blog
+posts in org mode.

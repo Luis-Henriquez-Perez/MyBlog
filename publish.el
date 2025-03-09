@@ -60,16 +60,16 @@
          :exclude "index\\.org$\\|sitemap\\.org$\\|draft_.+\\.org$"
          :publishing-function org-html-publish-to-html
          :recursive t
-         :auto-sitemap t
-         :sitemap-title "Blog Index"
-         :sitemap-filename "sitemap.org"
-         :sitemap-style list
-         ;; I timestamp my files so this should sort them in order by creation date.
-         :sitemap-sort-files anti-chronologically
-         ;; :sitemap-format-entry "%d %t"
-         ;; :sitemap-date-format
-         :sitemap-format-entry taingram--sitemap-dated-entry-format
-         :sitemap-file-entry-format "%d %t"
+         ;; :auto-sitemap t
+         ;; :sitemap-title "Blog Index"
+         ;; :sitemap-filename "sitemap.org"
+         ;; :sitemap-style list
+         ;; ;; I timestamp my files so this should sort them in order by creation date.
+         ;; :sitemap-sort-files anti-chronologically
+         ;; ;; :sitemap-format-entry "%d %t"
+         ;; ;; :sitemap-date-format
+         ;; :sitemap-format-entry taingram--sitemap-dated-entry-format
+         ;; :sitemap-file-entry-format "%d %t"
          ;; ----------------------------------- experimental
          :html-doctype "html5"
          :html-html5-fancy t
