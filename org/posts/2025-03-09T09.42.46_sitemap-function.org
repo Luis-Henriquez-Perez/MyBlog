@@ -10,11 +10,11 @@ and then include the entries from that file.
 However, this was not perfect because org did not generate the sitemap file
 first.  It first tries to include the sitemap file which leads to an error.  I
 want my blog to be reproduceable.  So then while looking for a solution I came
-across a post on dennis ogbe's custom sitemap function.  It slooks impressive
+across a post on dennis ogbe's custom sitemap function.  It looks impressive
 but I also do not want to necessarily write the whole page with code.
 
 #+begin_src emacs-lisp
 #+end_src
 
 The other solution is I could just manually update the sitemap myself, which is
-certainly the boring solution.
+certainly the boring solution but probably the simplest.

@@ -36,6 +36,7 @@
 ;; structure.  As in I want the links to work in the org files as well as the
 ;; html files.
 (setq org-html-wrap-src-lines t)
+
 (setq org-publish-project-alist
       `(("index"
          :base-directory "org/"
