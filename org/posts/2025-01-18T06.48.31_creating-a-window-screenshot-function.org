@@ -11,9 +11,9 @@ not find them.  Instead I decided to compromise and use an external package I
 have known about called [[https://github.com/Luis-Henriquez-Perez/escr][escr]].  It is the only package I could find that could do
 window, region and frame screenshots for Emacs.
 
-I install it via =package.el= in [[../documentation/29.4-110-init-package.html][110-init-package.el]] by adding it to
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--package-vc-selected-packages.html][package-vc-selected-packages]] and relying on
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-vc-install-selected-packages.html][package-vc-install-selected-packages]].
+I install it via =package.el= in [[file:../documentation/29.4-110-init-package.html][110-init-package.el]] by adding it to
+[[file:../documentation/29.4-helpful-variable--package-vc-selected-packages.html][package-vc-selected-packages]] and relying on
+[[file:../documentation/29.4-helpful-callable--package-vc-install-selected-packages.html][package-vc-install-selected-packages]].
 
 #+begin_src emacs-lisp
 (setq package-vc-selected-packages '((completion-preview :url "https://git.sr.ht/~eshel/completion-preview")
@@ -27,7 +27,7 @@ I install it via =package.el= in [[../documentation/29.4-110-init-package.html][
 (package-vc-install-selected-packages)
 #+end_src
 
-This is my configuration for it in [[../documentation/29.4-130-init-escr.html][130-init-escr.el]].  I do not do much.  I
+This is my configuration for it in [[file:../documentation/29.4-130-init-escr.html][130-init-escr.el]].  I do not do much.  I
 just declare and autoload the main =escr= commands and set the directory where
 screenshots will go.
 
