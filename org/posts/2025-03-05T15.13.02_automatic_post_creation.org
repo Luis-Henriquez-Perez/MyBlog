@@ -1,9 +1,9 @@
 #+title:automate blog post creation
 #+author:Luis Henriquez-Perez
 
-Creating post manually can be a pain.  This means calling [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--find-file.html][find-file]], entering
+Creating post manually can be a pain.  This means calling [[file:../documentation/29.4-helpful-callable--find-file.html][find-file]], entering
 the filename (this excludes the timestamp but includes the separating
-underscores), and then calling prepend the timestamp (via [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--date2name-prepend-date.html][date2name-prepend-date]]
+underscores), and then calling prepend the timestamp (via [[file:../documentation/29.4-helpful-callable--date2name-prepend-date.html][date2name-prepend-date]]
 ) onto the file from the dired buffer.  This is something that can and should be
 automated.  To that end, I have been experimenting with this function I wrote
 for generating a new blog post.

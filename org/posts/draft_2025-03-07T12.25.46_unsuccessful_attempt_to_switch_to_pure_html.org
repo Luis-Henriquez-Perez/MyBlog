@@ -2,10 +2,19 @@
 #+author:Luis Henriquez-Perez
 
 I have struggled back and forth between continuing to write this blog in org
-versus switching to a pure html and CSS blog.  I will be honest it is a tough
-choice.
+versus switching to a pure HTML and CSS blog.
+
+It is a tough choice.  What drew me to pure HTML and CSS is its simplicity and
+breath of support online.
+
+* no publishing
+
+Unlike using org-publish there is no middle-man publishing step.  This means.  The
+"publishing" is just a simple rsync of your files to the cloud.  Whereas with
+org you need to update all the time.
 
 Embedding source code in a post is where org-mode shines.  With it is ability to
+embbed multiple modes in a single files via source block
 Org naturally is like a sort of "multi-mode" package akin to [[][mmm-mode]] and
 [[][polymode]].  However, to understand how amazing org is for this we first
 have to understand how this is handled by HTML and CSS.  To show code with

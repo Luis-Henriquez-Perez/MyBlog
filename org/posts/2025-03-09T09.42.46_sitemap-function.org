@@ -1,20 +1,101 @@
 #+title:generating a custom sitemap
 #+author:Luis Henriquez-Perez
 
-I have been using the strategy from [[][]] wherein you generate a sitemap file
-and then include the entries from that file.
+I have been using the strategy from [[https://taingram.org/blog/org-mode-blog.html][Thomas Ingrams's post]] wherein you generate a
+sitemap file and then include those entries from that file.  He does say that
+this works only "once the sitemap.org is generated" which does not explain how
+to include it to have first time.
 
 #+begin_src emacs-lisp
 #+end_src
 
 However, this was not perfect because org did not generate the sitemap file
-first.  It first tries to include the sitemap file which leads to an error.  I
-want my blog to be reproduceable.  So then while looking for a solution I came
-across a post on dennis ogbe's custom sitemap function.  It looks impressive
-but I also do not want to necessarily write the whole page with code.
+first.  It first tries to include the sitemap file which leads to an error if
+the sitemap file does not exist, which will be the case the first time.  So I
+guess one solution is to version control the sitemap file.  Although I think
+this would defeat the purpose of what he is trying to do which is to avoid
+version controlling an auto-generated file.  I want my blog to be reproduceable.
+So then while looking for a solution I came across a post on [[https://ogbe.net/about][Dennis Ogbe]]'s
+[[https://ogbe.net/blog/org_custom_sitemap][custom sitemap function]].  It looks impressive but I also do not want to
+necessarily write the whole page with code.
 
 #+begin_src emacs-lisp
 #+end_src
 
-The other solution is I could just manually update the sitemap myself, which is
-certainly the boring solution but probably the simplest.
+In the end, I opted to just manually update the sitemap myself, which is
+certainly the boring solution but the simplest.  At least this way I do not have
+to worry about new posts.
+
+When I actually tried to enter a post I saw that it was more involved than I
+thought.  I considered making an abbrev that would make this insertion easy but.
+
+Maybe there is a way to generate.  What is the function responsible
+for the sitemap file?
+
+I think that there is a function [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-publish-sitemap.html][org-publish-sitemap]] that does it.  It may be
+possible to invoke the function preemptively to generate the sitemap myself
+before [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-publish-all.html][org-publish-all]] does it is thing.  The =org-publish-timestamp= function
+takes a project as it is first required argument but I am not sure what a
+"project" is exactly.  To see what a project is I think it is best to just try
+publishing with the sitemap settings I had before and hijack the function to see
+what is passed in.  Well actually that is one way but I also looked at the
+documentation of the variable
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--org-publish-project-alist.html][org-publish-project-alist]].
+
+The general impression I get from
+
+After I run the public file I get the following backtrace.  The first thing I
+wonder is if it will work I can just "nope" [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-publish-cache-get.html][org-publish-cache-get]].
+
+#+begin_src emacs-lisp
+Generating sitemap for Sitemap for project posts
+
+Error: error ("‘org-publish-cache-get’ called, but no cache present")
+  mapbacktrace(#f(compiled-function (evald func args flags) #<bytecode -0x59f39cd645171df>))
+  debug-early-backtrace()
+  debug-early(error (error "‘org-publish-cache-get’ called, but no cache present"))
+  signal(error ("‘org-publish-cache-get’ called, but no cache present"))
+  error("`org-publish-cache-get' called, but no cache present")
+  org-publish-cache-get("/home/luis/Documents/MyBlog/org/posts/2025-01-19T11.43.56_using-timestamped-posts.org")
+  org-publish-cache-get-file-property("/home/luis/Documents/MyBlog/org/posts/2025-01-19T11.43.56_using-timestamped-posts.org" :title nil t)
+  org-publish-find-title("/home/luis/Documents/MyBlog/org/posts/2025-01-19T11.43.56_using-timestamped-posts.org" ("posts" :base-directory "org/posts/" :base-extension "org" :publishing-directory "html/posts/" :exclude "index\\.org$\\|sitemap\\.org$\\|draft_.+\\.org$" :publishing-function org-html-publish-to-html :recursive t :html-doctype "html5" :html-html5-fancy t :html-head-include-scripts nil :html-head-include-default-style nil :html-head "<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\"/>" :with-emphasize t :with-footnotes t :with-title t :with-creator nil :with-date nil :with-author nil :with-toc nil :section-numbers nil :html-validation-link nil :time-stamp-file nil))
+  #f(compiled-function (a b) #<bytecode -0x14306bc17799bc58>)("/home/luis/Documents/MyBlog/org/posts/2025-01-19T11.43.56_using-timestamped-posts.org" "/home/luis/Documents/MyBlog/org/posts/2025-02-26T12.58.40_new_tidbit_howmany.org")
+  sort(("/home/luis/Documents/MyBlog/org/posts/2025-02-26T12.58.40_new_tidbit_howmany.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-19T11.43.56_using-timestamped-posts.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-16T13.03.14_showcasing-the-progn-bang-macro-part-1.org" "/home/luis/Documents/MyBlog/org/posts/fixing_links.org" "/home/luis/Documents/MyBlog/org/posts/generate_sitemap_link.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-20T04.57.23_stopping-abbrev-from-expanding-on-newline.org" "/home/luis/Documents/MyBlog/org/posts/2025-02-26T03.26.00_tricks_I_learned_to_make_using_tempel_better.org" "/home/luis/Documents/MyBlog/org/posts/journey_to_improve_website.org" "/home/luis/Documents/MyBlog/org/posts/2025-03-09T09.42.46_sitemap-function.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-18T06.48.31_creating-a-window-screenshot-function.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-16T13.03.15_an-abstraction-for-binding-data-structures:-with-map!.org" "/home/luis/Documents/MyBlog/org/posts/2025-03-05T06.32.51_inserting_links_painlessly_with_abbrevs_1.org" "/home/luis/Documents/MyBlog/org/posts/2025-03-05T15.13.02_automatic_post_creation.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-16T13.03.15_one-of-my-proudest-macros-lef.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-20T00.56.54_latency_problem.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-16T13.03.15_downloading-music-from-youtube.org" "/home/luis/Documents/MyBlog/org/posts/trying_out_noether.org" "/home/luis/Documents/MyBlog/org/posts/2025-01-16T13.03.15_what-are-some-good-abbrev-ideas.org") #f(compiled-function (a b) #<bytecode -0x14306bc17799bc58>))
+  org-publish-sitemap(("posts" :base-directory "org/posts/" :base-extension "org" :publishing-directory "html/posts/" :exclude "index\\.org$\\|sitemap\\.org$\\|draft_.+\\.org$" :publishing-function org-html-publish-to-html :recursive t :html-doctype "html5" :html-html5-fancy t :html-head-include-scripts nil :html-head-include-default-style nil :html-head "<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\"/>" :with-emphasize t :with-footnotes t :with-title t :with-creator nil :with-date nil :with-author nil :with-toc nil :section-numbers nil :html-validation-link nil :time-stamp-file nil) "sitemap.org")
+  eval-buffer(#<buffer  *load*> nil "/home/luis/Documents/MyBlog/publish.el" nil t)
+  load-with-code-conversion("/home/luis/Documents/MyBlog/publish.el" "/home/luis/Documents/MyBlog/publish.el" nil t)
+  load("/home/luis/Documents/MyBlog/publish.el" nil t)
+  command-line-1(("-l" "/home/luis/.config/emacs/init.el" "-l" "publish.el"))
+  command-line()
+  normal-top-level()
+‘org-publish-cache-get’ called, but no cache present
+#+end_src
+
+It looks like the publishing worked.
+
+The problem when I checked is the paths are wrong.  The paths are relative to
+the blog post directory.  That is why tainam used.
+
+#+begin_src emacs-lisp
+#+end_src
+
+From my experience with org publish is that although it is something else to
+learn that is technically unnecessary for making a blog, it at least does provide an
+avenue for automating tasks like generating.
+
+I changed my advice to overriding advice.  Probably should have been this in the
+first place instead of a function that is so fragile.
+
+#+begin_src emacs-lisp
+;; Sort sitemap entries by the filename.
+(defun oo--publish-find-date (orig-fn file project)
+  (let ((timestamp nil)
+        (regexp "[0-9]\\{4\\}-[01][0-9]-[0-3][0-9]T[0-2][0-9].[0-5][0-9].[0-5][0-9]"))
+    (if (string-match regexp file)
+        (progn (setq timestamp (match-string 0 file))
+               (message "file -> %s" file)
+               (encode-time (parse-time-string (string-replace "." ":" timestamp))))
+      (funcall orig-fn file project))))
+
+(advice-add 'org-publish-find-date :around 'oo--publish-find-date)
+#+end_src

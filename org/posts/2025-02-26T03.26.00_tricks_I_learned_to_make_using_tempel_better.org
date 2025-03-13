@@ -25,7 +25,7 @@ keybindings precedence make =tempel-map= an intercept map.
 
 You can be certain you will be typing text right after inserting a template
 because there will be fields you have to fill out.  That is why I recommend
-advising [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-insert.html][tempel-insert]] to enter insert state after it is done.  In general,
+advising [[file:../documentation/29.4-helpful-callable--tempel-insert.html][tempel-insert]] to enter insert state after it is done.  In general,
 configuring functions to enter insert state is so common when using [[https://github.com/emacs-evil/evil][evil]] that I
 recommend a dedicated function for this.
 
@@ -41,7 +41,7 @@ recommend a dedicated function for this.
 
 * properly use map an abbrev to a tempel expansion
 
-First let me mention the solution that tempel provides: [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].
+First let me mention the solution that tempel provides: [[file:../documentation/29.4-helpful-callable--tempel-abbrev-mode.html][tempel-abbrev-mode]].
 That mode defines abbrevs for every named template, puts them in an abbrev
 table.  This solution is too crude and opinionated for my taste.  It assumes
 that you want the abbrevs to be the same name you defined for your tempel
@@ -49,7 +49,7 @@ templates.  And it decides how to set up the abbrev table for you.  This is
 designed for someone who just wants something working fast.
 
 If you are not in a rush.  What I recommend is just doing it explicitly with good
-old [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-abbrev.html][define-abbrev]].  Specify the circumstances when an abbrev should be active in
+old [[file:../documentation/29.4-helpful-callable--define-abbrev.html][define-abbrev]].  Specify the circumstances when an abbrev should be active in
 the =:enable-function= property.
 
 #+begin_src emacs-lisp
@@ -68,7 +68,7 @@ the =:enable-function= property.
 
 * simplify creating templates with a macro
 
-I recommend making a macro similar to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--define-skeleton.html][define-skeleton]].  When I dabbled with
+I recommend making a macro similar to [[file:../documentation/29.4-helpful-callable--define-skeleton.html][define-skeleton]].  When I dabbled with
 [[file:../documentation/29.4-info-using-skeletons.html][skeletons]] I became quite endeared to the =define-skeleton= macro.  Despite being
 simple it made things more convenient.
 
