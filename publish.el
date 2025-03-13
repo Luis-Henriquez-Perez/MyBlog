@@ -23,14 +23,16 @@
 	    (t entry)))
 
 ;; Sort sitemap entries by the filename.
-(defun oo--publish-find-date (file _)
-  (string-match "[0-9]\\{4\\}-[0-1][0-9]-[0-3][0-9]T[0-2][0-9].[0-5][0-9].[0-5][0-9]" file)
-  (if-let (timestamp (match-string 0 file))
-      (progn
-        (encode-time (parse-time-string (string-replace "." ":" timestamp))))
-    (error "No timestamp")))
+(defun oo--publish-find-date (orig-fn file project)
+  (let ((timestamp nil)
+        (regexp "[0-9]\\{4\\}-[01][0-9]-[0-3][0-9]T[0-2][0-9].[0-5][0-9].[0-5][0-9]"))
+    (if (string-match regexp file)
+        (progn (setq timestamp (match-string 0 file))
+               (message "file -> %s" file)
+               (encode-time (parse-time-string (string-replace "." ":" timestamp))))
+      (funcall orig-fn file project))))
 
-(advice-add 'org-publish-find-date :override 'oo--publish-find-date)
+(advice-add 'org-publish-find-date :around 'oo--publish-find-date)
 
 ;; The reason for keeping using the recursive directory is to preserve the same
 ;; structure.  As in I want the links to work in the org files as well as the
