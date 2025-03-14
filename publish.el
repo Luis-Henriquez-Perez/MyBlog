@@ -73,7 +73,8 @@
          :publishing-directory "html/"
          :publishing-function org-publish-attachment
          :recursive t)
-        ("all" :components ("index" "posts" "pages" "static"))))
+        ("all"
+         :components ("index" "posts" "pages" "static"))))
 
 (org-publish "posts" :force)
 (org-publish "pages" :force)

@@ -1,0 +1,107 @@
+#+title:explaining my publish alist
+#+author:Luis Henriquez-Perez
+
+Today I worked on refining and fixing the [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--org-publish-project-alist.html][org-publish-project-alist]].  And here I
+will explain the reasoning behind each component.
+
+# Unless you have a specific plan, I highly recommend to have the publishing
+# directory file structure match the directory.  Otherwise, your links will not
+# work properly.
+
+This section includes just one file, the index file.  Right now, the only reason
+it is in a separate project is because I do not want it to have a title because
+I want to add one myself that is also a link.  but I do want every other file to
+have a title and I do not know how, or if there is a way to, .  There is a
+"trick" where I use.
+
+#+begin_src emacs-lisp
+("index"
+ :base-directory "org"
+ :base-extension "org"
+ :exclude ".*"
+ :include ("index.org")
+ :recursive nil
+ :publishing-directory "html"
+ :publishing-function org-html-publish-to-html
+ :with-title nil
+ ,@oo-publish-defaults)
+#+end_src
+
+I do want to mention that the index file uses the include directive to get the
+file contents of the sitemap file produced.  Note though that including this
+file will not work unless the file exists; meaning that the posts project
+should be published before the index project is.
+
+#+begin_src org
+,#+begin_blog-entries
+,#+INCLUDE: "posts/sitemap.org" :lines "3-"
+,#+end_blog-entries
+#+end_src
+
+This is why I publish the projects separately.  Specifically I publish the posts
+first so that the sitemap file is created.  And yes, for those wondering,
+something like this should be sufficient.
+
+#+begin_src emacs-lisp
+(org-publish "posts" :force)
+(org-publish "pages" :force)
+(org-publish "static" :force)
+(org-publish "index" :force)
+#+end_src
+
+This pages project is for non-post files of the website.  Things like my [[file:../about.org][about
+page]] and my [[file:../index.org][index page]].
+
+#+begin_src emacs-lisp
+("pages"
+ :base-directory "org"
+ :base-extension "org"
+ :publishing-directory "html"
+ :recursive nil
+ :exclude "index\\.org$"
+ :publishing-function org-html-publish-to-html
+ ,@oo-publish-defaults)
+#+end_src
+
+This sets up the directory for blog posts.  At first I tried to have the pages
+and the posts together but.  I am considering putting the stylesheet for the
+blog posts in the post directory.  It might be more logical.  I ignore any posts
+prepended with drafts so I can have control over which posts.  I also ignore the
+sitemap file since it is important contents are put into the other one.
+
+#+begin_src emacs-lisp
+("posts"
+ :base-directory "org/posts"
+ :base-extension "org"
+ :publishing-directory "html/posts"
+ :recursive nil
+ :exclude "sitemap\\.org$\\|draft_.+\\.org$"
+ :publishing-function org-html-publish-to-html
+ :auto-sitemap t
+ :sitemap-filename "sitemap.org"
+ :html-head "<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\"/>"
+ :sitemap-sort-files anti-chronologically
+ ,@oo-publish-defaults)
+#+end_src
+
+These are for static files.  As the name suggests, static files are files that
+do not change and will be published as is.  This is basically for anything that
+is not an =.org= file.
+
+#+begin_src emacs-lisp
+("static"
+ :base-directory "org"
+ :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|mov\\|html\\|txt\\|"
+ :publishing-directory "html/"
+ :publishing-function org-publish-attachment
+ :recursive t)
+#+end_src
+
+This is just a convenience project for running them all at once.
+
+#+begin_src emacs-lisp
+("all"
+ :components ("index" "posts" "pages" "static"))
+#+end_src
+
+I will mention.

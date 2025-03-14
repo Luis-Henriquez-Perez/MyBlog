@@ -40,7 +40,7 @@ Now I create an advice function.  The macros.
   (flet! file-attributes (filename)
     (seconds-to-time (string-to-number (shell-command-to-string (format "stat -c %%W %s" filename)))))
   (flet! date2name-file-attribute-modification-time #'identity)
-  (date2name-dired-add-datetime-to-name arg))
+  (date2name-dired-add-datetime-to-name argument))
 #+end_src
 
 #+begin_src emacs-lisp
