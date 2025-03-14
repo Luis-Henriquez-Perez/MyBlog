@@ -1,0 +1,9 @@
+#+title:fixing links
+#+author:Luis Henriquez-Perez
+
+I was fixing links that were created in an absolute path in my blog.  The links
+should be relative to the blog directory.  After I was fixing these links I
+encounterd an error publishing my posts.  Org could not find where the link
+pointed to.  I realized that the error stemmed from the fact that the directory
+structure in my org file was not the same as that for my html files.  I highly
+recommend they are the same so that both links work.

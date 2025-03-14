@@ -11,16 +11,7 @@ Welcome to my blog.
 - [[https://github.com/Luis-Henriquez-Perez/MyBlog][This Blog]]
 
 * Posts
-- [[file:2025-03-05T15.13.02_automatic_post_creation.org][03-05 ~ automate blog post creation]]
-- [[file:2025-03-05T06.32.51_inserting_links_painlessly_with_abbrevs_1.org][03-05 ~ inserting links painlessly with abbrevs (part 1)]]
-- [[file:2025-02-26T12.58.40_new_tidbit_howmany.org][02-26 ~ A Cool New Command: howmany]]
-- [[file:2025-02-26T03.26.00_tricks_I_learned_to_make_using_tempel_better.org][02-26 ~ tricks I learned to make using tempel smoother]]
-- [[file:2025-01-20T04.57.23_stopping-abbrev-from-expanding-on-newline.org][01-20 ~ Stop abbrev from expanding on newline]]
-- [[file:2025-01-20T00.56.54_latency_problem.org][01-20 ~ Diagnosing a Latency Problem]]
-- [[file:2025-01-19T11.43.56_using-timestamped-posts.org][01-19 ~ Using Timestamped Posts]]
-- [[file:2025-01-18T06.48.31_creating-a-window-screenshot-function.org][01-18 ~ Screenshot Function]]
-- [[file:2025-01-16T13.03.15_what-are-some-good-abbrev-ideas.org][01-16 ~ Good abbrev ideas]]
-- [[file:2025-01-16T13.03.15_downloading-music-from-youtube.org][01-16 ~ downloading music from youtube (part 1)]]
-- [[file:2025-01-16T13.03.15_one-of-my-proudest-macros-lef.org][01-16 ~ lef!, One of My Best Macros]]
-- [[file:2025-01-16T13.03.15_an-abstraction-for-binding-data-structures:-with-map!.org][01-16 ~ Binding Symbols in Maps: with-map!]]
-- [[file:2025-01-16T13.03.14_showcasing-the-progn-bang-macro-part-1.org][01-16 ~ Showcasing the =progn!= macro (part 1)]]
+
+#+begin_blog-entries
+#+INCLUDE: "posts/sitemap.org" :lines "3-"
+#+end_blog-entries

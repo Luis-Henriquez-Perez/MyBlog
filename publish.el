@@ -39,71 +39,73 @@
 ;; html files.
 (setq org-html-wrap-src-lines t)
 
+(defvar oo-staples (list :with-emphasize t
+                         :html-head-include-scripts nil
+                         :html-head-include-default-style nil
+                         :html-doctype "html5"
+                         :html-html5-fancy t
+                         :with-footnotes t
+                         :with-creator nil
+                         :with-date nil
+                         :with-author nil
+                         :with-toc nil
+                         :section-numbers nil
+                         :html-validation-link nil
+                         :time-stamp-file nil))
+
+(defun oo-publish-sitemap-default (title list)
+  "Default site map, as a string.
+TITLE is the title of the site map.  LIST is an internal
+representation for the files to include, as returned by
+`org-list-to-lisp'.  PROJECT is the current project."
+  (let (posts)
+    (setq posts (cl-find-if (lambda (it) (equal (car-safe it) "posts")) list))
+    (setq posts (cl-second posts))
+    (concat "#+TITLE: " title "\n\n" (org-list-to-org posts))))
+
 (setq org-publish-project-alist
       `(("index"
-         :base-directory "org/"
+         :base-directory "org"
          :base-extension "org"
          :exclude ".*"
          :include ("index.org")
-         :publishing-function org-html-publish-to-html
-         :publishing-directory "html/"
-         :with-title nil
-         :with-creator nil
-         :with-date nil
-         :with-author nil
-         :with-toc nil
-         :section-numbers nil
-         :html-validation-link nil
-         :time-stamp-file nil
-         :html-head "<link rel=\"stylesheet\" href=\"index-style.css\" type=\"text/css\"/>")
-        ("posts"
-         :base-directory "org/posts/"
-         :base-extension "org"
-         :publishing-directory "html/"
-         ;; Ignore files that start with `draft_'.
-         :exclude "index\\.org$\\|sitemap\\.org$\\|draft_.+\\.org$"
-         :publishing-function org-html-publish-to-html
          :recursive nil
-         ;; :auto-sitemap t
-         ;; :sitemap-title "Blog Index"
-         ;; :sitemap-filename "sitemap.org"
-         ;; :sitemap-style list
-         ;; ;; I timestamp my files so this should sort them in order by creation date.
-         ;; :sitemap-sort-files anti-chronologically
-         ;; ;; :sitemap-format-entry "%d %t"
-         ;; ;; :sitemap-date-format
-         ;; :sitemap-format-entry taingram--sitemap-dated-entry-format
-         ;; :sitemap-file-entry-format "%d %t"
-         ;; ----------------------------------- experimental
+         :publishing-directory "html"
+         :publishing-function org-html-publish-to-html
+         :with-title nil
+         ,@oo-staples)
+        ("pages"
+         :base-directory "org"
+         :base-extension "org"
+         :publishing-directory "html"
+         :recursive nil
+         :exclude "index\\.org$"
+         :publishing-function org-html-publish-to-html
          :html-doctype "html5"
          :html-html5-fancy t
-         :html-head-include-scripts nil
-         :html-head-include-default-style nil
-         :html-head "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>"
-         ;; -----------------------------------
-         :with-emphasize t
-         :with-footnotes t
-         :with-title t
-         :with-creator nil
-         :with-date nil
-         :with-author nil
-         :with-toc nil
-         :section-numbers nil
-         :html-validation-link nil
-         :time-stamp-file nil)
+         ,@oo-staples)
+        ("posts"
+         :base-directory "org/posts"
+         :base-extension "org"
+         :publishing-directory "html/posts"
+         :recursive nil
+         :exclude "sitemap\\.org$\\|draft_.+\\.org$"
+         :publishing-function org-html-publish-to-html
+         :auto-sitemap t
+         :sitemap-filename "sitemap.org"
+         :html-head "<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\"/>"
+         :sitemap-sort-files anti-chronologically
+         ,@oo-staples)
         ("static"
-         :base-directory "org/"
+         :base-directory "org"
          :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|mov\\|html\\|txt\\|"
          :publishing-directory "html/"
          :publishing-function org-publish-attachment
          :recursive t)
-        ;; ("all" :components ("posts" "static"))
-        ;; ("static"
-        ;;  :base-directory ,base-dir
-        ;;  :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|mov\\|html\\|txt\\|"
-        ;;  :publishing-directory ,publish-dir
-        ;;  :recursive t
-        ;;  :publishing-function org-publish-attachment)
-        ))
+        ("all" :components ("index" "posts" "pages" "static"))))
 
-(org-publish-all 'force)
+(org-publish "posts" :force)
+(org-publish "pages" :force)
+(org-publish "static" :force)
+(org-publish "index" :force)
+;; (org-publish "all" 'force)

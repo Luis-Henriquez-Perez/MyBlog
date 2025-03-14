@@ -1,0 +1,80 @@
+#+title:honing the publishing alist
+#+author:Luis Henriquez-Perez
+
+Deciding on the publish alist needs to be a strategic thing.  And here I am
+restructuring it.  The goals are to keep it as simple as possible while still
+meeting my needs.  My needs are as follows.
+
+- a sitemap file only for the posts directory
+# - bar
+
+There is one "trick" to keep in mind.  The index file may have to be in a
+separate project on its own because it needs the it needs to "include" the
+sitemap file.  I do not think you can include it from the same project though
+maybe I am wrong.
+
+I notice that the sitemap.html file keeps being created despite me disabling the
+publishing with the special keyword.  It is not a big deal but I am not sure why
+this is happening.
+
+I also notice that the sitemap generated is not what I want.  I want it to just
+be a sitemap of the.  I am considering using the sitemap function to generate
+the sitemap, but I just want to.
+
+This is the function that generates the sitemap.
+
+#+begin_src emacs-lisp
+(defun org-publish-sitemap-default (title list)
+  "Default site map, as a string.
+TITLE is the title of the site map.  LIST is an internal
+representation for the files to include, as returned by
+`org-list-to-lisp'.  PROJECT is the current project."
+  (concat "#+TITLE: " title "\n\n"
+	      (org-list-to-org list))
+#+end_src
+
+Now I need to look at the return value.
+
+#+begin_src emacs-lisp
+#+end_src
+
+Now I looked at what the list looks like.  Gottosay I am not sure why it needs
+to be structured this way.
+
+#+begin_src emacs-lisp
+(alet! '(unordered ("[[file:about.org][about]]")
+                   ("posts" (unordered ("[[file:posts/2025-03-12T16.22.15_generate_sitemap_link.org][generate sitemap link]]")
+                                       ("[[file:posts/2025-03-12T15.15.18_trying_out_noether.org][review of noether]]")
+                                       ("[[file:posts/2025-03-12T05.58.29_journey_to_improve_website.org][journey to improve website]]")
+                                       ("[[file:posts/2025-03-11T13.03.25_fixing_links.org][fixing links]]")
+                                       ("[[file:posts/2025-03-09T09.42.46_sitemap-function.org][generating a custom sitemap]]")
+                                       ("[[file:posts/2025-03-05T15.13.02_automatic_post_creation.org][automate blog post creation]]")
+                                       ("[[file:posts/2025-03-05T06.32.51_inserting_links_painlessly_with_abbrevs_1.org][inserting links painlessly with abbrevs (part 1)]]")
+                                       ("[[file:posts/2025-02-26T12.58.40_new_tidbit_howmany.org][A Cool New Command: howmany]]")
+                                       ("[[file:posts/2025-02-26T03.26.00_tricks_I_learned_to_make_using_tempel_better.org][tricks I learned to make using tempel smoother]]")
+                                       ("[[file:posts/2025-01-20T04.57.23_stopping-abbrev-from-expanding-on-newline.org][Stop abbrev from expanding on newline]]")
+                                       ("[[file:posts/2025-01-20T00.56.54_latency_problem.org][Diagnosing a Latency Problem]]")
+                                       ("[[file:posts/2025-01-19T11.43.56_using-timestamped-posts.org][Using Timestamped Posts]]")
+                                       ("[[file:posts/2025-01-18T06.48.31_creating-a-window-screenshot-function.org][Screenshot Function]]")
+                                       ("[[file:posts/2025-01-16T13.03.15_what-are-some-good-abbrev-ideas.org][Good abbrev ideas]]")
+                                       ("[[file:posts/2025-01-16T13.03.15_downloading-music-from-youtube.org][downloading music from youtube (part 1)]]")
+                                       ("[[file:posts/2025-01-16T13.03.15_one-of-my-proudest-macros-lef.org][lef!, One of My Best Macros]]")
+                                       ("[[file:posts/2025-01-16T13.03.15_an-abstraction-for-binding-data-structures:-with-map!.org][Binding Symbols in Maps: with-map!]]")
+                                       ("[[file:posts/2025-01-16T13.03.14_showcasing-the-progn-bang-macro-part-1.org][Showcasing the =progn!= macro (part 1)]]"))))
+  (org-list-to-org it))
+#+end_src
+
+Finally.
+
+#+begin_src emacs-lisp
+(defun oo-publish-sitemap-default (title list)
+  "Default site map, as a string.
+TITLE is the title of the site map.  LIST is an internal
+representation for the files to include, as returned by
+`org-list-to-lisp'.  PROJECT is the current project."
+  (let (posts)
+    (setq posts (cl-find-if (lambda (it) (equal (car-safe it) "posts")) list))
+    (setq posts (cl-second posts))
+    (concat "#+TITLE: " title "\n\n" (org-list-to-org posts))))
+#+end_src
+

@@ -1,0 +1,10 @@
+#+title:journey to improve website
+#+author:Luis Henriquez-Perez
+
+I vacillitated greatly on whether to use pure html and CSS or to continue using
+org.  Ultimately I decided to use org.  Now I am on a journey to slightly
+improve my blog little by little.  Right now the first step is to fix the links
+I have which poing to the absolute path, making them still work on my computer
+but unusable online.
+
+I found.

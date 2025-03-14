@@ -1,7 +1,7 @@
 #+title:generating a custom sitemap
 #+author:Luis Henriquez-Perez
 
-I have been using the strategy from [[https://taingram.org/blog/org-mode-blog.html][Thomas Ingrams's post]] wherein you generate a
+I have been using the strategy from [[https://taingram.org/blog/org-mode-blog.html][Thomas Ingrams's post]] where you generate a
 sitemap file and then include those entries from that file.  He does say that
 this works only "once the sitemap.org is generated" which does not explain how
 to include it to have first time.

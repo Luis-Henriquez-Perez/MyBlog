@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: org-publish-all*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+org-publish-all is an <span class="button">autoloaded</span>, <span class="button">interactive</span> and <span class="button">byte-compiled</span>
+function defined in <span class="button">ox-publish.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(org-publish-all <span class="type">&amp;optional</span> FORCE ASYNC)
+
+<span class="helpful-heading">Documentation
+</span>Publish all projects.
+
+With prefix argument FORCE, remove all files in the timestamp
+directory and force publishing all projects.  With a non-nil
+optional argument ASYNC, publishing will be done asynchronously,
+in another process.
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>org-publish-all is unused in <span class="button">ox-publish.el.gz</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by org-publish-all</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/org/ox-publish.el.gz</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">org-publish-all</span> (<span class="type">&amp;optional</span> force async)
+  <span class="doc">"Publish all projects.
+With prefix argument FORCE, remove all files in the timestamp
+directory and force publishing all projects.  With a non-nil
+optional argument ASYNC, publishing will be done asynchronously,
+in another process."</span>
+  (<span class="keyword">interactive</span> <span class="string">"P"</span>)
+  (<span class="keyword">if</span> async
+      (org-export-async-start (<span class="keyword">lambda</span> (_) nil)
+	`(<span class="keyword">progn</span>
+	   (<span class="keyword">when</span> ',force (org-publish-remove-all-timestamps))
+	   (<span class="keyword">let</span> ((org-publish-use-timestamps-flag
+		  (<span class="keyword">if</span> ',force nil ,org-publish-use-timestamps-flag)))
+	     (org-publish-projects ',org-publish-project-alist))))
+    (<span class="keyword">when</span> force (org-publish-remove-all-timestamps))
+    (<span class="keyword">save-window-excursion</span>
+      (<span class="keyword">let</span> ((org-publish-use-timestamps-flag
+	     (<span class="keyword">if</span> force nil org-publish-use-timestamps-flag)))
+	(org-publish-projects org-publish-project-alist)))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (org-publish-all 0)
+<span class="constant">event-symbol-elements</span>
+  (org-publish-all)
+<span class="constant">function-history</span>
+  ("/usr/share/emacs/29.4/lisp/org/ox-publish.elc"
+   (autoload "ox-publish"
+     ("/usr/share/emacs/29.4/lisp/org/org-loaddefs.elc" . 110699)
+     t nil))
+<span class="constant">modifier-cache</span>
+  ((0 . org-publish-all))</pre>
+  </body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful macro: noether-defview*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+noether-defview is a macro defined in <span class="button">noether.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(<span class="keyword">noether-defview</span> NAME DOCS <span class="type">&amp;rest</span> BODY)
+
+<span class="helpful-heading">Documentation
+</span>Create a new view with the given NAME with the given DOCS and BODY.
+
+BODY will be parsed in a way that any starting pair of keyword and value
+will be used as the view properties and the rest will be the body of
+the show function.
+
+<span class="helpful-heading">References
+</span>noether-defview is unused in <span class="button">noether.el</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by noether-defview</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/elpa/noether-20250309.1704/noether.el</span>
+(<span class="keyword">defmacro</span> <span class="function-name">noether-defview</span> (name docs <span class="type">&amp;rest</span> body)
+  <span class="doc">"Create a new view with the given NAME with the given DOCS and BODY.
+BODY will be parsed in a way that any starting pair of keyword and value
+will be used as the view properties and the rest will be the body of
+the show function."</span>
+  (<span class="keyword">declare</span> (doc-string 2) (indent defun))
+  (<span class="keyword">let*</span> ((parsed-body (noether--extract-props body))
+         (show-body (car parsed-body))
+         (props (cdr parsed-body))
+         (initial-content
+          (mapconcat #'noether--create-placeholder (eval (plist-get props <span class="builtin">:units</span>))
+                     (<span class="keyword">or</span> (plist-get props <span class="builtin">:separator</span>) <span class="string">""</span>))))
+
+    `(<span class="keyword">progn</span>
+       (<span class="keyword">defvar</span> ,name
+         (list
+          ,@props
+          <span class="builtin">:name</span> ',name
+          <span class="builtin">:show</span> (<span class="keyword">lambda</span> () ,@show-body))
+         ,docs)
+       <span class="comment-delimiter">;; </span><span class="comment">It's not necessary but well doesn't hurt either
+</span>       <span class="comment-delimiter">;; </span><span class="comment">for future reference
+</span>       (put ',name <span class="builtin">:updaters</span> ())
+       (put ',name <span class="builtin">:initial-content</span> ,initial-content)
+       t)))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">doc-string-elt</span>
+  2
+<span class="constant">function-history</span>
+  ("/home/luis/.config/emacs/elpa/noether-20250309.1704/noether.elc"
+   (macro closure
+          (t)
+          (name docs &amp;rest body)
+          "Create a new view with the given NAME with the given DOCS and BODY.\nBODY will be parsed in a way that any starting pair of keyword and value\nwill be used as the view properties and the rest will be the body of\nthe show function."
+          (let*
+              ((parsed-body
+                (noether--extract-props body))
+               (show-body
+                (car parsed-body))
+               (props
+                (cdr parsed-body))
+               (initial-content
+                (mapconcat #'noether--create-placeholder
+                           (eval
+                            (plist-get props :units))
+                           (or
+                            (plist-get props :separator)
+                            ""))))
+            (cons 'progn
+                  (cons
+                   (list 'defvar name
+                         (cons 'list
+                               (append props
+                                       (list ':name
+                                             (list 'quote name)
+                                             ':show
+                                             (cons 'lambda
+                                                   (cons nil show-body)))))
+                         docs)
+                   (cons
+                    (cons 'put
+                          (cons
+                           (list 'quote name)
+                           '(:updaters nil)))
+                    (cons
+                     (list 'put
+                           (list 'quote name)
+                           ':initial-content initial-content)
+                     '(t))))))))
+<span class="constant">lisp-indent-function</span>
+  defun</pre>
+  </body>
+</html>

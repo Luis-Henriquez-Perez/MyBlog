@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: org-publish-sitemap*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+org-publish-sitemap is a <span class="button">byte-compiled</span> function defined in
+<span class="button">ox-publish.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(org-publish-sitemap PROJECT <span class="type">&amp;optional</span> SITEMAP-FILENAME)
+
+<span class="helpful-heading">Documentation
+</span>Create a sitemap of pages in set defined by PROJECT.
+
+Optionally set the filename of the sitemap with SITEMAP-FILENAME.
+Default for SITEMAP-FILENAME is <span class="constant">sitemap.org</span>.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">ox-publish.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">org-publish-projects</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by org-publish-sitemap</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/org/ox-publish.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">org-publish-sitemap</span> (project <span class="type">&amp;optional</span> sitemap-filename)
+  <span class="doc">"Create a sitemap of pages in set defined by PROJECT.
+Optionally set the filename of the sitemap with SITEMAP-FILENAME.
+Default for SITEMAP-FILENAME is `</span><span class="doc"><span class="constant">sitemap.org</span></span><span class="doc">'."</span>
+  (<span class="keyword">let*</span> ((root (expand-file-name
+		(file-name-as-directory
+		 (org-publish-property <span class="builtin">:base-directory</span> project))))
+	 (sitemap-filename (expand-file-name (<span class="keyword">or</span> sitemap-filename <span class="string">"sitemap.org"</span>)
+					     root))
+	 (title (<span class="keyword">or</span> (org-publish-property <span class="builtin">:sitemap-title</span> project)
+		    (concat <span class="string">"Sitemap for project "</span> (car project))))
+	 (style (<span class="keyword">or</span> (org-publish-property <span class="builtin">:sitemap-style</span> project)
+		    'tree))
+	 (sitemap-builder (<span class="keyword">or</span> (org-publish-property <span class="builtin">:sitemap-function</span> project)
+			      #'org-publish-sitemap-default))
+	 (format-entry (<span class="keyword">or</span> (org-publish-property <span class="builtin">:sitemap-format-entry</span> project)
+			   #'org-publish-sitemap-default-entry))
+	 (sort-folders
+	  (org-publish-property <span class="builtin">:sitemap-sort-folders</span> project
+				org-publish-sitemap-sort-folders))
+	 (sort-files
+	  (org-publish-property <span class="builtin">:sitemap-sort-files</span> project
+				org-publish-sitemap-sort-files))
+	 (ignore-case
+	  (org-publish-property <span class="builtin">:sitemap-ignore-case</span> project
+				org-publish-sitemap-sort-ignore-case))
+	 (org-file-p (<span class="keyword">lambda</span> (f) (equal <span class="string">"org"</span> (file-name-extension f))))
+	 (sort-predicate
+	  (<span class="keyword">lambda</span> (a b)
+	    (<span class="keyword">let</span> ((retval t))
+	      <span class="comment-delimiter">;; </span><span class="comment">First we sort files:
+</span>	      (<span class="keyword">pcase</span> sort-files
+		(`alphabetically
+		 (<span class="keyword">let</span> ((A (<span class="keyword">if</span> (funcall org-file-p a)
+			      (concat (file-name-directory a)
+				      (org-publish-find-title a project))
+			    a))
+		       (B (<span class="keyword">if</span> (funcall org-file-p b)
+			      (concat (file-name-directory b)
+				      (org-publish-find-title b project))
+			    b)))
+		   (<span class="keyword">setq</span> retval
+			 (<span class="keyword">if</span> ignore-case
+			     (not (string-lessp (upcase B) (upcase A)))
+			   (not (string-lessp B A))))))
+		((<span class="keyword">or</span> `anti-chronologically `chronologically)
+		 (<span class="keyword">let*</span> ((adate (org-publish-find-date a project))
+			(bdate (org-publish-find-date b project)))
+		   (<span class="keyword">setq</span> retval
+			 (not (<span class="keyword">if</span> (eq sort-files 'chronologically)
+				  (time-less-p bdate adate)
+				(time-less-p adate bdate))))))
+		(`nil nil)
+		(_ (<span class="warning">user-error</span> <span class="string">"Invalid sort value %s"</span> sort-files)))
+	      <span class="comment-delimiter">;; </span><span class="comment">Directory-wise wins:
+</span>	      (<span class="keyword">when</span> (memq sort-folders '(first last))
+		<span class="comment-delimiter">;; </span><span class="comment">a is directory, b not:
+</span>		(<span class="keyword">cond</span>
+		 ((<span class="keyword">and</span> (file-directory-p a) (not (file-directory-p b)))
+		  (<span class="keyword">setq</span> retval (eq sort-folders 'first)))
+		 <span class="comment-delimiter">;; </span><span class="comment">a is not a directory, but b is:
+</span>		 ((<span class="keyword">and</span> (not (file-directory-p a)) (file-directory-p b))
+		  (<span class="keyword">setq</span> retval (eq sort-folders 'last)))))
+	      retval))))
+    (message <span class="string">"Generating sitemap for %s"</span> title)
+    (<span class="keyword">with-temp-file</span> sitemap-filename
+      (insert
+       (<span class="keyword">let</span> ((files (remove sitemap-filename
+			    (org-publish-get-base-files project))))
+	 <span class="comment-delimiter">;; </span><span class="comment">Add directories, if applicable.
+</span>	 (<span class="keyword">unless</span> (<span class="keyword">and</span> (eq style 'list) (eq sort-folders 'ignore))
+	   (<span class="keyword">setq</span> files
+		 (nconc (remove root (org-uniquify
+				      (mapcar #'file-name-directory files)))
+			files)))
+	 <span class="comment-delimiter">;; </span><span class="comment">Eventually sort all entries.
+</span>	 (<span class="keyword">when</span> (<span class="keyword">or</span> sort-files (not (memq sort-folders 'ignore)))
+	   (<span class="keyword">setq</span> files (sort files sort-predicate)))
+	 (funcall sitemap-builder
+		  title
+		  (org-publish--sitemap-files-to-lisp
+		   files project style format-entry)))))))
+
+</pre>
+  </body>
+</html>

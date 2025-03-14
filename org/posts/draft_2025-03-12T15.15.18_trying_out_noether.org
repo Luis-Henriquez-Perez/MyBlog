@@ -1,0 +1,70 @@
+#+title:review of noether
+#+author:Luis Henriquez-Perez
+
+I have got to be honest with you I thought this [[https://git.sr.ht/~lxsameer/noether][noether]] package was a dud when I
+first read the description on [[https://sachachua.com/blog/2025/03/2025-03-10-emacs-news/][sacha's news]] "A mode line which plays hide and
+seek".  I thought it was just a rewrite or different implementation of
+[[https://github.com/emacsmirror/mood-line][hide-modeline]].  Luckily that did not stop me from clicking on it.  Apparently it
+is a general package with a specific functionality to create a global mode line.
+
+I tried to install this package via [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--package-vc-install.html][package-vc-install]] only to realize that.
+
+#+begin_src emacs-lisp
+(package-install 'noether)
+#+end_src
+
+I have always wanted a global mode line as opposed to one mode line per buffer
+which is the default in Emacs to conserve.  Really, I only need to see one mode
+line at any given time--the mode line of the selected window.  I wanted to look
+into a way to have a global mode line.  And this package seems to be able to
+offer that.
+
+I would say the examples are a bit lacking.  When I evaluated [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--noether-defview.html][noether-defview]] ,
+the =C-c x= binding did not seem to work.  At first I thought it was I thought it
+was [[https://github.com/emacs-evil/evil][evil]] but even typing =C-c x= from Emacs state does not work.  Is there some
+way to make this a permanent view instead of toggling it with the binding?  Also
+is there a way to specify the separator between each pair of units individually?
+I wish there were a function that could trigger the view.
+
+I have not even gotten to have package to work yet.  It seems a bit
+unintuitive.  And also it uses a different way to specify the diesplay so it is
+more that I would have to learn.  And this makes it more complex.
+
+#+begin_src emacs-lisp
+(require 'noether)
+(noether-defview example-bar
+  "Just a test view"
+
+  ;; Name of the buffer to be used for the view. It will be managed by Noether
+  :buffer "*mainview*"
+
+  ;; What keybinding will trigger the view
+  ;; :binding (kbd "C-c x")
+
+  ;; A seperator, to be used between the units
+  :separator "|"
+
+  ;; Any posframe property can be used in the list passed to `:frame'
+  :frame
+  (list
+   :position (cons (- (frame-outer-width) 10)
+                   (- (frame-outer-height) 40))
+   :border-width 1
+   :border-color "#bd93f9")
+
+  ;; A list of units to use in this view
+  :units
+  (list
+   (line-unit)
+
+   ;; A unit's properties can be overriden by passing the key value
+   ;; to the unit's function.
+   (time-unit
+    :label
+    (format "%s " (propertize (all-the-icons-octicon "clock")
+                              'face `(:family ,(all-the-icons-octicon-family) :height 1.0 :weight 'bold)
+                              'display '(raise -0.1))))
+   (buffer-name-unit)
+   (mode-name-unit)
+   (project-unit)))
+#+end_src

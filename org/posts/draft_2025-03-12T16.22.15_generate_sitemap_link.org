@@ -1,0 +1,5 @@
+#+title:generate sitemap link
+#+author:Luis Henriquez-Perez
+
+In a previous post I spoke about.  After having said that I realized there is
+some boilerplate in volved for actually addin gmy own link manually.
