@@ -97,7 +97,8 @@ is not an =.org= file.
  :recursive t)
 #+end_src
 
-This is just a convenience project for running them all at once.
+This is just a convenience project for running them all at once.  I do not use
+this though.
 
 #+begin_src emacs-lisp
 ("all"
