@@ -4,15 +4,9 @@
 Today I worked on refining and fixing the [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--org-publish-project-alist.html][org-publish-project-alist]].  And here I
 will explain the reasoning behind each component.
 
-# Unless you have a specific plan, I highly recommend to have the publishing
-# directory file structure match the directory.  Otherwise, your links will not
-# work properly.
-
-This section includes just one file, the index file.  Right now, the only reason
-it is in a separate project is because I do not want it to have a title because
-I want to add one myself that is also a link.  but I do want every other file to
-have a title and I do not know how, or if there is a way to, .  There is a
-"trick" where I use.
+This project includes just one file, the index file.  Partly, the reason it is
+in a separate project is because unlike every other page on my website I do not
+want =org-publish= it to give it a default title.
 
 #+begin_src emacs-lisp
 ("index"
@@ -27,10 +21,8 @@ have a title and I do not know how, or if there is a way to, .  There is a
  ,@oo-publish-defaults)
 #+end_src
 
-I do want to mention that the index file uses the include directive to get the
-file contents of the sitemap file produced.  Note though that including this
-file will not work unless the file exists; meaning that the posts project
-should be published before the index project is.
+Additionally, the index file includes the generated =sitemap.org= file; meaning
+that including this file will not work unless the file exists.
 
 #+begin_src org
 ,#+begin_blog-entries
@@ -38,8 +30,8 @@ should be published before the index project is.
 ,#+end_blog-entries
 #+end_src
 
-This is why I publish the projects separately.  Specifically I publish the posts
-first so that the sitemap file is created.  And yes, for those wondering,
+This is why I publish the projects separately.  And, specifically, I publish the
+posts first so that the sitemap file is created.  And yes, for those wondering,
 something like this should be sufficient.
 
 #+begin_src emacs-lisp
