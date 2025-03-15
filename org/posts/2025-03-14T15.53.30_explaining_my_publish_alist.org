@@ -6,9 +6,9 @@ each element being a publishing project.  Today I worked on refining and fixing
 the [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--org-publish-project-alist.html][org-publish-project-alist]].  And here I will explain the reasoning behind my
 tinkering project by project.
 
-The "index" project includes just one file, the index file.  Partly, the reason
-it is in a separate project is because unlike every other page on my website I
-do not want =org-publish= it to give it a default title.
+The "index" project includes just one file, the index file.  The reason it is in
+a separate project is partly because unlike every other page on my website I do
+not want =org-publish= it to give it a default title and also.
 
 # #+caption: the "index" project consisting of the single index.org
 #+begin_src emacs-lisp
@@ -37,8 +37,7 @@ beforehand.
 
 Specifically, I publish the "posts" project first so that the sitemap file is
 created.  That is why I use the more fine-grained [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-publish.html][org-publish]] instead
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-publish-all.html][org-publish-all]].  And yes, for those wondering, something like this should be
-sufficient.
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-publish-all.html][org-publish-all]].
 
 #+begin_src emacs-lisp
 (org-publish "posts" :force)
@@ -85,7 +84,7 @@ add it to the post directory but I have not decided yet.
  ,@oo-publish-defaults)
 #+end_src
 
-The "static" project, as its name suggests, contains are files that are
+The "static" project, also aptly named, contains are files that are
 "static", meaning that they do not change and will be published as is.  This is
 for virtually anything that is not an =.org= file.
 
@@ -98,12 +97,12 @@ for virtually anything that is not an =.org= file.
  :recursive t)
 #+end_src
 
-This is just a convenience project for running them all at once.  I do not use
-this though.
+And finally I have just a convenience project for running them all at once.  I
+do not use this though.
 
 #+begin_src emacs-lisp
 ("all"
  :components ("index" "posts" "pages" "static"))
 #+end_src
 
-I will mention.
+My impressions of.
