@@ -1,10 +1,10 @@
 #+title:explaining my publish alist
 #+author:Luis Henriquez-Perez
 
-Most of the configuring for org-publish happens in =org-public-project-alist=, with
-each element being a publishing project.  Today I worked on refining and fixing
-the [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--org-publish-project-alist.html][org-publish-project-alist]].  And here I will explain the reasoning behind my
-tinkering project by project.
+Most of the configuring for org-publish happens in [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--org-publish-project-alist.html][org-publish-project-alist]],
+with each element being a publishing project.  Today I worked on refining and
+fixing this alist.  And here I will explain the reasoning behind my tinkering
+project by project.
 
 The "index" project includes just one file, the index file.  The reason it is in
 a separate project is partly because unlike every other page on my website I do
