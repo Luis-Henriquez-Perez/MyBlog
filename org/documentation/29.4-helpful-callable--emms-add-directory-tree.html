@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: emms-add-directory-tree*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+emms-add-directory-tree is an <span class="button">autoloaded</span>, <span class="button">interactive</span> and
+<span class="button">byte-compiled</span> function defined in <span class="button">emms-source-file.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(emms-add-directory-tree DIR)
+
+<span class="helpful-heading">Documentation
+</span>An EMMS source for multiple directory trees - either DIR, or the
+value of <span class="button">emms-source-file-default-directory</span>.
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>emms-add-directory-tree is unused in <span class="button">emms-source-file.el</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by emms-add-directory-tree</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/elpa/emms-20250204.2022/emms-source-file.el</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment"> (autoload 'emms-play-directory-tree "emms-source-file" nil t)
+</span><span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment"> (autoload 'emms-add-directory-tree "emms-source-file" nil t)
+</span>(<span class="keyword">define-emms-source</span> directory-tree (dir)
+  <span class="doc">"An EMMS source for multiple directory trees - either DIR, or the
+value of `</span><span class="doc"><span class="constant">emms-source-file-default-directory</span></span><span class="doc">'."</span>
+  (<span class="keyword">interactive</span> (list
+                (emms-read-directory-name <span class="string">"Play directory tree: "</span>
+					  (emms-source-file-directory-hint)
+                                          emms-source-file-default-directory
+                                          t)))
+  (<span class="keyword">let</span> ((files (emms-source-file-directory-tree (expand-file-name dir)
+						(emms-source-file-regex)))
+	(case-fold-search nil))
+    (emms-playlist-ensure-playlist-buffer)
+    (mapc (<span class="keyword">lambda</span> (file)
+	    (<span class="keyword">unless</span> (string-match emms-source-file-exclude-regexp file)
+	      (funcall emms-playlist-insert-track-function 
+		       (emms-track 'file file))))
+	  files)))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (emms-add-directory-tree 0)
+<span class="constant">event-symbol-elements</span>
+  (emms-add-directory-tree)
+<span class="constant">function-history</span>
+  ("/home/luis/.config/emacs/elpa/emms-20250204.2022/emms-source-file.elc"
+   (autoload "emms-source-file" nil t nil))
+<span class="constant">modifier-cache</span>
+  ((0 . emms-add-directory-tree))</pre>
+  </body>
+</html>
