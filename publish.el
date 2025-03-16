@@ -72,9 +72,7 @@
          :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php\\|mov\\|html\\|txt\\|"
          :publishing-directory "html/"
          :publishing-function org-publish-attachment
-         :recursive t)
-        ("all"
-         :components ("index" "posts" "pages" "static"))))
+         :recursive t)))
 
 (org-publish "posts" :force)
 (org-publish "pages" :force)

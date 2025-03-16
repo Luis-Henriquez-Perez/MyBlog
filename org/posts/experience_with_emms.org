@@ -1,5 +1,14 @@
 #+title:experience with emms
 #+author:Luis Henriquez-Perez
+renesaince
+Lately I have had a renaissance of good habits I have struggled to foster.  One
+of the things I have always found as a problem is staying up when sedentary for
+a long period of time.  I know there are certain strategies such as.  And I know
+several people, particularly programmers, do it by frequently drinking coffee
+likely for the caffeine it provides.  I do not want to develop a dependence or
+tolerance of caffeine.  And so I have been looking into natural ways to stay
+awake.  One of these is to just play music.  Hearing.  This got me back into
+trying emms.
 
 #+begin_src emacs-lisp
 #+end_src
