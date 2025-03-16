@@ -21,7 +21,7 @@ I choose to do it via eshell.
 I am having a hard time getting emms to display the tracks in the emms browser.
 I already have added songs to emms with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory-tree.html][emms-add-directory-tree]] but when I
 invoke [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] it says that no songs are cached and to add them with
-=emms-add-directory-tree=.  It looks like.
+=emms-add-directory-tree=.
 
 #+begin_src emacs-lisp
 #+end_src
@@ -34,7 +34,7 @@ information so nothing is happening.
 #+end_src
 
 Another confusion is what happens when a track in the playlist finishes.  I
-thought it would autmatically go to the next track but it seems to just repeat
+thought it would automatically go to the next track but it seems to just repeat
 the current track forever.  I have repeating the same track, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-repeat-track.html][emms-repeat-track]],
 disabled.
 
