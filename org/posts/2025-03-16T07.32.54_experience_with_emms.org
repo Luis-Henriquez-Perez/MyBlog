@@ -13,11 +13,9 @@ Emacs.
 
 ** setup
 
-I followed its manual page and added a directory with and used.  At the time of
-writing this I had no music in my music directory because I had moved all my
-songs to an external hardrive.  When I added my directory via eshell it worked
-for [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-playlist-mode-go.html][emms-playlist-mode-go]] but [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] did not do anything.  It is possible
-to do it interactively though I choose to do it via eshell.
+I followed its manual page and added the music from my music directory with
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory.html][emms-add-directory]].  It is possible to do it interactively though I choose to do
+it via eshell.
 
 #+begin_src sh
 /m/h/a/Music λ (emms-add-directory (eshell/pwd))
@@ -67,11 +65,11 @@ of the specific player.  To fix this for mpv you add the =--no-config= flag.
 
 The emms buffer is invisible.  Despite being mentioned in the documentation, it
 was still surprising to me.  I expected to be able to access it with
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--switch-to-buffer.html][switch-to-buffer]] but instead had to exclusively use =emms-playlist-mode-go=.  This
-happens because the default [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-playlist-buffer-name.html][emms-playlist-buffer-name]] is set to a buffer whose
-name starts with a space, " EMMS Playlist" making it "invisible".  I forgot
-about being able to do this in Emacs.  The easy fix is to just rename it to the
-same thing but without the initial space.
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--switch-to-buffer.html][switch-to-buffer]] but instead had to exclusively use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-playlist-mode-go.html][emms-playlist-mode-go]].
+This happens because the default [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-playlist-buffer-name.html][emms-playlist-buffer-name]] is set to a buffer
+whose name starts with a space, " EMMS Playlist" making it "invisible".  I
+forgot about being able to do this in Emacs.  The easy fix is to just rename it
+to the same thing but without the initial space.
 
 #+begin_src emacs-lisp
 (setopt emms-playlist-buffer-name "*EMMS Playlist*")
@@ -80,8 +78,9 @@ same thing but without the initial space.
 ** playing random songs
 
 I like playing random songs but I do not necessarily like using [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-random.html][emms-random]]
-because I prefer random with no repeats.  Instead, a clever way of achieving the
-same result is to use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-shuffle.html][emms-shuffle]] and to just go down the songs one by one.
+which moves point to a random track in the playlist.  The thing is I prefer no
+repeats.  Instead, a clever way of achieving the same result is to use
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-shuffle.html][emms-shuffle]] and to just go down the songs one by one.
 
 ** potential of saving playlists with text files
 
@@ -89,3 +88,9 @@ I also want to comment on the potential on saving playlists as text files.  It
 is cool that you can just filter the playlist.
 
 ** general configuring of Emacs packages
+
+This experience is telling about generally configuring Emacs packages.  Very
+often compared to apps in real life Emacs packages might have a less "refined"
+out of the box experience.  And you will encounter things you do not expect,
+sometimes with even basic functionality even after following the manual.  More
+often than not the package does work.
