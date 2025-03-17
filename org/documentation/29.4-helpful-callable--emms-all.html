@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful function: emms-all*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+emms-all is an <span class="button">autoloaded</span> and <span class="button">byte-compiled</span> function defined in
+<span class="button">emms-setup.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(emms-all)
+
+<span class="helpful-heading">Documentation
+</span>An Emms setup script.
+
+Everything included in the <span class="button">emms-minimalistic</span> setup and adds all
+the stable features which come with the Emms distribution.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">emms-setup.el</span>:
+(<span class="keyword">defun</span> <span class="function-name">emms-devel</span> ...)    <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">emms-standard</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by emms-all</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/elpa/emms-20250204.2022/emms-setup.el</span>
+<span class="comment-delimiter">;;;</span><span class="comment">###</span><span class="comment"><span class="warning">autoload</span></span><span class="comment">
+</span>(<span class="keyword">defun</span> <span class="function-name">emms-all</span> ()
+  <span class="doc">"An Emms setup script.
+Everything included in the `</span><span class="doc"><span class="constant">emms-minimalistic</span></span><span class="doc">' setup and adds all
+the stable features which come with the Emms distribution."</span>
+  <span class="comment-delimiter">;; </span><span class="comment">include
+</span>  (emms-minimalistic)
+  <span class="comment-delimiter">;; </span><span class="comment">define
+</span>  (<span class="keyword">eval-and-compile</span>
+    (<span class="keyword">require</span> '<span class="constant">emms-playlist-mode</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-info</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-info-mp3info</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-info-ogginfo</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-info-opusinfo</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-info-metaflac</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-info-tinytag</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-info-exiftool</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-info-native</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-cache</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-mode-line</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-mark</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-tag-editor</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-tag-tracktag</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-show-all</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-streams</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-lyrics</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-playing-time</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-player-mpd</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-player-xine</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-playlist-sort</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-browser</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-mode-line-icon</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-cue</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-bookmarks</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-last-played</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-metaplaylist-mode</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-stream-info</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-score</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-history</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-i18n</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-volume</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-playlist-limit</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-librefm-scrobbler</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-librefm-stream</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-mpris</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-idapi-musicbrainz</span>)
+    (<span class="keyword">require</span> '<span class="constant">emms-idapi-browser</span>))
+  <span class="comment-delimiter">;; </span><span class="comment">setup
+</span>  (<span class="keyword">setq</span> emms-playlist-default-major-mode #'emms-playlist-mode)
+  (add-to-list 'emms-track-initialize-functions #'emms-info-initialize-track)
+  (<span class="keyword">setq</span> emms-info-functions '(emms-info-native emms-info-cueinfo))
+  (<span class="keyword">setq</span> emms-track-description-function #'emms-info-track-description)
+  (<span class="keyword">when</span> (fboundp 'emms-cache)		<span class="comment-delimiter">; </span><span class="comment">work around compiler warning
+</span>    (emms-cache 1))
+  (emms-mode-line-mode 1)
+  (emms-mode-line-blank)
+  (emms-lyrics 1)
+  (emms-playing-time-mode 1)
+  (add-hook 'emms-player-started-hook #'emms-last-played-update-current)
+  (emms-score 1))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">function-history</span>
+  ("/home/luis/.config/emacs/elpa/emms-20250204.2022/emms-setup.elc"
+   (autoload "emms-setup" "An Emms setup script.\nEverything included in the `emms-minimalistic' setup and adds all\nthe stable features which come with the Emms distribution." nil nil))</pre>
+  </body>
+</html>

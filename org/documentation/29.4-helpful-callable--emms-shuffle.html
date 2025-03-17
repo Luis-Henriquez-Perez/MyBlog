@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: emms-shuffle*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+emms-shuffle is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function defined in
+<span class="button">emms.el</span>.
+
+<span class="helpful-heading">Signature
+</span>(emms-shuffle)
+
+<span class="helpful-heading">Documentation
+</span>Shuffle the current playlist.
+
+This uses <span class="button">emms-playlist-shuffle-function</span>.
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>emms-shuffle is unused in <span class="button">emms.el</span>.
+
+<span class="button">Find all references</span> <span class="button">Functions used by emms-shuffle</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/elpa/emms-20250204.2022/emms.el</span>
+(<span class="keyword">defun</span> <span class="function-name">emms-shuffle</span> ()
+  <span class="doc">"Shuffle the current playlist.
+This uses `</span><span class="doc"><span class="constant">emms-playlist-shuffle-function</span></span><span class="doc">'."</span>
+  (<span class="keyword">interactive</span>)
+  (<span class="keyword">with-current-emms-playlist</span>
+    (<span class="keyword">save-excursion</span>
+      (funcall emms-playlist-shuffle-function))))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">event-symbol-element-mask</span>
+  (emms-shuffle 0)
+<span class="constant">event-symbol-elements</span>
+  (emms-shuffle)
+<span class="constant">modifier-cache</span>
+  ((0 . emms-shuffle))</pre>
+  </body>
+</html>

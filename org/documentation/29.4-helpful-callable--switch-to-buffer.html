@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful command: switch-to-buffer*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .comment-delimiter {
+        /* font-lock-comment-delimiter-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #005f5f;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #884900;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+switch-to-buffer is an <span class="button">interactive</span> and <span class="button">byte-compiled</span> function defined
+in <span class="button">window.el.gz</span>.
+
+<span class="helpful-heading">Signature
+</span>(switch-to-buffer BUFFER-OR-NAME <span class="type">&amp;optional</span> NORECORD FORCE-SAME-WINDOW)
+
+<span class="helpful-heading">Documentation
+</span>Display buffer BUFFER-OR-NAME in the selected window.
+
+WARNING: This is NOT the way to work on another buffer temporarily
+within a Lisp program!  Use <span class="button">set-buffer</span> instead.  That avoids
+messing with the <span class="button">window-buffer</span> correspondences.
+
+If the selected window cannot display the specified buffer
+because it is a minibuffer window or strongly dedicated to
+another buffer, call <span class="button">pop-to-buffer</span> to select the buffer in
+another window.  In interactive use, if the selected window is
+strongly dedicated to its buffer, the value of the option
+<span class="button">switch-to-buffer-in-dedicated-window</span> specifies how to proceed.
+
+If called interactively, read the buffer name using <span class="button">read-buffer</span>.
+The variable <span class="button">confirm-nonexistent-file-or-buffer</span> determines
+whether to request confirmation before creating a new buffer.
+See <span class="button">read-buffer</span> for features related to input and completion
+of buffer names.
+
+BUFFER-OR-NAME may be a buffer, a string (a buffer name), or nil.
+If BUFFER-OR-NAME is a string that does not identify an existing
+buffer, create a buffer with that name.  If BUFFER-OR-NAME is
+nil, switch to the buffer returned by <span class="button">other-buffer</span>.
+
+If optional argument NORECORD is non-nil, do not put the buffer
+at the front of the buffer list, and do not make the window
+displaying it the most recently selected one.
+
+If optional argument FORCE-SAME-WINDOW is non-nil, the buffer
+must be displayed in the selected window when called
+non-interactively; if that is impossible, signal an error rather
+than calling <span class="button">pop-to-buffer</span>.  It has no effect when the option
+<span class="button">switch-to-buffer-obey-display-actions</span> is non-nil.
+
+The option <span class="button">switch-to-buffer-preserve-window-point</span> can be used
+to make the buffer appear at its last position in the selected
+window.
+
+If the option <span class="button">switch-to-buffer-obey-display-actions</span> is non-nil,
+run the function <span class="button">pop-to-buffer-same-window</span> instead.
+This may display the buffer in another window as specified by
+<span class="button">display-buffer-overriding-action</span>, <span class="button">display-buffer-alist</span> and
+other display related variables.  If this results in displaying
+the buffer in the selected window, window start and point are adjusted
+as prescribed by the option <span class="button">switch-to-buffer-preserve-window-point</span>.
+Otherwise, these are left alone.
+
+Return the buffer switched to.
+
+This function has :before advice: <span class="button">super-save-command-advice</span>.
+
+<span class="button">View in manual</span>
+
+<span class="helpful-heading">Key Bindings
+</span>This command is not in any keymaps.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">window.el.gz</span>:
+(<span class="keyword">defun</span> <span class="function-name">unbury-buffer</span> ...)               <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">special-display-popup-frame</span> ...) <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span> <span class="button">Functions used by switch-to-buffer</span>
+
+<span class="helpful-heading">Advice
+</span>This function is advised.
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Enable edebug</span> <span class="button">Enable tracing</span>
+<span class="button">Disassemble</span> <span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">/usr/share/emacs/29.4/lisp/window.el.gz</span>
+(<span class="keyword">defun</span> <span class="function-name">switch-to-buffer</span> (buffer-or-name <span class="type">&amp;optional</span> norecord force-same-window)
+  <span class="doc">"Display buffer BUFFER-OR-NAME in the selected window.
+
+WARNING: This is NOT the way to work on another buffer temporarily
+within a Lisp program!  Use `</span><span class="doc"><span class="constant">set-buffer</span></span><span class="doc">' instead.  That avoids
+messing with the `</span><span class="doc"><span class="constant">window-buffer</span></span><span class="doc">' correspondences.
+
+If the selected window cannot display the specified buffer
+because it is a minibuffer window or strongly dedicated to
+another buffer, call `</span><span class="doc"><span class="constant">pop-to-buffer</span></span><span class="doc">' to select the buffer in
+another window.  In interactive use, if the selected window is
+strongly dedicated to its buffer, the value of the option
+`</span><span class="doc"><span class="constant">switch-to-buffer-in-dedicated-window</span></span><span class="doc">' specifies how to proceed.
+
+If called interactively, read the buffer name using `</span><span class="doc"><span class="constant">read-buffer</span></span><span class="doc">'.
+The variable `</span><span class="doc"><span class="constant">confirm-nonexistent-file-or-buffer</span></span><span class="doc">' determines
+whether to request confirmation before creating a new buffer.
+See `</span><span class="doc"><span class="constant">read-buffer</span></span><span class="doc">' for features related to input and completion
+of buffer names.
+
+BUFFER-OR-NAME may be a buffer, a string (a buffer name), or nil.
+If BUFFER-OR-NAME is a string that does not identify an existing
+buffer, create a buffer with that name.  If BUFFER-OR-NAME is
+nil, switch to the buffer returned by `</span><span class="doc"><span class="constant">other-buffer</span></span><span class="doc">'.
+
+If optional argument NORECORD is non-nil, do not put the buffer
+at the front of the buffer list, and do not make the window
+displaying it the most recently selected one.
+
+If optional argument FORCE-SAME-WINDOW is non-nil, the buffer
+must be displayed in the selected window when called
+non-interactively; if that is impossible, signal an error rather
+than calling `</span><span class="doc"><span class="constant">pop-to-buffer</span></span><span class="doc">'.  It has no effect when the option
+`</span><span class="doc"><span class="constant">switch-to-buffer-obey-display-actions</span></span><span class="doc">' is non-nil.
+
+The option `</span><span class="doc"><span class="constant">switch-to-buffer-preserve-window-point</span></span><span class="doc">' can be used
+to make the buffer appear at its last position in the selected
+window.
+
+If the option `</span><span class="doc"><span class="constant">switch-to-buffer-obey-display-actions</span></span><span class="doc">' is non-nil,
+run the function `</span><span class="doc"><span class="constant">pop-to-buffer-same-window</span></span><span class="doc">' instead.
+This may display the buffer in another window as specified by
+`</span><span class="doc"><span class="constant">display-buffer-overriding-action</span></span><span class="doc">', `</span><span class="doc"><span class="constant">display-buffer-alist</span></span><span class="doc">' and
+other display related variables.  If this results in displaying
+the buffer in the selected window, window start and point are adjusted
+as prescribed by the option `</span><span class="doc"><span class="constant">switch-to-buffer-preserve-window-point</span></span><span class="doc">'.
+Otherwise, these are left alone.
+
+Return the buffer switched to."</span>
+  (<span class="keyword">interactive</span>
+   (<span class="keyword">let</span> ((force-same-window
+          (<span class="keyword">unless</span> switch-to-buffer-obey-display-actions
+            (<span class="keyword">cond</span>
+             ((window-minibuffer-p) nil)
+             ((not (eq (window-dedicated-p) t)) 'force-same-window)
+             ((<span class="keyword">pcase</span> switch-to-buffer-in-dedicated-window
+                ('nil (<span class="warning">user-error</span>
+                       <span class="string">"Cannot switch buffers in a dedicated window"</span>))
+                ('prompt
+                 (<span class="keyword">if</span> (y-or-n-p
+                      (format <span class="string">"Window is dedicated to %s; undedicate it?"</span>
+                              (window-buffer)))
+                     (<span class="keyword">progn</span>
+                       (set-window-dedicated-p nil nil)
+                       'force-same-window)
+                   (<span class="warning">user-error</span>
+                    <span class="string">"Cannot switch buffers in a dedicated window"</span>)))
+                ('pop nil)
+                (_ (set-window-dedicated-p nil nil) 'force-same-window)))))))
+     (list (read-buffer-to-switch <span class="string">"Switch to buffer: "</span>) nil force-same-window)))
+  (<span class="keyword">let</span> ((buffer (window-normalize-buffer-to-switch-to buffer-or-name))
+        (set-window-start-and-point (not switch-to-buffer-obey-display-actions)))
+    (<span class="keyword">cond</span>
+     <span class="comment-delimiter">;; </span><span class="comment">Don't call set-window-buffer if it's not needed since it
+</span>     <span class="comment-delimiter">;; </span><span class="comment">might signal an error (e.g. if the window is dedicated).
+</span>     ((<span class="keyword">and</span> (eq buffer (window-buffer))
+           <span class="comment-delimiter">;; </span><span class="comment">pop-to-buffer-same-window might decide to display
+</span>           <span class="comment-delimiter">;; </span><span class="comment">the same buffer in another window
+</span>           (not switch-to-buffer-obey-display-actions)))
+     ((<span class="keyword">and</span> (window-minibuffer-p)
+           (not switch-to-buffer-obey-display-actions))
+      (<span class="keyword">if</span> force-same-window
+          (<span class="warning">user-error</span> <span class="string">"Cannot switch buffers in minibuffer window"</span>)
+        (pop-to-buffer buffer norecord)))
+     ((<span class="keyword">and</span> (eq (window-dedicated-p) t)
+           (not switch-to-buffer-obey-display-actions))
+      (<span class="keyword">if</span> force-same-window
+          (<span class="warning">user-error</span> <span class="string">"Cannot switch buffers in a dedicated window"</span>)
+        (pop-to-buffer buffer norecord)))
+     (t
+      (<span class="keyword">when</span> switch-to-buffer-obey-display-actions
+        (<span class="keyword">let</span> ((selected-window (selected-window)))
+          (pop-to-buffer-same-window buffer norecord)
+          (<span class="keyword">when</span> (eq (selected-window) selected-window)
+            (<span class="keyword">setq</span> set-window-start-and-point t))))
+
+      (<span class="keyword">when</span> set-window-start-and-point
+        (<span class="keyword">let*</span> ((entry (assq buffer (window-prev-buffers)))
+               (preserve-win-point
+                (buffer-local-value 'switch-to-buffer-preserve-window-point
+                                    buffer))
+	       (displayed (<span class="keyword">and</span> (eq preserve-win-point 'already-displayed)
+			       (get-buffer-window buffer 0))))
+	  (set-window-buffer nil buffer)
+	  (<span class="keyword">when</span> (<span class="keyword">and</span> entry (<span class="keyword">or</span> (eq preserve-win-point t) displayed))
+	    <span class="comment-delimiter">;; </span><span class="comment">Try to restore start and point of buffer in the selected
+</span>	    <span class="comment-delimiter">;; </span><span class="comment">window (Bug#4041).
+</span>	    (set-window-start (selected-window) (nth 1 entry) t)
+	    (set-window-point nil (nth 2 entry)))))))
+
+    (<span class="keyword">unless</span> norecord
+      (select-window (selected-window)))
+    (set-buffer buffer)))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">defalias-fset-function</span>
+  #[128 "\304\300\301&#3;#\207"
+        [advice--defalias-fset nil :around nil apply]
+        5 advice]
+  <span class="button">Disassemble</span>
+<span class="constant">event-symbol-element-mask</span>
+  (switch-to-buffer 0)
+<span class="constant">event-symbol-elements</span>
+  (switch-to-buffer)
+<span class="constant">function-documentation</span>
+  (advice--make-docstring 'switch-to-buffer)
+<span class="constant">modifier-cache</span>
+  ((0 . switch-to-buffer))</pre>
+  </body>
+</html>

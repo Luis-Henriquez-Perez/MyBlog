@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.57 in css mode. -->
+<html>
+  <head>
+    <title>*helpful variable: emms-player-mpv-parameters*</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style type="text/css">
+    <!--
+      body {
+        color: #000000;
+        background-color: #ffffff;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #8f0075;
+      }
+      .button {
+        /* button */
+        color: #3548cf;
+        text-decoration: underline;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #595959;
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #0000b0;
+      }
+      .doc {
+        /* font-lock-doc-face */
+        color: #2a5045;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #721045;
+      }
+      .helpful-heading {
+        /* helpful-heading */
+        color: #000000;
+        font-weight: bold;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #531ab6;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #3548cf;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #005e8b;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+emms-player-mpv-parameters is a <span class="button">customizable</span> variable defined in
+<span class="button">emms-player-mpv.el</span>.
+
+<span class="helpful-heading">Value
+</span>("--quiet" "--really-quiet" "--no-config" "--no-audio-display" "--force-window=no" "--vo=null")
+
+<span class="helpful-heading">Original Value
+</span>("--quiet" "--really-quiet" "--no-audio-display")
+
+<span class="button">Set</span> <span class="button">Customize</span>
+
+<span class="helpful-heading">Documentation
+</span>Extra command-line arguments for started mpv process(es).
+
+Either a list of strings or function returning such list.
+Extra arguments --idle and --input-ipc-server are added automatically.
+Note that unless --no-config option is specified here,
+mpv will also use options from its configuration files.
+For mpv binary path, see <span class="button">emms-player-mpv-command-name</span>.
+
+<span class="helpful-heading">References
+</span>References in <span class="button">emms-player-mpv.el</span>:
+(<span class="keyword">defcustom</span> <span class="variable-name">emms-player-mpv-parameters</span> ...) <span class="comment">1 reference</span>
+(<span class="keyword">defun</span> <span class="function-name">emms-player-mpv-proc-init</span> ...)      <span class="comment">1 reference</span>
+
+<span class="button">Find all references</span>
+
+<span class="helpful-heading">Debugging
+</span><span class="button">Forget</span>
+
+<span class="helpful-heading">Source Code
+</span><span class="comment">;; Defined in </span><span class="button">~/.config/emacs/elpa/emms-20250204.2022/emms-player-mpv.el</span>
+(<span class="keyword">defcustom</span> <span class="variable-name">emms-player-mpv-parameters</span>
+  '(<span class="string">"--quiet"</span> <span class="string">"--really-quiet"</span> <span class="string">"--no-audio-display"</span>)
+  <span class="doc">"Extra command-line arguments for started mpv process(es).
+Either a list of strings or function returning such list.
+Extra arguments --idle and --input-ipc-server are added automatically.
+Note that unless --no-config option is specified here,
+mpv will also use options from its configuration files.
+For mpv binary path, see `</span><span class="doc"><span class="constant">emms-player-mpv-command-name</span></span><span class="doc">'."</span>
+  <span class="builtin">:type</span> '(choice (repeat <span class="builtin">:tag</span> <span class="string">"List of mpv arguments"</span> string)
+                 function))
+
+<span class="helpful-heading">Symbol Properties
+</span><span class="constant">custom-requests</span>
+  nil
+<span class="constant">custom-type</span>
+  (choice
+   (repeat :tag "List of mpv arguments" string)
+   function)
+<span class="constant">standard-value</span>
+  ((funcall
+    #'#[0 "\300\207"
+          [("--quiet" "--really-quiet" "--no-audio-display")]
+          1 ""]))
+<span class="constant">variable-documentation</span>
+  "Extra command-line arguments for started mpv process(es).\nEither a list of strings or function returning such list.\nExtra arguments --idle and --input-ipc-server are added automatically.\nNote that unless --no-config option is specified here,\nmpv will also use options from its configuration files.\nFor mpv binary path, see `emms-player-mpv-command-name'."</pre>
+  </body>
+</html>
