@@ -14,42 +14,42 @@ Emacs.
 ** setup
 
 I followed its manual page and added the music from my music directory with
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory.html][emms-add-directory]].  It is possible to do it interactively though I choose to do
-it via eshell.
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory.html][emms-add-directory]].  Although it is possible to do it interactively, I choose to
+do it via eshell.
 
 #+begin_src sh
 /m/h/a/Music λ (emms-add-directory-tree (eshell/pwd))
 #+end_src
 
-** trouble opening emms browser
+# ** trouble opening emms browser
 
-I am having a hard time getting emms to display the tracks in the emms browser.
-I already have added songs to emms with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory-tree.html][emms-add-directory-tree]] as recommended
-by the manual but when I invoke [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] it says that no songs are cached
-and to add them with =emms-add-directory-tree=.  So confusingly songs are
-registered fine with the emms player buffer but not with emms browser.
+# I am having a hard time getting emms to display the tracks in the emms browser.
+# I already have added songs to emms with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory-tree.html][emms-add-directory-tree]] as recommended
+# by the manual but when I invoke [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] it says that no songs are cached
+# and to add them with =emms-add-directory-tree=.  So confusingly songs are
+# registered fine with the emms player buffer but not with emms browser.
 
-#+begin_src emacs-lisp
-(setq emms-info-functions '(emms-info-native))
-#+end_src
+# #+begin_src emacs-lisp
+# (setq emms-info-functions '(emms-info-native))
+# #+end_src
 
-I had moved all of my music to an external drive.  The directory with my music
-contained.  My preliminary conclusion is that the tracks do not have author
-information so nothing is happening.
+# I had moved all of my music to an external drive.  The directory with my music
+# contained.  My preliminary conclusion is that the tracks do not have author
+# information so nothing is happening.
 
-** track keeps repeating
+** track keeps repeating in playlist
 
-Another confusion is what happens when a track in the playlist finishes.  I
-thought it would automatically go to the next track but it seems to just repeat
-the current track forever.  I have repeating the same track, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-repeat-track.html][emms-repeat-track]],
-disabled.  For me it just stays at the current track and keeps replaying it.
-
-It looks like this should the expected behavior according to the manual which
-says that "Emms [should]" proceed "to play the media tracks in the buffer from
-top to bottom until the end of the playlist".
+I had the impression when a track in the playlist finishes the next track
+starts.  And the manual seems to agree with me when it says that: that "Emms
+[should]" proceed "to play the media tracks in the buffer from top to bottom
+until the end of the playlist".  Instead emms seems to just repeat the current
+track forever.  I even checked if the setting for repeating the same track,
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-repeat-track.html][emms-repeat-track]], is disabled; and it was.
 
 According to [[https://old.reddit.com/r/emacs/comments/y0mblz/why_does_emms_not_play_the_next_track/][this reddit post]] this happens because of the default configuration
-of the specific player.  To fix this for mpv you add the =--no-config= flag.
+of the specific player.  To fix this for mpv you specify the =--no-config= flag
+for the emms command via [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-player-mpv-parameters.html][emms-player-mpv-parameters]].  In the posts many other
+flags were also added which I (maybe irrationally) just coped as well.
 
 #+begin_src emacs-lisp
 (setopt emms-player-list '(emms-player-mpv))
@@ -83,10 +83,11 @@ repeats and using =emms-random= can result jumping to the same track again.
 Instead, a clever way of achieving the same result is to use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-shuffle.html][emms-shuffle]] and to
 just go down the songs one by one.
 
-** potential of saving playlists with text files
+# ** potential of saving playlists with text files
 
-I also want to comment on the potential on saving playlists as text files.  It
-is cool that you can just filter the playlist with normal Emacs facilities.
+# I also want to comment on the potential on saving playlists as text files.  It
+# is cool that you can potentially filter the playlist via [[][marking]] and save
+# the subset of tracks you want for a particular playlist.
 
 ** general configuring of Emacs packages
 
@@ -94,4 +95,5 @@ This experience is telling about generally configuring Emacs packages.  Very
 often compared to apps in real life Emacs packages might have a less "refined"
 out of the box experience.  And you will encounter things you do not expect,
 sometimes with even basic functionality even after following the manual.  More
-often than not the package does work.
+often than not the package does work but some time needs to be invested to
+understand it.
