@@ -1,0 +1,26 @@
+#+title:switching to html
+#+author:Luis Henriquez-Perez
+
+For a long time I have vacillated between using org or writing my blog in pure
+HTML, CSS, and maybe some JavaScript.  As of writing this, my blog is in org.
+And do not get me wrong, org has its advantages, but I do not like how I have to
+figure out how to do things that would be straight-forward with CSS and HTML all
+the time.  It is just another.  At the same time I feel like I am too deep in to
+back out now.
+
+** readability
+
+Org is much more readable and less cluttered than HTML.  To me it is surprising
+that basic things such has adding an overlay between html links.
+
+** source blocks
+
+Org handles source blocks way better and with elegance.  With html you have to
+either use an external package to manage source blocks.
+
+** flexibility
+
+When there is a change you need to make to the site, it is much easier to reason
+about how to make that change with HTML and CSS than to do so indirectly with.
+
+How to slowly migrate to org and css.  I do want to take advantage of org.

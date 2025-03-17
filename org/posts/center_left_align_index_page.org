@@ -1,0 +1,4 @@
+#+title:center left align index page
+#+author:Luis Henriquez-Perez
+
+One of my small improvements to my blog is to left align.

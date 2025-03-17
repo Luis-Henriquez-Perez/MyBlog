@@ -1,0 +1,14 @@
+#+title:saving playlists emms
+#+author:Luis Henriquez-Perez
+
+When I read about the idea of marking the songs I like then saving them in a
+playlist with emms I was intrigued.
+
+First I filtered my massive hoard of tracks to just nightcore tracks.  I used.
+
+#+begin_src emacs-lisp
+#+end_src
+
+#+begin_src emacs-lisp
+#+end_src
+
