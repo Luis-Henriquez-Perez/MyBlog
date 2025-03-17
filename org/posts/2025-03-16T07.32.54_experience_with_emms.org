@@ -1,23 +1,29 @@
-#+title:confusions when using emms
+#+title:experience using emms
 #+author:Luis Henriquez-Perez
 
-One of the things I have always found as a problem is staying up when sedentary
-for a long period of time.  I know several people, particularly programmers, do
-it by frequently drinking coffee likely for the caffeine it provides.  However,
-I do not want to develop a dependence or tolerance of caffeine or any other drug
-for that matter.  And so I have been looking into natural ways to stay awake.
-One of these is to just listen to music.  This got me back into trying [[https://www.gnu.org/software/emms/][emms]], a
-multimedia player for Emacs.
+** background
 
-I followed its manual page and added a directory with and used.  Since I do not
-have any subdirectories in my music directory I choose to simply.  When I added
-my directory via eshell it worked for [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-playlist-mode-go.html][emms-playlist-mode-go]] but [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] did
-not do anything.  It is possible to do it interactively though I choose to do it
-via eshell.
+One of the things I have always found as a problem is staying up when sedentary
+for a long period of time.  I know several people do it by frequently drinking
+coffee likely for the caffeine it provides.  However, I do not want to develop a
+dependence or tolerance of caffeine or any other drug for that matter.  And so I
+have been looking into natural ways to stay awake.  One of these is to just
+listen to music.  This got me back into trying [[https://www.gnu.org/software/emms/][emms]], a multimedia player for
+Emacs.
+
+** setup
+
+I followed its manual page and added a directory with and used.  At the time of
+writing this I had no music in my music directory because I had moved all my
+songs to an external hardrive.  When I added my directory via eshell it worked
+for [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-playlist-mode-go.html][emms-playlist-mode-go]] but [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] did not do anything.  It is possible
+to do it interactively though I choose to do it via eshell.
 
 #+begin_src sh
 /m/h/a/Music λ (emms-add-directory (eshell/pwd))
 #+end_src
+
+** trouble opening emms browser
 
 I am having a hard time getting emms to display the tracks in the emms browser.
 I already have added songs to emms with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory-tree.html][emms-add-directory-tree]] as recommended
@@ -33,6 +39,8 @@ I had moved all of my music to an external drive.  The directory with my music
 contained.  My preliminary conclusion is that the tracks do not have author
 information so nothing is happening.
 
+** track keeps repeating
+
 Another confusion is what happens when a track in the playlist finishes.  I
 thought it would automatically go to the next track but it seems to just repeat
 the current track forever.  I have repeating the same track, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-repeat-track.html][emms-repeat-track]],
@@ -47,9 +55,15 @@ of the specific player.  To fix this for mpv you add the =--no-config= flag.
 
 #+begin_src emacs-lisp
 (setopt emms-player-list '(emms-player-mpv))
-(setopt emms-player-mpv-parameters '("--quiet" "--really-quiet" "--no-config"
-                                           "--no-audio-display" "--force-window=no" "--vo=null"))
+(setopt emms-player-mpv-parameters (list "--quiet"
+                                         "--really-quiet"
+                                         "--no-config"
+                                         "--no-audio-display"
+                                         "--force-window=no"
+                                         "--vo=null"))
 #+end_src
+
+** invisible emms buffer
 
 Another annoyance is that the emms buffer is invisible for some reason.  It was
 surprising to me because I expected to be able to access it with
@@ -63,11 +77,15 @@ it to the same thing but without the initial space.
 (setopt emms-playlist-buffer-name "*EMMS Playlist*")
 #+end_src
 
-I have been looking at [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-all.html][emms-all]] for some ideas.
+** playing random songs
 
 I like playing random songs but I do not necessarily like using [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-random.html][emms-random]]
 because I prefer random with no repeats.  Instead, a nice way of achieving the
 same result is to use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-shuffle.html][emms-shuffle]] and to just go down the songs one by one.
 
+** potential of saving playlists with text files
+
 I also want to comment on the potential on saving playlists as text files.  I
-think you can just filter the playist.  I think you can just.
+think you can just filter the playlist.  I think you can just.
+
+** general configuring of Emacs packages
