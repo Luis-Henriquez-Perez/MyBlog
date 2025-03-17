@@ -18,7 +18,7 @@ I followed its manual page and added the music from my music directory with
 it via eshell.
 
 #+begin_src sh
-/m/h/a/Music λ (emms-add-directory (eshell/pwd))
+/m/h/a/Music λ (emms-add-directory-tree (eshell/pwd))
 #+end_src
 
 ** trouble opening emms browser
@@ -79,13 +79,14 @@ to the same thing but without the initial space.
 
 I like playing random songs but I do not necessarily like using [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-random.html][emms-random]]
 which moves point to a random track in the playlist.  The thing is I prefer no
-repeats.  Instead, a clever way of achieving the same result is to use
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-shuffle.html][emms-shuffle]] and to just go down the songs one by one.
+repeats and using =emms-random= can result jumping to the same track again.
+Instead, a clever way of achieving the same result is to use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-shuffle.html][emms-shuffle]] and to
+just go down the songs one by one.
 
 ** potential of saving playlists with text files
 
 I also want to comment on the potential on saving playlists as text files.  It
-is cool that you can just filter the playlist.
+is cool that you can just filter the playlist with normal Emacs facilities.
 
 ** general configuring of Emacs packages
 
