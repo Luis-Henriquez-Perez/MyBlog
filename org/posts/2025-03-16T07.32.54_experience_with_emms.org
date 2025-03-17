@@ -3,10 +3,10 @@
 
 One of the things I have always found as a problem is staying up when sedentary
 for a long period of time.  I know several people, particularly programmers, do
-it by frequently drinking coffee likely for the caffeine it provides.  I do not
-want to develop a dependence or tolerance of caffeine or any other drug for that
-matter.  And so I have been looking into natural ways to stay awake.  One of
-these is to just listen to music.  This got me back into trying [[https://www.gnu.org/software/emms/][emms]], a
+it by frequently drinking coffee likely for the caffeine it provides.  However,
+I do not want to develop a dependence or tolerance of caffeine or any other drug
+for that matter.  And so I have been looking into natural ways to stay awake.
+One of these is to just listen to music.  This got me back into trying [[https://www.gnu.org/software/emms/][emms]], a
 multimedia player for Emacs.
 
 I followed its manual page and added a directory with and used.  Since I do not
@@ -20,10 +20,10 @@ via eshell.
 #+end_src
 
 I am having a hard time getting emms to display the tracks in the emms browser.
-I already have added songs to emms with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory-tree.html][emms-add-directory-tree]] but when I
-invoke [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] it says that no songs are cached and to add them with
-=emms-add-directory-tree=.  So confusingly songs are registered fine with the emms
-player buffer but not with emms browser.
+I already have added songs to emms with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory-tree.html][emms-add-directory-tree]] as recommended
+by the manual but when I invoke [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] it says that no songs are cached
+and to add them with =emms-add-directory-tree=.  So confusingly songs are
+registered fine with the emms player buffer but not with emms browser.
 
 #+begin_src emacs-lisp
 (setq emms-info-functions '(emms-info-native))
@@ -38,40 +38,34 @@ thought it would automatically go to the next track but it seems to just repeat
 the current track forever.  I have repeating the same track, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-repeat-track.html][emms-repeat-track]],
 disabled.  For me it just stays at the current track and keeps replaying it.
 
-It looks like this is the expected behavior according to the manual:
+It looks like this should the expected behavior according to the manual which
+says that "Emms [should]" proceed "to play the media tracks in the buffer from
+top to bottom until the end of the playlist".
 
-#+begin_quote
-Emms then proceeds to play the media tracks in the buffer from top to bottom
-until the end of the playlist.
-#+end_quote
-
-According to [[https://old.reddit.com/r/emacs/comments/y0mblz/why_does_emms_not_play_the_next_track/][this reddit post]] this happens because of the specific player.  I
-would like to use vlc as the player because that is what I am using to watch
-videos.
-
-It looks like I need to check here.
+According to [[https://old.reddit.com/r/emacs/comments/y0mblz/why_does_emms_not_play_the_next_track/][this reddit post]] this happens because of the default configuration
+of the specific player.  To fix this for mpv you add the =--no-config= flag.
 
 #+begin_src emacs-lisp
-(defun emms-last-played-update-current ()
-  "Updates the current track."
-  (emms-last-played-update-track (emms-playlist-current-selected-track))
-  (if emms-last-played-keep-count
-      (emms-last-played-increment-count (emms-playlist-current-selected-track))))
-#+end_src
-
-#+begin_src emacs-lisp
-;; (opt! emms-player-list '(emms-player-vlc))
-;; (opt! emms-player-vlc-parameters '("--ignore-config"
-;;                                    ;; "--force-window=no"
-;;                                    ))
-(opt! emms-player-list '(emms-player-mpv))
-;; (opt! emms-player-mpv-environment '("PULSE_PROP_media.role=music"))
-;; I think its the "--no-config" that does this.
-(opt! emms-player-mpv-parameters '("--quiet" "--really-quiet" "--no-config"
+(setopt emms-player-list '(emms-player-mpv))
+(setopt emms-player-mpv-parameters '("--quiet" "--really-quiet" "--no-config"
                                            "--no-audio-display" "--force-window=no" "--vo=null"))
 #+end_src
 
-Another annoyance is that the emms buffer is invisible for some reason.  So I
-need to invoke =emms-playlist-mode-go= to access it instead of =switch-to-buffer=.
+Another annoyance is that the emms buffer is invisible for some reason.  It was
+surprising to me because I expected to be able to access it with
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--switch-to-buffer.html][switch-to-buffer]] but instead had to exclusively use =emms-playlist-mode-go=.
+Apparently this happens because the default [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-playlist-buffer-name.html][emms-playlist-buffer-name]] is set to
+a buffer whose name starts with a space, " EMMS Playlist" making it "invisible".
+I forgot about being able to do this in Emacs.  The easy fix is to just rename
+it to the same thing but without the initial space.
+
+#+begin_src emacs-lisp
+(setopt emms-playlist-buffer-name "*EMMS Playlist*")
+#+end_src
 
 I have been looking at [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-all.html][emms-all]] for some ideas.
+
+I like playing random songs but I do not necessarily like using
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-random.html][emms-random]] because I prefer random with no repeats.
+
+I also want to comment on the potential.
