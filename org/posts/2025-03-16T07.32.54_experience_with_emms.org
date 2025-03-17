@@ -4,15 +4,16 @@
 One of the things I have always found as a problem is staying up when sedentary
 for a long period of time.  I know several people, particularly programmers, do
 it by frequently drinking coffee likely for the caffeine it provides.  I do not
-want to develop a dependence or tolerance of caffeine.  And so I have been
-looking into natural ways to stay awake.  One of these is to just listen to
-music.  This got me back into trying [[https://www.gnu.org/software/emms/][emms]].
+want to develop a dependence or tolerance of caffeine or any other drug for that
+matter.  And so I have been looking into natural ways to stay awake.  One of
+these is to just listen to music.  This got me back into trying [[https://www.gnu.org/software/emms/][emms]], a
+multimedia player for Emacs.
 
 I followed its manual page and added a directory with and used.  Since I do not
-have any subdirectories in my music directory I choose to simply.
-When I added my directory via eshell it worked for [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-playlist-mode-go.html][emms-playlist-mode-go]] but
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] did not do anything.  It is possible to do it interactively though
-I choose to do it via eshell.
+have any subdirectories in my music directory I choose to simply.  When I added
+my directory via eshell it worked for [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-playlist-mode-go.html][emms-playlist-mode-go]] but [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] did
+not do anything.  It is possible to do it interactively though I choose to do it
+via eshell.
 
 #+begin_src sh
 /m/h/a/Music λ (emms-add-directory (eshell/pwd))
@@ -21,22 +22,56 @@ I choose to do it via eshell.
 I am having a hard time getting emms to display the tracks in the emms browser.
 I already have added songs to emms with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory-tree.html][emms-add-directory-tree]] but when I
 invoke [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-browser.html][emms-browser]] it says that no songs are cached and to add them with
-=emms-add-directory-tree=.
+=emms-add-directory-tree=.  So confusingly songs are registered fine with the emms
+player buffer but not with emms browser.
 
 #+begin_src emacs-lisp
+(setq emms-info-functions '(emms-info-native))
 #+end_src
 
 I had moved all of my music to an external drive.  The directory with my music
 contained.  My preliminary conclusion is that the tracks do not have author
 information so nothing is happening.
 
-#+begin_src emacs-lisp
-#+end_src
-
 Another confusion is what happens when a track in the playlist finishes.  I
 thought it would automatically go to the next track but it seems to just repeat
 the current track forever.  I have repeating the same track, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-repeat-track.html][emms-repeat-track]],
-disabled.
+disabled.  For me it just stays at the current track and keeps replaying it.
+
+It looks like this is the expected behavior according to the manual:
+
+#+begin_quote
+Emms then proceeds to play the media tracks in the buffer from top to bottom
+until the end of the playlist.
+#+end_quote
+
+According to [[https://old.reddit.com/r/emacs/comments/y0mblz/why_does_emms_not_play_the_next_track/][this reddit post]] this happens because of the specific player.  I
+would like to use vlc as the player because that is what I am using to watch
+videos.
+
+It looks like I need to check here.
+
+#+begin_src emacs-lisp
+(defun emms-last-played-update-current ()
+  "Updates the current track."
+  (emms-last-played-update-track (emms-playlist-current-selected-track))
+  (if emms-last-played-keep-count
+      (emms-last-played-increment-count (emms-playlist-current-selected-track))))
+#+end_src
+
+#+begin_src emacs-lisp
+;; (opt! emms-player-list '(emms-player-vlc))
+;; (opt! emms-player-vlc-parameters '("--ignore-config"
+;;                                    ;; "--force-window=no"
+;;                                    ))
+(opt! emms-player-list '(emms-player-mpv))
+;; (opt! emms-player-mpv-environment '("PULSE_PROP_media.role=music"))
+;; I think its the "--no-config" that does this.
+(opt! emms-player-mpv-parameters '("--quiet" "--really-quiet" "--no-config"
+                                           "--no-audio-display" "--force-window=no" "--vo=null"))
+#+end_src
 
 Another annoyance is that the emms buffer is invisible for some reason.  So I
 need to invoke =emms-playlist-mode-go= to access it instead of =switch-to-buffer=.
+
+I have been looking at [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-all.html][emms-all]] for some ideas.
