@@ -6,6 +6,8 @@ with each element being a publishing project.  Today I worked on refining and
 fixing this alist.  And here I will explain the reasoning behind my tinkering
 project by project.
 
+** index
+
 The "index" project includes just one file, the index file.  The reason it is in
 a separate project is partly because unlike every other page on my website I do
 not want =org-publish= it to give it a default title (I want the title, my name,
@@ -47,6 +49,8 @@ fine-grained [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-c
 (org-publish "index" :force)
 #+end_src
 
+** pages
+
 The "pages" project is for publishing non-post files of the website; things
 like my [[file:../about.org][about page]] and my [[file:../index.org][index page]].
 
@@ -60,6 +64,8 @@ like my [[file:../about.org][about page]] and my [[file:../index.org][index page
  :publishing-function org-html-publish-to-html
  ,@oo-publish-defaults)
 #+end_src
+
+** posts
 
 The "posts" project is, as its name suggests, for blog posts.  I ignore any
 posts prepended with drafts so I can have control over which posts are published
@@ -84,6 +90,8 @@ add it to the post directory but I have not decided yet.
  :sitemap-sort-files anti-chronologically
  ,@oo-publish-defaults)
 #+end_src
+
+** static
 
 The "static" project, also aptly named, contains are files that are
 "static", meaning that they do not change and will be published as is.  This is

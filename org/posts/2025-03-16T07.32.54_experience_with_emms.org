@@ -8,17 +8,18 @@ for a long period of time.  I know several people do it by frequently drinking
 coffee, likely for the caffeine it provides.  However, I do not want to develop a
 dependence or tolerance of caffeine or any other drug for that matter.  And so I
 have been looking into natural ways to stay awake.  One of these is to just
-listen to music.  This got me back into trying [[https://www.gnu.org/software/emms/][emms]], a multimedia player for
+listen to music.  This got me back into using [[https://www.gnu.org/software/emms/][emms]], a multimedia player for
 Emacs.
 
 ** setup
 
 I followed its manual page and added the music from my music directory with
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory.html][emms-add-directory]].  Although it is possible to do it interactively, I choose to
-do it via eshell.
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory.html][emms-add-directory]][fn::Technically in the manual [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-add-directory-tree.html][emms-add-directory-tree]] was
+used, but no big deal.].  Although it is possible to do it interactively, I
+choose to do it via eshell.
 
 #+begin_src sh
-/m/h/a/Music λ (emms-add-directory-tree (eshell/pwd))
+/m/h/a/Music λ (emms-add-directory (eshell/pwd))
 #+end_src
 
 # ** trouble opening emms browser
@@ -42,14 +43,14 @@ do it via eshell.
 I had the impression when a track in the playlist finishes the next track
 starts.  And the manual seems to agree with me when it says that: that "Emms
 [should]" proceed "to play the media tracks in the buffer from top to bottom
-until the end of the playlist".  Instead emms seems to just repeat the current
+until the end of the playlist".  Instead emms just repeats the current
 track forever.  I even checked if the setting for repeating the same track,
 [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-repeat-track.html][emms-repeat-track]], is disabled; and it was.
 
 According to [[https://old.reddit.com/r/emacs/comments/y0mblz/why_does_emms_not_play_the_next_track/][this reddit post]] this happens because of the default configuration
 of the specific player.  To fix this for mpv you specify the =--no-config= flag
 for the emms command via [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-player-mpv-parameters.html][emms-player-mpv-parameters]].  In the posts many other
-flags were also added which I (maybe irrationally) just coped as well.
+flags were also added which I (maybe irrationally) just copied as well.
 
 #+begin_src emacs-lisp
 (setopt emms-player-list '(emms-player-mpv))

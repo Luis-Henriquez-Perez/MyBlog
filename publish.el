@@ -43,6 +43,7 @@
          :recursive nil
          :publishing-directory "html"
          :publishing-function org-html-publish-to-html
+         :html-head "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\"/>"
          :with-title nil
          ,@oo-publish-defaults)
         ("pages"
