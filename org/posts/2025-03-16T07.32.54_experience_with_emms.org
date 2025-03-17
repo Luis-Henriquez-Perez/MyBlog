@@ -3,9 +3,9 @@
 
 ** background
 
-One of the things I have always found as a problem is staying up when sedentary
+One of the things I have always found as a problem is staying awake when sitting
 for a long period of time.  I know several people do it by frequently drinking
-coffee likely for the caffeine it provides.  However, I do not want to develop a
+coffee, likely for the caffeine it provides.  However, I do not want to develop a
 dependence or tolerance of caffeine or any other drug for that matter.  And so I
 have been looking into natural ways to stay awake.  One of these is to just
 listen to music.  This got me back into trying [[https://www.gnu.org/software/emms/][emms]], a multimedia player for
@@ -65,13 +65,13 @@ of the specific player.  To fix this for mpv you add the =--no-config= flag.
 
 ** invisible emms buffer
 
-Another annoyance is that the emms buffer is invisible for some reason.  It was
-surprising to me because I expected to be able to access it with
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--switch-to-buffer.html][switch-to-buffer]] but instead had to exclusively use =emms-playlist-mode-go=.
-Apparently this happens because the default [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-playlist-buffer-name.html][emms-playlist-buffer-name]] is set to
-a buffer whose name starts with a space, " EMMS Playlist" making it "invisible".
-I forgot about being able to do this in Emacs.  The easy fix is to just rename
-it to the same thing but without the initial space.
+The emms buffer is invisible.  Despite being mentioned in the documentation, it
+was still surprising to me.  I expected to be able to access it with
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--switch-to-buffer.html][switch-to-buffer]] but instead had to exclusively use =emms-playlist-mode-go=.  This
+happens because the default [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emms-playlist-buffer-name.html][emms-playlist-buffer-name]] is set to a buffer whose
+name starts with a space, " EMMS Playlist" making it "invisible".  I forgot
+about being able to do this in Emacs.  The easy fix is to just rename it to the
+same thing but without the initial space.
 
 #+begin_src emacs-lisp
 (setopt emms-playlist-buffer-name "*EMMS Playlist*")
@@ -80,12 +80,12 @@ it to the same thing but without the initial space.
 ** playing random songs
 
 I like playing random songs but I do not necessarily like using [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-random.html][emms-random]]
-because I prefer random with no repeats.  Instead, a nice way of achieving the
+because I prefer random with no repeats.  Instead, a clever way of achieving the
 same result is to use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-shuffle.html][emms-shuffle]] and to just go down the songs one by one.
 
 ** potential of saving playlists with text files
 
-I also want to comment on the potential on saving playlists as text files.  I
-think you can just filter the playlist.  I think you can just.
+I also want to comment on the potential on saving playlists as text files.  It
+is cool that you can just filter the playlist.
 
 ** general configuring of Emacs packages
