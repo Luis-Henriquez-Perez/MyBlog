@@ -65,7 +65,9 @@ it to the same thing but without the initial space.
 
 I have been looking at [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-all.html][emms-all]] for some ideas.
 
-I like playing random songs but I do not necessarily like using
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-random.html][emms-random]] because I prefer random with no repeats.
+I like playing random songs but I do not necessarily like using [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-random.html][emms-random]]
+because I prefer random with no repeats.  Instead, a nice way of achieving the
+same result is to use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--emms-shuffle.html][emms-shuffle]] and to just go down the songs one by one.
 
-I also want to comment on the potential.
+I also want to comment on the potential on saving playlists as text files.  I
+think you can just filter the playist.  I think you can just.
