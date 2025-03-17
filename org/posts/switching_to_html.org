@@ -21,6 +21,10 @@ either use an external package to manage source blocks.
 ** flexibility
 
 When there is a change you need to make to the site, it is much easier to reason
-about how to make that change with HTML and CSS than to do so indirectly with.
+about how to make that change with HTML and CSS than to do so indirectly with
+=org-publish=.  For this reason alone I am considering switching to pure html and
+css, simply because I want full control.  As in when I have an unexpected change
+I need to make I want it to be able to be made in a predictable way.  I will
+give an example.  I am trying to.
 
 How to slowly migrate to org and css.  I do want to take advantage of org.
