@@ -1,0 +1,12 @@
+#+title:writing fn to auto declare a function
+#+author:Luis Henriquez-Perez
+
+Many of the byte-compilation warnings I get when using Emacs are due to
+undeclared functions.  I got tired of needing to declare them all the time.  So
+I have created a function that will automatically declare the function at point.
+Even as I write this I am wondering whether there is a way to automate this
+across multiple files. 
+
+#+begin_src emacs-lisp
+#+end_src
+

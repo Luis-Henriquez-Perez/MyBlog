@@ -1,0 +1,39 @@
+#+title:compromise for pure html
+#+author:Luis Henriquez-Perez
+
+For a while now I have been considering migrating managing my website from org
+to using pure HTML and CSS.  And I have one main reason: the ability to respond
+to unforeseen demands with a simple and clear solution.  The problem with using
+org is that every time such an unforeseen demand happens you not only need to
+know the HTML and CSS but additionally you need to know how to use org to add
+it.  It is another mental hurdle.  And it is not like you can just do everything
+with just elisp and org either.  Regardless of what your doing you need to know
+and understand the underlying HTML and CSS.  In fact I often times find myself
+reading the HTML [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--org-publish.html][org-publish]] produces.
+
+I would like to magically migrate right now.  But there are a few problems.  I
+have already created many blog posts and even severla functions and abbrevs to
+help write org.  I have x done and yy are in progress.  And I need to figure out
+a few things, for example how to best handle source blocks with and HTML CSS.
+Anyway, there are things that need to be done.
+
+* the dilemma I have with using
+
+Such an underrated feature in org is its ability to seamlessly weave code from
+different languages in the same buffer with proper syntax highlighting.  This
+ability really shines when it comes to writing blog posts.
+
+#+begin_src emacs-lisp
+(defun oo-declare-fn-at-point ()
+  "Add declaration form for function at point."
+  (interactive)
+  ;; Get the function at point.
+  ()
+  ;; Prompt for feature of the function.
+  (set! feature (read-string "Feature: "))
+  ;; Search for the right place in the buffer to insert the form.
+  ;; Insert it.
+  (insert (format "%S\n" `(declare-function ,function ,feature))))
+#+end_src
+
+

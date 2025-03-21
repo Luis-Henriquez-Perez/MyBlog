@@ -1,0 +1,25 @@
+#+title:learned about type break
+#+author:Luis Henriquez-Perez
+
+Yesterday I learned about a built-in feature I did not know existed called
+=type-break=.  I had been looking for a package to help use the [[https://en.wikipedia.org/wiki/Pomodoro_Technique][pomodoro
+technique]].  I had been using [[https://github.com/baudtack/pomodoro.el][pomodoro]], an external Emacs package that attempts
+to do just that but it is buggy.  Sometimes like accidentally stopping the timer
+when I meant to just pause it.  Ultimately, I was dissatisfied with the package.
+I rememberd a post that [[][system crafters]] made on using built-in pomodoro
+timer in Emacs, it was on using an org feature called org timer.  I had tried it
+before and just found it lacking.  When I saw the reddit post a comment talked
+about a built-in package called =type-break=.  I was immediately surprised at how
+similar it was.
+
+#+begin_src emacs-lisp
+(setq type-break-interval (* 1 60))  ;; 25 minutes in seconds
+(setq type-break-good-rest-interval (* 5 60))  ;; 5 minutes in seconds
+
+(setq type-break-warning-repeat 3)  ;; Repeat warnings 3 times
+(setq type-break-time-warning-intervals '(60 30 10)) ;; Warnings at 60s, 30s, 10s before break
+(setq type-break-query-mode t) ;; Force confirmation to skip breaks
+
+(setq type-break-good-rest-interval 300) ;; 5 minutes break required
+#+end_src
+
