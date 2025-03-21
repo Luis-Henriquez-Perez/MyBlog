@@ -16,15 +16,16 @@ syntax heavy among markup languages, but it is feather-light compared with HTML.
 This is an advantage because you can focus on what is important for blog post,
 the actual content.  In contrast when working with HTML your vision is rife with
 a plethora of tags.  I have trouble getting some of them to indent properly or
-even getting the indentation just the way I want despite using [[][html]].  To
+even getting the indentation just the way I want despite using [[][html-prettify]].  To
 make matters worse unlike org HTML lacks support for hiding links making
-sentences with links long and unreadable.  For a simple website.
+sentences with links long and unreadable.  For a simple website, like this blog, it is
+definitely nice writing posts.
 
 ** source blocks
 
 With HTML to add sample code snippets to your webpage you add the in =pre= and
 =code= tags and for syntax highlighting you use something like [[https://prismjs.com/][prism.js]].  It is
-not at all perfect because you have to rely that the external javascript first
+not at all perfect because you have to rely that the external JavaScript first
 has your language.  For example, just looking at the supported languages I can
 already tell emacs-lisp is not supported, and neither is it is relative
 common-lisp.  So already at best my syntax highlighting will be different than.
@@ -32,14 +33,13 @@ And considering it from a more abstract design perspective it really is a waste
 because I am using some external thing to try to replicate what I already have
 in Emacs syntax highlighting.
 
-One solution described by xah lee is to.  And
-while this works.
+One solution described by xah lee is to.  And while this works.
 
 Org handles source blocks way better and with elegance.  With html you have to
 either use an external package to manage source blocks.  But you have the power
 to see the source code as it its.  Org mode acts as something of a multi-mode
-like [[][mmm-mode]] or [[][polymode]] where you can see the source code as it is
-and edit it.
+like [[https://github.com/dgutov/mmm-mode][mmm-mode]] or [[https://github.com/polymode/polymode][polymode]] where you can see the source code as it is and edit
+it.
 
 ** easy and predictable to change
 
