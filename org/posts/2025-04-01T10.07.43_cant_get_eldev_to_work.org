@@ -1,0 +1,38 @@
+#+title:cant get eldev to work
+#+author:Luis Henriquez-Perez
+
+Right now I cannot get Eldev to work properly with loading files.  I do not get
+it honestly.  I specify the main fileset properly but when I compile my files
+with ~eldev compile~ not all the files that should be specified by the fileset are compile.
+
+#+begin_src emacs-lisp
+(setq eldev-main-fileset '("./init.el"
+                           "./early-init.el"
+                           "!./lisp/disabled*.el"
+                           "./lisp/*.el"))
+#+end_src
+
+O.K. so the more inclusive rules must be /before/ the less inclusive rules.
+
+#+begin_src emacs-lisp
+(setq eldev-main-fileset '("./init.el"
+                           "./early-init.el"
+                           "./lisp/*.el"
+                           "!./lisp/1*"
+                           ;; "!./lisp/disabled*.el"
+                           ))
+#+end_src
+
+It stopped compiling because of an error.  There is a general theme when using
+Eldev for your Emacs configuration that package.el will conflict with eldev's
+usage of package.el.  And I suspect the failure to compile has to do with this.
+Not including the package.el file does not seem to noticeably effect startup
+time though.
+
+d12frosted loads his configuration but I cannot do that here because my
+package.el will effect.  He can because he used straight and is now using
+elpaca.
+
+#+begin_src emacs-lisp
+#+end_src
+

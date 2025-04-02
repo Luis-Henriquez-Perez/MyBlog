@@ -1,0 +1,17 @@
+#+title:maybe just use visual fill
+#+author:Luis Henriquez-Perez
+
+I have been researching the problem more and I have been considering using =visual-fill-mode=.  I know the reason for doing it is that it does not actually modify the text.  And of course, I know this can be useful especially when viewing something your not allowed to modify.  Still though I would like.
+
+A user says:
+#+begin_quote
+fill-paragraph is fine but I've abandoned it for various approaches to doing visual fill for a few reasons.
+
+Firstly, visual fill is dynamic. I don't have to continually press M-q when I edit or add text to keep the paragraphs looking tidy and uniform. And secondly, because it doesn't preclude sharing text with different people or tools. Those new line characters aren't "real" characters, they're only there to affect the appearance of the text. So let's maybe do what it is we really want to do and change how the text looks, not what the text is.
+
+I like visual-fill-column with centering for prose and I like using adaptive-wrap-prefix with a few spaces for the prefix to make a really nice look for paragraphs, all without adding those characters to my text, which would make copy-and-paste, moving from org-mode to LaTeX, or collaboration a huge headache.
+#+end_quote
+
+The point of being dynamic is important.  When you use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--fill-paragraph.html][fill-paragraph]] to "hard" fill it (by which I mean actually edit the thex too look visually appealing) it only works if you are viewing it from the "correct" text size.  If you increase or decrease the text with something like [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--text-scale-increase.html][text-scale-increase]] and [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--text-scale-decrease.html][text-scale-decrease]] the text will not fit anymore because you.
+
+One jarring thing is just moving down text.  When you move the cursor down to what looks like to have another line.

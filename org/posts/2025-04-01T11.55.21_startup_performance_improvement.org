@@ -1,0 +1,17 @@
+#+title:startup performance improvement
+#+author:Luis Henriquez-Perez
+
+Today I noticed that pretty tags was taking forever in startup.  In fact, I
+still do not know why that is.  It has something to do with it is macro
+expansion.  This post is how I found a workaround for it.  I simply moved.  The
+drawback is my configuration is a bit less modular because now if I do not want
+to use [[https://gitlab.com/marcowahl/org-pretty-tags][org-pretty-tags]] I need to actually modify the [[../documentation/29.4-990-config-org.html][990-config-org.el]] file
+instead of just removing an init org pretty tag file.  Since it is my personal
+configuration and not.
+
+I will tell you I wanted to kind of conform to a standard when I was writing my
+configuration but sometimes you need to ask yourself whether it is really worth
+it and whether it makes sense.  Even using a modular config, you still need to
+change /something/.  Your just making it so that instead of editing a file you can
+move something around instead or disable a file.  It is better in the sense that
+you do not have to edit the particular file which may still be useful.

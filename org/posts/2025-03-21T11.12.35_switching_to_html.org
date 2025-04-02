@@ -5,9 +5,8 @@ For a long time I vacillated between using org or writing my blog in pure HTML,
 CSS, and maybe some JavaScript.  As of writing this, my blog is in org.  And do
 not get me wrong, org has its advantages, but I do not like how I have to figure
 out how to do things that would be straight-forward with CSS and HTML all the
-time.  It is just another.  At the same time I feel like I am too deep in to
-back out now.  Here I will discuss factors that I am weighing to decide what to
-do.
+time.  At the same time I feel like I am too deep in to back out now.  Here I
+will discuss factors that I am weighing to decide what to do.
 
 ** readability
 
@@ -16,10 +15,10 @@ syntax heavy among markup languages, but it is feather-light compared with HTML.
 This is an advantage because you can focus on what is important for blog post,
 the actual content.  In contrast when working with HTML your vision is rife with
 a plethora of tags.  I have trouble getting some of them to indent properly or
-even getting the indentation just the way I want despite using [[][html-prettify]].  To
-make matters worse unlike org HTML lacks support for hiding links making
-sentences with links long and unreadable.  For a simple website, like this blog, it is
-definitely nice writing posts.
+even getting the indentation just the way I want despite using [[https://www.html-tidy.org/][html-prettify]].
+To make matters worse unlike org HTML lacks support for hiding links making
+sentences with links long and unreadable.  For a simple website, like this blog,
+it is definitely nice writing posts.
 
 ** source blocks
 
@@ -33,13 +32,54 @@ And considering it from a more abstract design perspective it really is a waste
 because I am using some external thing to try to replicate what I already have
 in Emacs syntax highlighting.
 
-One solution described by xah lee is to.  And while this works.
+One solution described by xah lee is to write [[https://github.com/hniksic/emacs-htmlize][htmlize]].  And while this works
+and correctly captures the syntax highlighting of your Emacs configuration.  The
+problem is the text is a completely unreadable blob of span tags.  Imagine
+editing that garbage.  See for yourself.
 
-Org handles source blocks way better and with elegance.  With html you have to
-either use an external package to manage source blocks.  But you have the power
+This is the source code you would see in an emacs-lisp source block.  And as you
+can see it would look exactly the same as regular source code.
+
+#+begin_src emacs-lisp
+(defun oo-in-blog-post-p ()
+  "Return non-nil if the current buffer is for one of my blog posts."
+  (declare (pure t) (side-effect-free error-free))
+  (and (derived-mode-p 'org-mode)
+       (stringp default-directory)
+       (string= (expand-file-name default-directory)
+                (expand-file-name "~/Documents/MyBlog/org/posts/"))))
+#+end_src
+
+And this is what you would see in an HTML of the same code, a completely
+uneditable mess.  If you wanted to edit it you would need to convert it back to
+source code and then reconvert it to HTML.  And of course even if you did that
+you would likely struggle edit the code properly because the major mode of the
+buffer it is in will be mhtml-mode or web-mode, not emacs-lisp.  So in addition
+to this you would have to configure something like polymode or mmm-mode.  It is
+such a pain.  Not to mention, forget about indenting this properly.  The spacing
+is extremely fragile because any little change will affect.
+
+#+begin_src mhtml
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><code>(<span style="font-weight: bold;">defun</span> <span style="font-weight: bold;">oo-in-blog-post-p</span> ()</code>
+<code>  <span style="font-style: italic;">"Return non-nil if the current buffer is for one of my blog posts."</span></code>
+<code>  (<span style="font-weight: bold;">declare</span> (pure t) (side-effect-free error-free))</code>
+<code>  (<span style="font-weight: bold;">and</span> (derived-mode-p <span style="font-weight: bold;">'</span><span style="font-weight: bold; text-decoration: underline;">org-mode</span>)</code>
+<code>       (stringp default-directory)</code>
+<code>       (string= (expand-file-name default-directory)</code>
+<code>                (expand-file-name <span style="font-style: italic;">"~/Documents/MyBlog/org/posts/"</span>))))</code>
+</pre>
+</div>
+#+end_src
+
+Both of these would produce the same HTML so they are the same in terms of
+output.  But it is obviously really nice to have hurman readable code as visible
+to you as you write our blog.
+
+Org handles source blocks way better and with elegance.  But you have the power
 to see the source code as it its.  Org mode acts as something of a multi-mode
 like [[https://github.com/dgutov/mmm-mode][mmm-mode]] or [[https://github.com/polymode/polymode][polymode]] where you can see the source code as it is and edit
-it.
+it.  It is so nice compared with the aforementioned alternative.
 
 ** easy and predictable to change
 

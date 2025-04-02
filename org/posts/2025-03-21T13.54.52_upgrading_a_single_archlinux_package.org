@@ -1,0 +1,16 @@
+#+title:MPV segment fault
+#+author:Luis Henriquez-Perez
+
+I am going to talk about this experience just to highlight one of the things
+that needs to be done as an arch user.   So some upgrade of MPV broke it.  Ftr I
+installed [[][VLC]] which to it is credit has worked splendidly with the simple
+task of watching videos.  However, the proper solution is to figure out what is
+up with MPV.  As always. 
+
+Just a small thing.  In all this time I have just used ~pacman -Syu~ for upgrading
+my packages.  I have never just upgraded just one package.  Today I actually had
+a need.
+
+#+begin_src emacs-lisp
+#+end_src
+

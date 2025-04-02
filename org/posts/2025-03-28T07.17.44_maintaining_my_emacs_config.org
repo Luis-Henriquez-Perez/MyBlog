@@ -1,0 +1,12 @@
+#+title:maintaining my emacs config
+#+author:Luis Henriquez-Perez
+
+So I looked at my Emacs configuration after uncaracteristically not looking at
+it for several days.  I got rid of all but one byte-compilation warnings.
+Additionally I tidied up a message.
+
+What I am trying to do is determine whether there is a way to.
+
+#+begin_src emacs-lisp
+#+end_src
+

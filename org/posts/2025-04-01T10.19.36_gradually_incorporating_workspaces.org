@@ -1,0 +1,18 @@
+#+title:gradually incorporating workspaces
+#+author:Luis Henriquez-Perez
+
+I have wanted workspaces for a long time.  There are a plethora of workspace
+packages in Emacs: [[https://github.com/nex3/perspective-el][perspective]], [[https://github.com/pashinin/workgroups2][workgroups]], [[https://depp.brause.cc/eyebrowse/][eyebrowse]] and even the built-in
+[[][desktop.el]] just to name a few.  These session managers each have a way of
+saving buffer information so that you can restore your current Emacs window
+configuration and all the buffers therein.  Usually they have their own
+"serialization".  What makes burly special is instead of adding support for
+several things (re)uses Emacs bookmark support.  Which is quite elegant and
+clever because it does not reinvent the wheel.  I wanted to use [[https://github.com/alphapapa/burly.el][burly]] for
+workspaces.
+
+This is a project so I want to take it helo a step at time
+
+#+begin_src emacs-lisp
+#+end_src
+

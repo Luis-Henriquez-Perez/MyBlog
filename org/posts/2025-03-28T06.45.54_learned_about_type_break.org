@@ -10,7 +10,9 @@ I rememberd a post that [[][system crafters]] made on using built-in pomodoro
 timer in Emacs, it was on using an org feature called org timer.  I had tried it
 before and just found it lacking.  When I saw the reddit post a comment talked
 about a built-in package called =type-break=.  I was immediately surprised at how
-similar it was.
+similar it was to pomodoro.  It is not integrated to org which may be a con for
+some but is an advantage to others.  Honestly I am not convinced that using org
+everywhere is the best way to go.
 
 #+begin_src emacs-lisp
 (setq type-break-interval (* 1 60))  ;; 25 minutes in seconds

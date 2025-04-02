@@ -1,0 +1,48 @@
+#+title:really switching to elpaca
+#+author:Luis Henriquez-Perez
+
+I thought about it and I decided the benefits of using elpaca are worth the
+costs.  The time you lose during startup you will lose whenever you have to deal
+with any package operations via package.el.  Again the main problem with
+package.el is that every single operation is synchronous therefore it is
+increasingly painful to do anything beyond say installing a single package.  I
+feel like you do not realize how big of a problem it is until you really start
+performing several package operations.
+
+Now everything will rely on elpaca.  The loading will look like: base-files ->
+init-files -> elpaca.
+
+* replace Emacs startup hooks
+
+I do not want to rethink my hooks.  In hindsight I do not know the reasoning why
+I decided to use one hook over another.  With these hooks I can just replace my
+corresponding [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--after-init-hook.html][after-init-hook]] and [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--emacs-startup-hook.html][emacs-startup-hook]].  One question is whether
+to even.
+
+#+begin_src emacs-lisp
+(defvar oo-elpaca-after-init-hook nil
+  "Hook to replace `after-init-hook' when using elpaca.")
+
+(defvar oo-elpaca-emacs-startup-hook nil
+  "Hook to replace `emacs-startup-hook' when using elpaca.")
+
+(defhook! run-extra-hooks (elpaca-after-init-hook)
+  "Run hooks."
+  (run-hooks 'oo-elpaca-after-init-hook 'oo-elpaca-emacs-startup-hook))
+#+end_src
+
+* decide what to do with particular hooks
+
+To be honest I do not know what to do with hooks involving startup time.
+Obvious the startup time will be way off when installing packages with elpaca.
+
+* should I change all hooks or just the ones that need elpaca to have processed its queues?
+
+I am not sure about the answer to this.  Sure, it would be more consistent to
+just switch anything.
+
+* all external packages that are loaded immediately
+
+The first thing is to move the requirement of any external package to =elpaca-after-init-hook=.
+
+* doing

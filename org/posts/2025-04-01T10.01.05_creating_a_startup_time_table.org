@@ -1,0 +1,35 @@
+#+title:creating a startup time table
+#+author:Luis Henriquez-Perez
+
+I have done plenty of work for reducing startup time.  Half the battle is just
+being aware of where time is being spent.
+
+#+begin_src emacs-lisp
+(defun! oo-startup-time-table ()
+  "Produce a table that shows the time taken by each feature during startup."
+  (interactive)
+
+  (for! ((feature time) oo-init-data)
+    (collecting! new (list feature time))
+    (summing! total time))
+
+  (set! init-time (string-to-number (emacs-init-time "%.2f")))
+
+  (flet! percent (time total) (format "%3d%%" (* 100 (/ time total))))
+
+  (for! ((feature time) new)
+    (set! dtime (format "%.2f" (/ (fround (* time 100)) 100.0)))
+    (pushing! data (list feature dtime (percent time total) (percent time init-time))))
+
+  (set! data (sort data (-on #'> (-compose #'string-to-number #'cl-second))))
+
+  (set! column-model (list (make-ctbl:cmodel :title "Feature" :align 'left)
+                           (make-ctbl:cmodel :title "Time (s)" :align 'center)
+                           (make-ctbl:cmodel :title "% of Total" :align 'center)
+                           (make-ctbl:cmodel :title "% of Init" :align 'center)))
+  (set! model (make-ctbl:model :column-model column-model :data data))
+  (set! component (ctbl:create-table-component-buffer :model model))
+  (pop-to-buffer (ctbl:cp-get-buffer component)))
+#+end_src
+
+This is the resulting buffer.

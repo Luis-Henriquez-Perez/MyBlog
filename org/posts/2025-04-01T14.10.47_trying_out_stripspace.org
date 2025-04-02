@@ -1,0 +1,67 @@
+#+title:intelligently removing trailing whitespace
+#+author:Luis Henriquez-Perez
+
+Several months ago I copied the following simple solution I copied from [[https://github.com/seagle0128/.emacs.d][Centaur
+Emacs]] which just deletes any trailing whitespace before saving.
+
+#+begin_src emacs-lisp
+(defhook! manage-trailing-whitespace (text-mode-hook prog-mode-hook conf-mode-hook)
+  "Show trailing whitespace and delete it before saving."
+  (setq-local show-trailing-whitespace t)
+  (oo-add-hook 'before-save-hook #'delete-trailing-whitespace :local t))
+#+end_src
+
+This works well for the most part.  However, sometimes this hooks is triggered
+when I am in the middle of editing a line.  I am in the habit of ending in
+incomplete sentence with a single space.  So if this hook is triggered at that
+point then the space will be deleted and I have to type it all over again.
+Not the end of the word but annoying nevertheless.  I do not want trailing
+whitespace to be removed from a line I am currently working on.
+
+# At first I wanted to try out this new package, [[https://github.com/jamescherti/stripspace.el][stripspace]], but now honestly I
+# have lost motivation.  The one thing that I wanted from this compared to my
+# current solution is not deleting the space I myself added after a word if I am
+# going to be typing again.  But I feel like it is not worth it to use an entirely
+# new package just for this functionality.  The package itself is a very light
+# wrapper around existing whitespace cleanup functions like
+# [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--delete-trailing-whitespace.html][delete-trailing-whitespace]] and [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--whitespace-cleanup.html][whitespace-cleanup]].
+
+# I set up my configuration to save the buffer when I switch to normal state.
+
+# In general you do not want to use an external package and pay the cost of
+# maintaining it and add another dependency when there is a built-in solution that
+# either does the job already or would only require a trivial amount of code to do
+# the job.  Let us see if I can whip up a solution.  It should not be hard the only
+# issue is how I should approach it.
+
+The function =delete-trailing-whitespace=, as its name suggests, deletes trailing
+whitespace.  Conveniently, it accepts two optional arguments, =BEG= and =END=, which
+delineate the region wherein trailing whitespace will be removed.  With these
+bounds I figure I can just delete the trailing whitespace before the current
+line and after the current line.  While.
+
+#+begin_src emacs-lisp
+(defun oo--dwim-delete-trailing-whitespace ()
+  "Delete the trailing whitespace except for the current line.
+Specifically, if the current line."
+  (interactive)
+  (delete-trailing-whitespace (point-min) (line-beginning-position))
+  ;; If the current line has more than two space then truncate it to two.
+  (save-match-data
+    (when (looking-back "^.*?\\(?1:[[:space:]]\\{3,\\}\\)$" (line-beginning-position))
+      (replace-match "\s" nil nil nil 1)))
+  (delete-trailing-whitespace (line-end-position) (point-max)))
+#+end_src
+
+When I am killing a buffer, however, I do want it to just because at that point
+I am no longer editing any lines.  Additionally add a hook to [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--kill-buffer-hook.html][kill-buffer-hook]]
+that deletes trailing whitespace.  In this case, I do not have to worry have to
+worry about the current line because I am killing the buffer.
+
+#+begin_src emacs-lisp
+(defhook! oo-ensure-delete-trailing-whitespace (kill-buffer-hook)
+  "Ensure that trailing whitespace is deleted."
+  (when (derived-mode-p 'text-mode 'prog-mode 'conf-mode)
+    (delete-trailing-whitespace (point-min) (point-max))))
+#+end_src
+
