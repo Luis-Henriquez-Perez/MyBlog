@@ -1,0 +1,7 @@
+#+title:properly capitalizing blog titles
+#+author:Luis Henriquez-Perez
+
+When I started creating my blog I did not even think about how blog titles
+should be captialzied.  I looked at [[][taingram.org]] page as an example.  It
+seems to capitalize all words except prepositions and articles.
+(rgrep (rx buffer-start "#+" (or "title" "TITLE") (1+ nonl) eol))

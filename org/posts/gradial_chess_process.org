@@ -1,0 +1,101 @@
+#+title:gradial chess process
+#+author:Luis Henriquez-Perez
+
+Here I will detail my first documented attempt to configure the chess package.
+
+The first thing I want to do is display a chessboard.  When I invoed the command
+=chess= a buffer popuped up with a letter display.  I would really like to see the
+actual images.
+
+#+begin_src emacs-lisp
+(opt! chess-images-directory "/home/luis/Downloads/chess-pieces/")
+#+end_src
+
+When invoking =chess= I get an error.
+
+Did not work.
+
+#+begin_src emacs-lisp
+(chess-images-clear-image-cache)
+#+end_src
+
+O.K. I got the images to display by invoking =chess= after setting
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--chess-images-directory.html][chess-images-directory]] to the following path.  The images were too big by
+default so I had to decrease their size with [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--chess-images-decrease-size.html][chess-images-decrease-size]].  Note
+that the chessboard by default is opened in a new frame as well as in a buffer
+in the current frame.  I want to change this.  I do not want Emacs opening a new
+frame.
+
+#+begin_src emacs-lisp
+(opt! chess-images-directory "~/.config/emacs/elpa/chess-2.0.5/pieces/xboard")
+#+end_src
+
+The next thing to do is see if I can setup a board.
+
+I want to simplify the display for now.
+
+#+begin_src emacs-lisp
+(opt! chess-default-display '(chess-ics1 chess-plain))
+#+end_src
+
+The faces of the pieces in the display are more difficult to read by default at
+least on a light theme.  The faces are a green and yellow.  They are fine for
+reading in a dark theme.  With the text display at least the chess board is not
+opened in a new frame as well.
+
+It is crazy how difficult it is for me to figure out how to just setup a
+position I am interested in for analysis.  I am looking at =chess-pos.el= but it
+does not seem helpful.
+
+O.K. I think I found the function.  It is [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--chess-display-edit-board.html][chess-display-edit-board]].  Now I am
+looking for how to move the pieces.
+
+O.K. I have found a way to move a piece using [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--chess-display-manual-move.html][chess-display-manual-move]] but I
+when I do it immediately starts having me play with stockfish.  I would rather
+have it.
+
+I like the =chess-plain= display over the =chess-ics1= because you do not have to
+deal with the boxes created by =chess-ics1=, it is simpler in other words.
+
+#+begin_src emacs-lisp
+(opt! chess-default-display '(chess-plain))
+#+end_src
+
+So to do non-engine I have to supply =none= as the argument for engine.  Then I
+can just play both sides.
+
+#+begin_src emacs-lisp
+(chess 'none)
+#+end_src
+
+Now though I have run into the problem where I have accidentally played the
+wrong move.  I am not sure how to undo a move.  I found the function
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--chess-display-move-backward.html][chess-display-move-backward]] but that just moves backward in the same variation,
+it will not let me overwrite the move I just played.
+
+#+begin_src emacs-lisp
+(opt! chess-display-highlight-last-move t)
+#+end_src
+
+As you can see every step is a struggle here because I this specific package is
+old and does not have extensive
+
+Other useful variables include [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--chess-plain-white-square-char.html][chess-plain-white-square-char]] and
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--chess-plain-black-square-char.html][chess-plain-black-square-char]].  Because by default the board shows no indicator
+to distinguish white squares from black squares.  At first I tried an asterisk
+for the white squares but I thought that was too distracting so I settled on a
+ocmma.
+
+#+begin_src emacs-lisp
+(opt! chess-plain-white-square-character ?,)
+#+end_src
+
+I do not think there is a function to specifically undo a move surprisingly,.
+Looks like I need to learn about the underlying data structure to edit the move directly.
+
+Another thing I want to know is how to save the chess moves current position and
+whether I can toggle the display to different displays.
+
+Although there is a manual, I still feel like there are many practical questions
+that require an answer.  I would not say it is "user friendly".
+

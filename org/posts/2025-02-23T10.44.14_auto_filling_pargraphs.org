@@ -1,105 +1,281 @@
-#+title:draft auto filling pargraphs
+#+title:auto-filling paragraphs
 #+author:Luis Henriquez-Perez
 
-For far too long I have wanted Emacs to automatically fill my paragraphs like
-all the other non-Emacs text editors I have used previously.  I looked at an
-external package.
+If you have used any modern word processor you have probably noticed that by
+default they automatically fill paragraphs as you are typing.  Surprisingly,
+despite being taken for granted in word processors, I have been hard-pressed to
+find this in Emacs.  Sure there is [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--auto-fill-mode.html][auto-fill-mode]] but that only fills the
+current line, not the entire paragraph; and it only happens at the end of the
+line, not interactively as you type text.  Sure there's [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--refill-mode.html][refill-mode]] but the
+problem with this mode, however, is that it aggressively joins adjacent
+paragraphs separated by newlines, something that I do not want.  I also looked
+at [[https://github.com/davidshepherd7/aggressive-fill-paragraph-mode][aggressive-fill-paragraph]] an external package which seems to try to do the
+same thing as =refill-mode= but it is also too aggressive.  I was frustrated
+because I felt like this should not be too hard.  Emacs already has fill
+paragraph function, [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--fill-paragraph.html][fill-paragraph]]; all I want is to invoke it repeatedly as I
+am typing.  And so I rolled up my sleeves and set off writing my own solution.
+
+And after much trial and error I came up with the following function.
+Essentially it auto-fills the current paragraph whenever you type.  But it deals
+with certain edge cases.  By default auto-filling consumes any spaces at the you
+type at the end of the paragraph.  To the person typing it looks like the cursor
+is just not moving after pressing space.  To avoid this I check you are at the
+end of the paragraph, which I assume happens when there is more than one newline
+after the current point, and ignore the leading spaces when filling.  Another
+quirk is whenever you type spaces in between words normal (like when you are
+adding something to a sentence) auto-filling would consume all but one of the
+extra spaces.  In practice I found this not to be such a big deal but I will
+admit it is a bit jarring and it does usually result in me having to type one
+extra space.  Ultimately the best solution I could find is filling the lines
+before the.  This way the paragraph would still be filled with the only
+difference from calling =fill-region= on the whole thing is the current line is
+filled with the extra spaces counted (as opposed to consuming them).  It makes
+sense to be more lax with the current line because after all that is the line
+being edited.
 
 #+begin_src emacs-lisp
-(with-eval-after-load 'prog-mode
-  (defun my-auto-fill-comments-only ()
-    (turn-on-auto-fill)
-    (setq-local comment-auto-fill-only-comments t))
-  (add-hook 'prog-mode-hook #'my-auto-fill-comments-only))
+(defun! oo-dwim-autofill-fn (&rest _)
+  "Fill the current paragraph."
+  (set! beg (save-excursion (start-of-paragraph-text) (point)))
+  (set! end (save-excursion (end-of-paragraph-text) (point)))
+  (cond ((equal (char-after) ? )
+         ;; Fill the lines before.
+         (set! end1 (save-excursion (skip-chars-backward " ") (point)))
+         (save-excursion (fill-region beg end1 nil 'nosqueeze))
+         ;; Fill the current line in a way that does not consume the spaces.
+         (save-excursion (goto-char (line-end-position)) (do-auto-fill))
+         ;; Fill the lines afterwards.
+         (and (> end (line-end-position))
+              (save-excursion (fill-region (line-end-position) end nil 'nosqueeze))))
+        (t
+         (when (looking-at "\n\n")
+           (set! end (save-excursion (skip-chars-backward " ") (point))))
+         (save-excursion (fill-region beg end nil 'nosqueeze)))))
 #+end_src
 
-There is also a relevant issue [[][]].  It recommends [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--refill-mode.html][refill-mode]], which is the
-closest I could find for this.  The problem with this mode is that it joins
-adjacent paragraphs separated by newlines which I do not want.
-
-I did not find anything at least on a precursory search.
-
-This is something that needs a minor mode that I can toggle on and off.  But the
-main part of the body is simply going to be adding a local hook to
-[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--post-command-hook.html][post-command-hook]] that calls [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--fill-paragraph.html][fill-paragraph]].
+Naturally, I wanted to test this auto-filling but of course in a way that I
+could easily undo.  Therefore I wrote this function which enables and disables
+my auto-filling function at will.  I initially tried doing this via
+[[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--post-self-insert-hook.html][post-self-insert-hook]] but it interfered with abbrev expansion.  The
+=auto-fill-function= is only called on inserting a space.  The majority of
+the time using space to trigger auto-filling is more than enough.
 
 #+begin_src emacs-lisp
-(defun oo--post-command-hook--fill-paragraph-h (&rest _)
-  (call-interactively #'fill-paragraph))
-
-(defun! oo-toggle-auto-fill-paragraph ()
+(defvar oo-old-autofill-fn nil)
+(defun oo-toggle-autofill-fn ()
   (interactive)
-  (set! hook #'oo--post-command-hook--fill-paragraph-h)
-  (if (member hook post-self-insert-hook)
-      (remove-hook 'post-self-insert-hook hook 'local)
-    (add-hook 'post-self-insert-hook hook nil 'local)))
-#+end_src
-
-The funny thing is that my preliminary code already almost works.  This code
-seemed to work well when I was inserting text but I noticed when I was at the
-end of the line and inserted a space, the space would immediately be deleted.
-This is a consequence of filling the paragraph.  The command seems to remove
-trailing whitespace.   
-
-The first way I could think of fixing it is just using a regular expression to
-determine.  First I thought maybe I should just not fill the paragraph if I am
-at the wrong location.  But then I thought I should always be filling.  Hello world I am 
-
-One idea is to save the spaces in front of the line and add them again after the
-paragraph is filled.  It would be better if I did not have to do this manual
-insertion.  Maybe I can use the function [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--fill-region.html][fill-region]] to only fill for the
-current paragraph excluding the space in front.  I do not know if that it works
-that way.
-
-#+begin_src emacs-lisp
-(defun oo--post-command-hook--fill-paragraph-h (&rest _)
-  (when (looking-back (rx))
-    ;; Get the match for spaces in front of the sentence.
-    ())
-  (call-interactively #'fill-paragraph)
-  ;; Insert the spaces that were removed by `fill-paragraph'.
-  ())
-#+end_src
-
-This is me trying to fill the paragraph using =fill-region= hello world.  I am bob
-and this is my snack.
-
-#+begin_src emacs-lisp
-(defun! oo--post-command-hook--fill-paragraph-h (&rest _)
-  ;; If there is a newline, as in we are at the end of the paragraph, then get
-  ;; the bounds of the paragraph, go back to the previous.
-  (cond ((save-excursion (goto-char (line-beginning-position))
-                         (looking-at (rx (seq bol (minimal-match (0+ nonl)) (group-n 1 (1+ "\s")) eol))))
-         (set! beg (save-excursion (save-match-data (backward-paragraph)) (point)))
-         (set! end (match-beginning 1))
-         (message "character before end: %c | match: %d" (char-before end) (length (match-string 1)))
-         ;; Do not include the current whitespace.
-         (and beg end (save-excursion (fill-region beg end))))
-        ;; Fill region.
+  (cond (oo-old-autofill-fn
+         (message "Disabling...")
+         (setq-local auto-fill-function oo-old-autofill-fn)
+         (setq-local oo-old-autofill-fn nil))
         (t
-         (call-interactively #'fill-paragraph))))
+         (message "Enabling...")
+         (setq-local oo-old-autofill-fn auto-fill-function)
+         (setq-local auto-fill-function #'oo-dwim-autofill-fn))))
 #+end_src
 
-I think this works well.
+I am happy with my solution.  Overall it works exactly as I want.  An
+improvement, and potentially a future blog post, is increasing the cases in
+which auto-filling happens.  As it stands auto-filling only happens when I
+insert a space.  So for example if you just change a single word the current
+paragraph will not automatically auto-fill.  Deleting words is another big blind
+spot.  Ideally, I would like deleting words from a paragraph to fill the
+paragraph after the text has been changed.
 
-#+begin_src emacs-lisp
-(defun! oo--post-command-hook--fill-paragraph-h (&rest _)
-  ;; If there is a newline, as in we are at the end of the paragraph, then get
-  ;; the bounds of the paragraph, go back to the previous.
-  (cond ((save-excursion (goto-char (line-beginning-position))
-                         (looking-at (rx (seq bol (minimal-match (0+ nonl)) (group-n 1 (1+ "\s")) eol))))
-         (set! beg (save-excursion (save-match-data (backward-paragraph)) (point)))
-         (set! end (match-beginning 1))
-         (message "cond 1 -> character before end: %c" (char-before end) (length (match-string 1)))
-         ;; Do not include the current whitespace.
-         (and beg end (save-excursion (fill-region beg end))))
-        ;; Fill region.
-        (t
-         ;; When you are typing a word, do not fill
-         (set! beg (save-excursion (backward-paragraph) (point)))
-         (set! end (save-excursion (point)))
-         (message "cond 2 -> character before end: %c" (char-before end))
-         (and beg end (save-excursion (fill-region beg end))))))
-#+end_src
+Generally, this journey illustrates a thematic strength and weakness of using
+Emacs.  The common downside is that often you will find cases where some
+mainstream feature is either not available in Emacs or, more likely, is not
+exactly what you want.  However, the upside is that even in these cases you have
+the power to either add it yourself or customize an existing solution to your
+exact liking.
 
-This interferes with abbrev expansion though.  Idonotknowwhy 
+# This is something that needs a minor mode that I can toggle on and off.  But the
+# main part of the body is simply going to be adding a local hook to
+# [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-variable--post-command-hook.html][post-command-hook]] that calls [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--fill-paragraph.html][fill-paragraph]].
+
+# #+begin_src emacs-lisp
+# (defun oo--post-command-hook--fill-paragraph-h (&rest _)
+#   (call-interactively #'fill-paragraph))
+
+# (defun! oo-toggle-auto-fill-paragraph ()
+#   (interactive)
+#   (set! hook #'oo--post-command-hook--fill-paragraph-h)
+#   (if (member hook post-self-insert-hook)
+#       (remove-hook 'post-self-insert-hook hook 'local)
+#     (add-hook 'post-self-insert-hook hook nil 'local)))
+# #+end_src
+
+# The funny thing is that my preliminary code already almost works.  This code
+# seemed to work well when I was inserting text but I noticed when I was at the
+# end of the line and inserted a space, the space would immediately be deleted.
+# This is a consequence of filling the paragraph.  The command seems to remove
+# trailing whitespace.
+
+# The first way I could think of fixing it is just using a regular expression to
+# determine.  First I thought maybe I should just not fill the paragraph if I am
+# at the wrong location.  But then I thought I should always be filling.  Hello world I am
+
+# One idea is to save the spaces in front of the line and add them again after the
+# paragraph is filled.  It would be better if I did not have to do this manual
+# insertion.  Maybe I can use the function [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--fill-region.html][fill-region]] to only fill for the
+# current paragraph excluding the space in front.  I do not know if that it works
+# that way.
+
+# #+begin_src emacs-lisp
+# (defun oo--post-command-hook--fill-paragraph-h (&rest _)
+#   (when (looking-back (rx))
+#     ;; Get the match for spaces in front of the sentence.
+#     ())
+#   (call-interactively #'fill-paragraph)
+#   ;; Insert the spaces that were removed by `fill-paragraph'.
+#   ())
+# #+end_src
+
+# This is me trying to fill the paragraph using =fill-region= hello world.  I am bob
+# and this is my snack.
+
+# #+begin_src emacs-lisp
+# (defun! oo--post-command-hook--fill-paragraph-h (&rest _)
+#   ;; If there is a newline, as in we are at the end of the paragraph, then get
+#   ;; the bounds of the paragraph, go back to the previous.
+#   (cond ((save-excursion (goto-char (line-beginning-position))
+#                          (looking-at (rx (seq bol (minimal-match (0+ nonl)) (group-n 1 (1+ "\s")) eol))))
+#          (set! beg (save-excursion (save-match-data (backward-paragraph)) (point)))
+#          (set! end (match-beginning 1))
+#          (message "character before end: %c | match: %d" (char-before end) (length (match-string 1)))
+#          ;; Do not include the current whitespace.
+#          (and beg end (save-excursion (fill-region beg end))))
+#         ;; Fill region.
+#         (t
+#          (call-interactively #'fill-paragraph))))
+# #+end_src
+
+# I think this works well for the most part but it fails if I try to edit and
+# split up a word by putting my cursor in it and adding a space.
+
+# #+begin_src emacs-lisp
+# (defun! oo--post-command-hook--fill-paragraph-h (&rest _)
+#   ;; If there is a newline, as in we are at the end of the paragraph, then get
+#   ;; the bounds of the paragraph, go back to the previous.
+#   (cond ((save-excursion (goto-char (line-beginning-position))
+#                          (looking-at (rx (seq bol (minimal-match (0+ nonl)) (group-n 1 (1+ "\s")) eol))))
+#          (set! beg (save-excursion (save-match-data (backward-paragraph)) (point)))
+#          (set! end (match-beginning 1))
+#          (message "cond 1 -> character before end: %c" (char-before end) (length (match-string 1)))
+#          ;; Do not include the current whitespace.
+#          (and beg end (save-excursion (fill-region beg end))))
+#         ;; Fill region.
+#         ;; If I am in a word, let me insert the space.
+#         (())
+#         (t
+#          ;; When you are typing a word, do not fill
+#          (set! beg (save-excursion (backward-paragraph) (point)))
+#          (set! end (save-excursion (point)))
+#          (message "cond 2 -> character before end: %c" (char-before end))
+#          (and beg end (save-excursion (fill-region beg end))))))
+# #+end_src
+
+# This interferes with abbrev expansion though.
+
+# * changing the auto fill function
+
+# This method involves.
+
+# #+begin_src emacs-lisp
+# (defvar oo-old-autofill-fn nil)
+# (defun oo-toggle-autofill-fn ()
+#   (interactive)
+#   (cond (oo-old-autofill-fn
+#          (message "Disabling...")
+#          (setq-local auto-fill-function oo-old-autofill-fn)
+#          (setq-local oo-old-autofill-fn nil))
+#         (t
+#          (message "Enabling...")
+#          (setq-local oo-old-autofill-fn auto-fill-function)
+#          (setq-local auto-fill-function #'oo-dwim-autofill-fn))))
+# #+end_src
+
+# #+begin_src emacs-lisp
+# (defun! oo-dwim-autofill-fn (&rest _)
+#   ;; If there is a newline, as in we are at the end of the paragraph, then get
+#   ;; the bounds of the paragraph, go back to the previous.
+#   (cond ((save-excursion (goto-char (line-beginning-position))
+#                          (looking-at (rx (seq bol (minimal-match (0+ nonl)) (group-n 1 (1+ "\s")) eol))))
+#          (set! beg (save-excursion (save-match-data (backward-paragraph)) (point)))
+#          (set! end (match-beginning 1))
+#          (message "cond 1 -> character before end: %c" (char-before end) (length (match-string 1)))
+#          ;; Do not include the current whitespace.
+#          (and beg end (save-excursion (fill-region beg end))))
+#         ;; Fill region.
+#         (t
+#          ;; When you are typing a word, do not fill
+#          (set! beg (save-excursion (backward-paragraph) (point)))
+#          (set! end (save-excursion (point)))
+#          (message "cond t -> character before end: %c" (char-before end))
+#          (and beg end (save-excursion (fill-region beg end))))))
+# #+end_src
+
+# The first thing I see with using a different auto fill function is that the
+# abbrevs work perfectly.
+
+# [[https://stackoverflow.com/questions/17177725/re-filling-entire-paragraph-automatically-with-auto-fill-mode][]]
+
+# [[https://www.emacswiki.org/emacs/RefillMode][]]
+
+# I encountered a problem where a space is not added when I am trying to insert
+# text in between a word.  So I need to check if I am in between a word and tell auto-fill to let hello me
+#  insert  hello the text in that case.
+
+# This is why I was so surprised.  Honestly this is not something that
+# fooooooooooooo should beeeeeeeeeeeeeeaaaa hello that hard.  That one article
+# says it is "tricky" to get right.  mean I just want the same as hi her editors.
+# And we already have fill.  Foo hello world hello world hi.  Hello.
+
+# #+begin_src emacs-lisp
+# (defun! oo-do-autofill ()
+#   (interactive)
+#   (set! beg (save-excursion (start-of-paragraph-text) (point)))
+#   (set! end (save-excursion (end-of-paragraph-text) (point)))
+#   (save-excursion (fill-region beg end nil 'nosqueeze)))
+
+# ;; (set! end2 (save-excursion (skip-chars-backward " ") (point)))
+# ;; (save-excursion
+# ;;   (save-restriction
+# ;;     (widen)
+# ;;     (narrow-to-region beg end2)
+# ;;     (fill-region (point-min) (point-max) nil 'nosqueeze)))
+
+# ;; (set! end2 (save-excursion (skip-chars-backward " ") (point)))
+# ;; (save-excursion
+# ;;   (save-restriction
+# ;;     (widen)
+# ;;     (narrow-to-region beg end2)
+# ;;     (fill-region (point-min) (point-max) nil 'nosqueeze)))
+# ;; (set! beg2 (save-excursion (skip-chars-forward " ") (point)))
+# ;; (save-excursion
+# ;;   (save-restriction
+# ;;     (widen)
+# ;;     (narrow-to-region beg2 end)
+# ;;     (fill-region (point-min) (point-max) nil 'nosqueeze)))
+
+# ;; If there is a space before point fill the region before the space and the
+# ;; region after it.
+# ;; ((member (char-before (point)) '(? ))
+# ;;  (message "cond 2 -> character before is a space")
+# ;;  ;; (set! end1 (save-excursion (skip-chars-backward " ") (point)))
+# ;;  ;; (save-excursion (fill-region beg end1 nil 'nosqueeze 'toeop))
+# ;;  ;; (message "second thing...")
+# ;;  ;; (funcall #'org-auto-fill-function)
+# ;;  ;; (set! beg1 (save-excursion (skip-chars-forward " ") (point)))
+# ;;  ;; (save-excursion (fill-region (line-beginning-position) end nil 'nosqueeze 'toeop))
+# ;;  (save-excursion (fill-region beg end nil 'nosqueeze 'toeop)))
+# #+end_src
+
+# I cannot get =fill-region= to work with the spaces properly.  I wanted to avoid
+# adding and removing spaces but looks like that is what I am going to have to do.
+
+# I cannot get =fill-region= hello hello
+
+# What I realized is that for =fill-region= to fill the paragraph it needs to have
+# the beginning of the line.  That is why =fill-region= is not working when I give a
+# partial line.  Also it might be inevitable for.

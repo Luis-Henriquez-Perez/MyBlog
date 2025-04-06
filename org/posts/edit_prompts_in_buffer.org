@@ -1,0 +1,16 @@
+#+title:edit prompts in buffer
+#+author:Luis Henriquez-Perez
+
+One thing I have always wanted to do is edit prompts in Emacs buffers.  Several
+Emacs functions prompt for a regular expression and when they prompt me I have
+always hated having to come up with one on the fly.  First, I strongly prefer
+writing regular expression in the [[][rx]] format, but none of the functions
+that prompt for a regexp accept that format.  But also I have wanted to be able
+to craft and edit what I enter into a prompt just like I edit text in every
+other buffer.  Instead of a one line prompt I would like a buffer to come up
+where I can enter the information at my leisure and with full editing
+capabilities and only then when I am ready invoke =C-c= or some other keybinding to
+actually pass in the contents of the buffer to whatever function prompted me for
+it.
+
+So as always the first step is to research the problem for existing solutions.

@@ -14,4 +14,4 @@ I like visual-fill-column with centering for prose and I like using adaptive-wra
 
 The point of being dynamic is important.  When you use [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--fill-paragraph.html][fill-paragraph]] to "hard" fill it (by which I mean actually edit the thex too look visually appealing) it only works if you are viewing it from the "correct" text size.  If you increase or decrease the text with something like [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--text-scale-increase.html][text-scale-increase]] and [[file:/home/luis/Documents/MyBlog/org/documentation/29.4-helpful-callable--text-scale-decrease.html][text-scale-decrease]] the text will not fit anymore because you.
 
-One jarring thing is just moving down text.  When you move the cursor down to what looks like to have another line.
+One jarring thing is just moving down text.  When you move the cursor down to what looks like to have another line it goes to the end of the line because visual fill only creates the illusion of a new line under it.

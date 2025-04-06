@@ -1,0 +1,2 @@
+#+title:buffer management gradual process
+#+author:Luis Henriquez-Perez

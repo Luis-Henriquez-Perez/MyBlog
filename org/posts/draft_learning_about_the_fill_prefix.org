@@ -1,0 +1,11 @@
+#+title:learning about the fill prefix
+#+author:Luis Henriquez-Perez
+
+As I was writing the ability to auto-fill I was considering.
+
+Hello world.
+
+#+begin_src emacs-lisp
+(setq-local fill-prefix "\s")
+#+end_src
+
